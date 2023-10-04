@@ -18,6 +18,16 @@ builder.Services.AddControllers();
 builder.UseVostokHosting(
     environmentBuilder =>
     {
+        environmentBuilder.DisableClusterConfig();
+
+        environmentBuilder.SetupSystemMetrics(
+            settings =>
+            {
+                settings.EnableProcessMetricsLogging = false;
+                settings.EnableGcEventsLogging = false;
+                settings.EnableHostMetricsLogging = false;
+            });
+
         environmentBuilder.SetupHostExtensions(
             extensions =>
             {
