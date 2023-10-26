@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Npgsql;
 using Vostok.Logging.Abstractions;
 using DbContext = Db.DbContext;
-using Core;
+using Core.Helpers;
 
 namespace Domain.Context;
 

@@ -1,6 +1,6 @@
 using Vostok.Logging.Abstractions;
 
-namespace Core;
+namespace Core.Helpers;
 
 public static class LogExtensions
 {

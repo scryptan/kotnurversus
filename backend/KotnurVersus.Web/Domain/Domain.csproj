@@ -16,4 +16,9 @@
       <ProjectReference Include="..\Models\Models.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <PackageReference Include="GrEmit" Version="3.4.10" />
+      <PackageReference Include="Microsoft.AspNetCore.JsonPatch" Version="7.0.13" />
+    </ItemGroup>
+
 </Project>
