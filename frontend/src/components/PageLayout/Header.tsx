@@ -6,7 +6,7 @@ import {
   Text,
   useColorMode,
 } from "@chakra-ui/react";
-import Link from "~/components/Link";
+import BaseLink from "~/components/Link";
 import paths from "~/pages/paths";
 import ColorModeButton from "../ColorModeButton";
 
@@ -24,32 +24,32 @@ const Header = () => {
         <Logo />
         <ColorModeButton />
         <Spacer />
-        <NavLink href="/">Провести турнир</NavLink>
-        <NavLink href="/">Турниры</NavLink>
-        <NavLink border="2px solid" href="/">
+        <Link href="/">Провести турнир</Link>
+        <Link href="/">Турниры</Link>
+        <Link border="2px solid" href="/">
           Войти как организатор
-        </NavLink>
+        </Link>
       </HStack>
     </Box>
   );
 };
 
 const Logo = () => (
-  <Link href={paths.main.path} _hover={{ transform: "translateY(5%)" }}>
+  <BaseLink href={paths.main.path} _hover={{ transform: "translateY(5%)" }}>
     <Text as="span" color="secondary" fontSize="32px" fontWeight="semibold">
       Котнур
     </Text>
     <Text ml={0.5} as="span" fontSize="32px" fontWeight="medium">
       Версус
     </Text>
-  </Link>
+  </BaseLink>
 );
 
-const NavLink = (props: LinkProps) => {
+const Link = (props: LinkProps) => {
   const { colorMode } = useColorMode();
 
   return (
-    <Link
+    <BaseLink
       {...props}
       px={6}
       py={2}

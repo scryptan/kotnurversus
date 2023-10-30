@@ -1,5 +1,6 @@
 import { Center, Flex, Spinner } from "@chakra-ui/react";
 import { ReactNode, Suspense } from "react";
+import Footer from "./Footer";
 import Header from "./Header";
 
 type Props = {
@@ -13,6 +14,7 @@ const PageLayout = ({ children }: Props) => (
       fallback={<Center flex={1} children={<Spinner size="lg" />} />}
       children={children}
     />
+    <Footer />
   </Flex>
 );
 
