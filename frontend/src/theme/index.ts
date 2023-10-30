@@ -3,6 +3,7 @@ import {
   theme as chakraTheme,
   extendTheme,
 } from "@chakra-ui/react";
+import * as components from "./components";
 import styles from "./styles";
 import foundations from "./foundations";
 
@@ -15,7 +16,7 @@ const config: ThemeConfig = {
 
 const theme = extendTheme({
   ...foundations,
-  components: chakraTheme.components,
+  components: { ...chakraTheme.components, ...components },
   styles,
   config,
 });

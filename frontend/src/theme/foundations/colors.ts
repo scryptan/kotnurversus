@@ -1,5 +1,8 @@
 const colors = {
-  bg: "#FFFFFF",
+  bg: {
+    1: "#FFFFFF",
+    2: "#EBEBEB"
+  },
   text: {
     main: "#222222",
     extra: {
