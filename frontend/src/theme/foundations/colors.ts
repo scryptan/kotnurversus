@@ -1,13 +1,24 @@
 const colors = {
   bg: {
-    1: "#FFFFFF",
-    2: "#EBEBEB"
+    light: {
+      1: "#FFFFFF",
+      2: "#EBEBEB",
+    },
+    dark: {
+      1: "#121212",
+      2: "#222222",
+    },
   },
   text: {
-    main: "#222222",
-    extra: {
-      1: "#858585",
-      2: "#ADADAD",
+    light: {
+      main: "#222222",
+      extra: {
+        1: "#858585",
+        2: "#ADADAD",
+      },
+    },
+    dark: {
+      main: "#FFFFFF",
     },
   },
   primary: "#3D3D3D",
