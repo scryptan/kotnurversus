@@ -9,7 +9,7 @@ type Props = {
 
 const PageLayout = ({ children }: Props) => (
   <Flex as="main" flexDir="column">
-    <Header />
+    <Header mb={9} />
     <Suspense
       fallback={<Center flex={1} children={<Spinner size="lg" />} />}
       children={children}

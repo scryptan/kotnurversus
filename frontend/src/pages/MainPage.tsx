@@ -6,6 +6,7 @@ const MainPage = () => (
     mx="auto"
     w="full"
     maxW="wrapper"
+    px={4}
     flex={1}
     align="center"
     justify="space-between"

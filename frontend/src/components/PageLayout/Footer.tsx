@@ -1,5 +1,6 @@
 import { Box, HStack, LinkProps, Text } from "@chakra-ui/react";
 import BaseLink from "~/components/Link";
+import paths from "~/pages/paths";
 
 const Footer = () => (
   <Box minH="80px">
@@ -12,7 +13,7 @@ const Footer = () => (
       justify="space-between"
     >
       <Text color="#808080">© Команда Котнур 2023</Text>
-      <Link href="/">Турниры</Link>
+      <Link href={paths.tourneys.path}>Турниры</Link>
       <Link href="/">О проекте</Link>
     </HStack>
   </Box>
