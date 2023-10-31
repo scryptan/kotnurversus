@@ -1,14 +1,24 @@
 import { Styles } from "@chakra-ui/theme-tools";
 
 const styles: Styles = {
-  global: {
+  global: ({ colorMode }) => ({
     html: {
       h: "100%",
+      background: colorMode === "light" ? "bg.light.1" : "bg.dark.2",
       scrollBehavior: "smooth",
       scrollbarGutter: "stable",
     },
     body: {
       h: "100%",
+      color: `text.${colorMode}.main`,
+      "&::-webkit-scrollbar": {
+        w: "8px",
+        h: "8px",
+        background: colorMode === "light" ? "bg.light.1" : "bg.dark.2",
+      },
+      "&::-webkit-scrollbar-thumb": {
+        bg: colorMode === "light" ? "gray.200" : "gray.900",
+      },
     },
     main: {
       h: "100%",
@@ -16,8 +26,9 @@ const styles: Styles = {
     "#root": {
       h: "100%",
       pos: "relative",
+      background: colorMode === "light" ? "bg.light.1" : "bg.dark.2",
     },
-  },
+  }),
 };
 
 export default styles;

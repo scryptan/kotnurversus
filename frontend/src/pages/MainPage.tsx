@@ -1,9 +1,24 @@
-import { Center, Heading } from "@chakra-ui/react";
+import { Flex, Heading, Image } from "@chakra-ui/react";
+import laptopLink from "assets/laptop.png";
 
 const MainPage = () => (
-  <Center flex={1}>
-    <Heading>Hello, World!</Heading>
-  </Center>
+  <Flex
+    mx="auto"
+    w="full"
+    maxW="wrapper"
+    flex={1}
+    align="center"
+    justify="space-between"
+  >
+    <Heading fontSize="6xl">
+      Проведем
+      <br />
+      архитектурный
+      <br />
+      баттл
+    </Heading>
+    <Image w="48%" objectFit="contain" pointerEvents="none" src={laptopLink} />
+  </Flex>
 );
 
 export default MainPage;
