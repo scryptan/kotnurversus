@@ -20,7 +20,7 @@ const Header = () => {
       borderBottom="1px solid transparent"
       _light={{ borderColor: "bg.light.2" }}
     >
-      <HStack mx="auto" maxW="1248px" h="full" spacing={8}>
+      <HStack mx="auto" maxW="wrapper" h="full" spacing={8}>
         <Logo />
         <ColorModeButton />
         <Spacer />
@@ -35,7 +35,7 @@ const Header = () => {
 };
 
 const Logo = () => (
-  <BaseLink href={paths.main.path} _hover={{ transform: "translateY(5%)" }}>
+  <BaseLink href={paths.main.path} _hover={{ transform: "scale(1.025)" }}>
     <Text as="span" color="secondary" fontSize="32px" fontWeight="semibold">
       Котнур
     </Text>

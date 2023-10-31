@@ -5,7 +5,7 @@ const Footer = () => (
   <Box minH="80px">
     <HStack
       mx="auto"
-      maxW="1248px"
+      maxW="wrapper"
       px={12}
       h="full"
       spacing={8}
