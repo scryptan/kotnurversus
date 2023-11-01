@@ -19,8 +19,8 @@ public class DbContext : Microsoft.EntityFrameworkCore.DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        var workspace = modelBuilder.Entity<UserDbo>();
-        workspace.HasKey(x => x.Id);
-        workspace.HasIndex(x => x.Email).IsUnique();
+        var user = modelBuilder.Entity<UserDbo>();
+        user.HasKey(x => x.Id);
+        user.HasIndex(x => x.Email).IsUnique();
     }
 }

@@ -7,10 +7,6 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <Folder Include="Services\" />
-    </ItemGroup>
-
-    <ItemGroup>
       <ProjectReference Include="..\Core\Core.csproj" />
       <ProjectReference Include="..\Db\Db.csproj" />
       <ProjectReference Include="..\Models\Models.csproj" />
