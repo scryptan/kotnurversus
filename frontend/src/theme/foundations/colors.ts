@@ -19,6 +19,10 @@ const colors = {
     },
     dark: {
       main: "#FFFFFF",
+      extra: {
+        1: "#858585",
+        2: "#ADADAD",
+      },
     },
   },
   primary: "#3D3D3D",

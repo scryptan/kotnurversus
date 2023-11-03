@@ -10,6 +10,7 @@ import {
 import dayjs from "dayjs";
 import { memo } from "react";
 import Link from "~/components/Link";
+import paths from "~/pages/paths";
 import { Tourney } from "~/types/tourney";
 
 type Props = {
@@ -47,7 +48,7 @@ const BodyRow = memo(
   ({ tourney }: BodyRowProps) => (
     <Grid
       as={Link}
-      href="/"
+      href={paths.tourney.path(tourney.id)}
       gridTemplateColumns="1fr 150px 200px"
       gridAutoRows="64px"
       fontSize="lg"
