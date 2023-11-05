@@ -28,7 +28,7 @@ const TourneyArtifacts = ({ artifacts }: Props) => {
   return (
     <Box>
       <ControlHeader isOpen={isOpen} onToggle={setIsOpen.toggle} />
-      <Collapse in={isOpen} unmountOnExit>
+      <Collapse in={isOpen} animateOpacity>
         <ArtifactsSection px={2} mt={6} artifacts={artifacts} />
       </Collapse>
     </Box>
@@ -79,11 +79,15 @@ const ArtifactsSection = ({ artifacts, ...props }: ArtifactsSectionProps) => (
   <Box {...props}>
     <UnorderedList m={0} fontSize="lg">
       {artifacts.map((a, i) => (
-        <ListItem key={i} ml={3}>
+        <ListItem
+          key={i}
+          ml={3}
+          color="blackAlpha.700"
+          _dark={{ color: "whiteAlpha.700" }}
+        >
           <Link
             isExternal
             href={a.link}
-            color="blue.400"
             variant="underline"
             target="_blank"
             children={a.name}

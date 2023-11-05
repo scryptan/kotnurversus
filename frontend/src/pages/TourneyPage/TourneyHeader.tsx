@@ -1,8 +1,5 @@
 import {
   BoxProps,
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
   Heading,
   SimpleGrid,
   Stack,
@@ -11,8 +8,7 @@ import {
 } from "@chakra-ui/react";
 import dayjs from "dayjs";
 import { ReactNode } from "react";
-import { Link } from "react-router-dom";
-import BreadcrumbIcon from "~/icons/BreadcrumbIcon";
+import Breadcrumb from "~/components/Breadcrumb";
 import paths from "~/pages/paths";
 import { TourneyFullInfo } from "~/types/tourney";
 
@@ -22,32 +18,15 @@ type Props = {
 
 const TourneyHeader = ({ tourney, ...props }: Props) => (
   <Stack spacing={8} {...props}>
-    <TourneyBreadcrumb />
+    <Breadcrumb items={breadcrumbItems} />
     <TourneyInfo px={3} tourney={tourney} />
   </Stack>
 );
 
-const TourneyBreadcrumb = () => (
-  <Breadcrumb
-    spacing={2}
-    fontSize="sm"
-    color="blackAlpha.800"
-    _dark={{ color: "whiteAlpha.800" }}
-    separator={<BreadcrumbIcon mb={1} boxSize="9px" />}
-  >
-    <BreadcrumbItem>
-      <BreadcrumbLink as={Link} to={paths.main.path}>
-        Главная
-      </BreadcrumbLink>
-    </BreadcrumbItem>
-
-    <BreadcrumbItem>
-      <BreadcrumbLink as={Link} to={paths.tourneys.path}>
-        Турниры
-      </BreadcrumbLink>
-    </BreadcrumbItem>
-  </Breadcrumb>
-);
+const breadcrumbItems = [
+  { name: "Главная", link: paths.main.path },
+  { name: "Турниры", link: paths.tourneys.path },
+];
 
 const TourneyInfo = ({ tourney, ...props }: Props) => (
   <SimpleGrid columns={2} gridGap={8} {...props}>

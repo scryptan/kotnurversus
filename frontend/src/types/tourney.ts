@@ -1,3 +1,5 @@
+import { MatchState } from "~/types/match";
+
 export type Tourney = {
   id: number;
   name: string;
@@ -14,19 +16,11 @@ export type TourneyFullInfo = Tourney & {
 
 export type TourneyMatch = {
   id: number;
-  name: string;
   nextMatchId: number | null;
   startTime: string;
-  state: TourneyMatchState;
+  state: MatchState;
   participants: TourneyTeam[];
 };
-
-export enum TourneyMatchState {
-  Scheduled = "SCHEDULED",
-  Played = "PLAYED",
-  WalkOver = "WALK_OVER",
-  Done = "DONE",
-}
 
 export type TourneyTeam = {
   id: string;

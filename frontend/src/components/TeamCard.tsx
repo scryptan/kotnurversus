@@ -1,12 +1,19 @@
-import { Box, Flex, ListItem, OrderedList, Text } from "@chakra-ui/react";
+import {
+  Box,
+  BoxProps,
+  Flex,
+  ListItem,
+  OrderedList,
+  Text,
+} from "@chakra-ui/react";
 import { memo } from "react";
 import { Team } from "~/types/team";
 
 type Props = {
   team: Team;
-};
+} & BoxProps;
 
-const TeamCard = ({ team }: Props) => (
+const TeamCard = ({ team, ...props }: Props) => (
   <Box
     w="250px"
     bg="blackAlpha.100"
@@ -18,6 +25,7 @@ const TeamCard = ({ team }: Props) => (
       bg: "whiteAlpha.100",
       borderColor: "whiteAlpha.400",
     }}
+    {...props}
   >
     <Flex px={4} h="42px" align="center">
       <Text

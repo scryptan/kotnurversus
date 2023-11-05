@@ -7,6 +7,10 @@ export default {
     pathTemplate: "/tourneys/:tourneyId",
     path: (tourneyId: number) => `/tourneys/${tourneyId}`,
   },
+  match: {
+    pathTemplate: "/match/:matchId",
+    path: (matchId: number | string) => `/match/${matchId}`,
+  },
   main: {
     pathTemplate: "/*",
     path: "/",

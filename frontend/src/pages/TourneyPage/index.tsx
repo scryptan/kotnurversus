@@ -1,10 +1,11 @@
 import { Stack } from "@chakra-ui/react";
 import { Team } from "~/types/team";
-import { TourneyFullInfo, TourneyMatchState } from "~/types/tourney";
+import { TourneyFullInfo } from "~/types/tourney";
 import TourneyArtifacts from "./TourneyArtifacts";
 import TourneyBracket from "./TourneyBracket";
 import TourneyHeader from "./TourneyHeader";
 import TourneyTeams from "./TourneyTeams";
+import { MatchState } from "~/types/match";
 
 const TourneyPage = () => (
   <Stack px={2} pb={20} mx="auto" w="full" maxW="wrapper" flex={1} spacing={8}>
@@ -116,10 +117,9 @@ const mockTourney: TourneyFullInfo = {
   matches: [
     {
       id: 1,
-      name: "A1",
       nextMatchId: 5,
       startTime: "2021-05-30",
-      state: TourneyMatchState.Done,
+      state: MatchState.Done,
       participants: [
         {
           id: "T1",
@@ -136,10 +136,9 @@ const mockTourney: TourneyFullInfo = {
     },
     {
       id: 2,
-      name: "A2",
       nextMatchId: 5,
       startTime: "2021-05-30",
-      state: TourneyMatchState.Done,
+      state: MatchState.Done,
       participants: [
         {
           id: "T3",
@@ -156,10 +155,9 @@ const mockTourney: TourneyFullInfo = {
     },
     {
       id: 3,
-      name: "A3",
       nextMatchId: 6,
       startTime: "2021-05-30",
-      state: TourneyMatchState.Played,
+      state: MatchState.Play,
       participants: [
         { id: "T5", name: "Лилипуты" },
         { id: "T6", name: "Стуканцы" },
@@ -167,10 +165,9 @@ const mockTourney: TourneyFullInfo = {
     },
     {
       id: 4,
-      name: "A4",
       nextMatchId: 6,
       startTime: "2021-05-30",
-      state: TourneyMatchState.Scheduled,
+      state: MatchState.Prepare,
       participants: [
         { id: "T7", name: "Гремлины" },
         { id: "T8", name: "Коротышки" },
@@ -178,10 +175,9 @@ const mockTourney: TourneyFullInfo = {
     },
     {
       id: 5,
-      name: "A5",
       nextMatchId: 7,
       startTime: "2021-05-31",
-      state: TourneyMatchState.Scheduled,
+      state: MatchState.Prepare,
       participants: [
         { id: "T4", name: "Хоббиты" },
         { id: "T1", name: "Гномы" },
@@ -189,10 +185,9 @@ const mockTourney: TourneyFullInfo = {
     },
     {
       id: 6,
-      name: "A6",
       nextMatchId: 7,
       startTime: "2021-05-30",
-      state: TourneyMatchState.Scheduled,
+      state: MatchState.Prepare,
       participants: [
         // { id: "T5", name: "Лилипуты" },
         // { id: "T7", name: "Гремлины" },
@@ -200,10 +195,9 @@ const mockTourney: TourneyFullInfo = {
     },
     {
       id: 7,
-      name: "A7",
       nextMatchId: null,
       startTime: "2021-05-30",
-      state: TourneyMatchState.Scheduled,
+      state: MatchState.Prepare,
       participants: [],
     },
   ],

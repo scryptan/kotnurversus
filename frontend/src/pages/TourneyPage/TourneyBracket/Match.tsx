@@ -1,6 +1,7 @@
 import { Center, Flex, FlexProps, Text } from "@chakra-ui/react";
 import { MatchComponentProps } from "@g-loot/react-tournament-brackets/dist/src/types";
 import { Link } from "react-router-dom";
+import paths from "~/pages/paths";
 
 const Match = ({
   match,
@@ -11,7 +12,7 @@ const Match = ({
 }: MatchComponentProps) => (
   <Flex
     as={Link}
-    to={`/?matchId=${match.id}`}
+    to={paths.match.path(match.id)}
     h="full"
     cursor="pointer"
     flexDir="column"
