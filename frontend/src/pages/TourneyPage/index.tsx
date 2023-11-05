@@ -1,14 +1,108 @@
 import { Stack } from "@chakra-ui/react";
+import { Team } from "~/types/team";
 import { TourneyFullInfo, TourneyMatchState } from "~/types/tourney";
 import TourneyBracket from "./TourneyBracket";
 import TourneyHeader from "./TourneyHeader";
+import TourneyTeams from "./TourneyTeams";
 
 const TourneyPage = () => (
   <Stack px={2} mx="auto" w="full" maxW="wrapper" flex={1} spacing={8}>
     <TourneyHeader tourney={mockTourney} />
     <TourneyBracket matches={mockTourney.matches} />
+    <TourneyTeams teams={mockTeams} />
   </Stack>
 );
+
+const mockTeams: Team[] = [
+  {
+    id: "T1",
+    name: "Гномы",
+    participants: [
+      "Кислицин Денис",
+      "Ведешкин Никита",
+      "Дон Дарья",
+      "Третьяков Максим",
+      "Казаков Салават",
+    ],
+  },
+  {
+    id: "T2",
+    name: "Дворфы",
+    participants: [
+      "Кислицин Денис",
+      "Ведешкин Никита",
+      "Дон Дарья",
+      "Третьяков Максим",
+      "Казаков Салават",
+    ],
+  },
+  {
+    id: "T3",
+    name: "Полурослики",
+    participants: [
+      "Кислицин Денис",
+      "Ведешкин Никита",
+      "Дон Дарья",
+      "Третьяков Максим",
+      "Казаков Салават",
+    ],
+  },
+  {
+    id: "T4",
+    name: "Хоббиты",
+    participants: [
+      "Кислицин Денис",
+      "Ведешкин Никита",
+      "Дон Дарья",
+      "Третьяков Максим",
+      "Казаков Салават",
+    ],
+  },
+  {
+    id: "T5",
+    name: "Лилипуты",
+    participants: [
+      "Кислицин Денис",
+      "Ведешкин Никита",
+      "Дон Дарья",
+      "Третьяков Максим",
+      "Казаков Салават",
+    ],
+  },
+  {
+    id: "T6",
+    name: "Стуканцы",
+    participants: [
+      "Кислицин Денис",
+      "Ведешкин Никита",
+      "Дон Дарья",
+      "Третьяков Максим",
+      "Казаков Салават",
+    ],
+  },
+  {
+    id: "T7",
+    name: "Гремлины",
+    participants: [
+      "Кислицин Денис",
+      "Ведешкин Никита",
+      "Дон Дарья",
+      "Третьяков Максим",
+      "Казаков Салават",
+    ],
+  },
+  {
+    id: "T8",
+    name: "Коротышки",
+    participants: [
+      "Кислицин Денис",
+      "Ведешкин Никита",
+      "Дон Дарья",
+      "Третьяков Максим",
+      "Казаков Салават",
+    ],
+  },
+];
 
 const mockTourney: TourneyFullInfo = {
   id: 1,
@@ -30,13 +124,11 @@ const mockTourney: TourneyFullInfo = {
           name: "Гномы",
           resultText: "4",
           isWinner: true,
-          status: TourneyMatchState.Done,
         },
         {
           id: "T2",
           name: "Дворфы",
           resultText: "3",
-          status: TourneyMatchState.Done,
         },
       ],
     },

@@ -17,7 +17,7 @@ export type TourneyMatch = {
   nextMatchId: number | null;
   startTime: string;
   state: TourneyMatchState;
-  participants: TourneyParticipant[];
+  participants: TourneyTeam[];
 };
 
 export enum TourneyMatchState {
@@ -27,10 +27,9 @@ export enum TourneyMatchState {
   Done = "DONE",
 }
 
-export type TourneyParticipant = {
+export type TourneyTeam = {
   id: string;
   name: string;
   resultText?: string;
   isWinner?: boolean;
-  status?: TourneyMatchState;
 };
