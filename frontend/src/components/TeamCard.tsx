@@ -31,6 +31,7 @@ const TeamCard = ({ team }: Props) => (
       m={0}
       px={4}
       py={2}
+      spacing={1}
       borderTop="1px solid"
       borderColor="inherit"
     >

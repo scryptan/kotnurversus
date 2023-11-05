@@ -9,6 +9,7 @@ export type TourneyFullInfo = Tourney & {
   organizer: string;
   location: string;
   matches: TourneyMatch[];
+  artifacts: TourneyArtifact[];
 };
 
 export type TourneyMatch = {
@@ -32,4 +33,9 @@ export type TourneyTeam = {
   name: string;
   resultText?: string;
   isWinner?: boolean;
+};
+
+export type TourneyArtifact = {
+  name: string;
+  link: string;
 };

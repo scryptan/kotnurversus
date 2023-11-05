@@ -1,15 +1,17 @@
 import { Stack } from "@chakra-ui/react";
 import { Team } from "~/types/team";
 import { TourneyFullInfo, TourneyMatchState } from "~/types/tourney";
+import TourneyArtifacts from "./TourneyArtifacts";
 import TourneyBracket from "./TourneyBracket";
 import TourneyHeader from "./TourneyHeader";
 import TourneyTeams from "./TourneyTeams";
 
 const TourneyPage = () => (
-  <Stack px={2} mx="auto" w="full" maxW="wrapper" flex={1} spacing={8}>
+  <Stack px={2} pb={20} mx="auto" w="full" maxW="wrapper" flex={1} spacing={8}>
     <TourneyHeader tourney={mockTourney} />
     <TourneyBracket matches={mockTourney.matches} />
     <TourneyTeams teams={mockTeams} />
+    <TourneyArtifacts artifacts={mockTourney.artifacts} />
   </Stack>
 );
 
@@ -204,6 +206,9 @@ const mockTourney: TourneyFullInfo = {
       state: TourneyMatchState.Scheduled,
       participants: [],
     },
+  ],
+  artifacts: [
+    { name: "Ссылка на гугл, чтоб не забывали", link: "https://google.com" },
   ],
 };
 
