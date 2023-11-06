@@ -1,0 +1,1 @@
+dotnet ef migrations add --project Db --startup-project KotnurVersus.Web $1 
