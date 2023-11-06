@@ -2,7 +2,7 @@ namespace Db;
 
 public class DbContextFactory: IDbContextFactory
 {
-    private IDbSettings dbSettings;
+    private readonly IDbSettings dbSettings;
 
     public DbContextFactory(IDbSettings dbSettings)
     {

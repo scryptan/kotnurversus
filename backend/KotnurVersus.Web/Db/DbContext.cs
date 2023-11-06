@@ -1,3 +1,4 @@
+using Db.Dbo.Challenges;
 using Db.Dbo.Users;
 using Microsoft.EntityFrameworkCore;
 
@@ -22,5 +23,9 @@ public class DbContext : Microsoft.EntityFrameworkCore.DbContext
         var user = modelBuilder.Entity<UserDbo>();
         user.HasKey(x => x.Id);
         user.HasIndex(x => x.Email).IsUnique();
+
+        var challenge = modelBuilder.Entity<ChallengeDbo>();
+        challenge.HasKey(x => x.Id);
+        challenge.HasIndex(x => new {x.Title, x.Theme}).IsUnique();
     }
 }
