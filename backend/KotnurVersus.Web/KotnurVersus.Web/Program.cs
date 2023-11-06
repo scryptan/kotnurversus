@@ -2,6 +2,7 @@ using System.Reflection;
 using KotnurVersus.Web.Configuration;
 using KotnurVersus.Web.Helpers;
 using KotnurVersus.Web.Helpers.DI;
+using Vostok.Configuration.Sources.Environment;
 using Vostok.Hosting.Abstractions;
 using Vostok.Hosting.AspNetCore;
 using Vostok.Hosting.Setup;
@@ -28,19 +29,28 @@ builder.UseVostokHosting(
 
         environmentBuilder.SetupLog(x => x.SetupConsoleLog());
         environmentBuilder.SetupConfiguration(
-            c => { c.SetupSourceFor<WebSecrets>(); });
+            c =>
+            {
+                c.SetupSourceFor<WebSecrets>();
+                
+                c.AddSource(new EnvironmentVariablesSource());
+                c.AddJsonFile("config/config.json");
+            });
 
         environmentBuilder.SetPort(4000);
         environmentBuilder.SetupHost();
     });
-builder.Services.AddSingleton<ILog>(x =>
-    x.GetRequiredService<IVostokHostingEnvironment>().Log.WithAllFlowingContextProperties());
+builder.Services.AddSingleton<ILog>(
+    x =>
+        x.GetRequiredService<IVostokHostingEnvironment>().Log.WithAllFlowingContextProperties());
 
 var assemblyHelper = new AssemblyHelpers();
 var applicationAssemblies = new List<Assembly>(assemblyHelper.Assemblies);
-builder.Services.AddApplicationServices(new ConsoleLog(),
+builder.Services.AddApplicationServices(
+    new ConsoleLog(),
     applicationAssemblies.Distinct().ToArray(),
     assemblyHelper.ExcludeDiTypes.ToHashSet());
+
 builder.Services.AddLazy();
 
 builder.Services.AddEndpointsApiExplorer();
