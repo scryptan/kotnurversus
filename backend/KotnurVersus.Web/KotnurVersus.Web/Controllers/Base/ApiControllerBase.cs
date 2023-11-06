@@ -12,7 +12,7 @@ namespace KotnurVersus.Web.Controllers.Base;
 public abstract class ApiControllerBase : Controller
 {
     protected const string RoutePrefix = "api/v1/";
-    
+
     protected string? GetAuthScheme() => User.Identities.FirstOrDefault()?.AuthenticationType;
 
     protected virtual async Task RunInContextAsync(ActionExecutingContext context, Func<Task> next)
