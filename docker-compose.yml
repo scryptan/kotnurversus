@@ -1,0 +1,14 @@
+services:
+  postgres:
+    image: postgres:16
+    environment:
+      POSTGRES_DB: "kot"
+      POSTGRES_USER: "kot"
+      POSTGRES_PASSWORD: "kot"
+    ports:
+      - "5432:5432"
+
+  redis:
+    image: redis:6.2.5
+    ports:
+      - "6379:6379"
