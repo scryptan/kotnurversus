@@ -1,0 +1,23 @@
+services:
+  api:
+    image: kotnurverus:debug
+    environment:
+      DbConnectionString: "Host=postgres;Port=5432;Database=kot;Username=kot;Password=kot"
+      POSTGRES_USER: "kot"
+      POSTGRES_PASSWORD: "kot"
+    ports:
+      - "4000:4000"
+  
+  postgres:
+    image: postgres:16
+    environment:
+      POSTGRES_DB: "kot"
+      POSTGRES_USER: "kot"
+      POSTGRES_PASSWORD: "kot"
+    ports:
+      - "5432:5432"
+
+  redis:
+    image: redis:6.2.5
+    ports:
+      - "6379:6379"

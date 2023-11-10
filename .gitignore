@@ -780,3 +780,5 @@ fabric.properties
 # .pnp.*
 
 # End of https://www.toptal.com/developers/gitignore/api/react,csharp,rider,dotnetcore,aspnetcore,node,yarn
+
+backend/**/config/*
