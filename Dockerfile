@@ -4,14 +4,15 @@ EXPOSE 4000
 
 FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
 WORKDIR /src
-COPY ["backend/KotnurVersus.Web/KotnurVersus.Web/KotnurVersus.Web.csproj", "KotnurVersus.Web/"]
-COPY ["backend/KotnurVersus.Web/Domain/Domain.csproj", "Domain/"]
-COPY ["backend/KotnurVersus.Web/Core/Core.csproj", "Core/"]
-COPY ["backend/KotnurVersus.Web/Db/Db.csproj", "Db/"]
-COPY ["backend/KotnurVersus.Web/Models/Models.csproj", "Models/"]
+COPY ["backend/KotnurVersus.Web/KotnurVersus.Web.csproj", "KotnurVersus.Web/"]
+COPY ["backend/Domain/Domain.csproj", "Domain/"]
+COPY ["backend/Core/Core.csproj", "Core/"]
+COPY ["backend/Db/Db.csproj", "Db/"]
+COPY ["backend/Models/Models.csproj", "Models/"]
 RUN dotnet restore "KotnurVersus.Web/KotnurVersus.Web.csproj"
-COPY . .
+COPY ./backend/ .
 WORKDIR "/src/KotnurVersus.Web"
+RUN ls -la
 RUN dotnet build "KotnurVersus.Web.csproj" -c Release -o /app/build
 
 FROM build AS publish
