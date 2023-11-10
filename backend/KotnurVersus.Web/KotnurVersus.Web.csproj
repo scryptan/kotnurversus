@@ -22,10 +22,10 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Content Include="..\..\..\docker-compose.yml">
+      <Content Include="..\..\docker-compose.yml">
         <Link>docker-compose.yml</Link>
       </Content>
-      <Content Include="..\..\..\Dockerfile">
+      <Content Include="..\..\Dockerfile">
         <Link>Dockerfiile</Link>
       </Content>
     </ItemGroup>
