@@ -20,4 +20,5 @@ const ColorModeButton = () => {
     />
   );
 };
+
 export default ColorModeButton;

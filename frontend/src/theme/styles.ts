@@ -17,7 +17,7 @@ const styles: Styles = {
         background: colorMode === "light" ? "bg.light.1" : "bg.dark.2",
       },
       "&::-webkit-scrollbar-thumb": {
-        bg: colorMode === "light" ? "gray.200" : "gray.900",
+        bg: colorMode === "light" ? "#00000029" : "#ffffff29",
       },
     },
     main: {
