@@ -4,6 +4,7 @@
         <TargetFramework>net7.0</TargetFramework>
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
+        <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     </PropertyGroup>
 
     <ItemGroup>
@@ -18,6 +19,15 @@
 
     <ItemGroup>
       <ProjectReference Include="..\Domain\Domain.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Content Include="..\..\..\docker-compose.yml">
+        <Link>docker-compose.yml</Link>
+      </Content>
+      <Content Include="..\..\..\Dockerfile">
+        <Link>Dockerfiile</Link>
+      </Content>
     </ItemGroup>
 
 </Project>
