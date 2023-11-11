@@ -20,13 +20,12 @@ const Header = (props: BoxProps) => {
       minH="80px"
       bg={`bg.${colorMode}.1`}
       borderBottom="1px solid transparent"
-      _light={{ borderColor: "bg.light.2" }}
+      borderColor={`bg.${colorMode}.2`}
     >
       <HStack mx="auto" px={6} maxW="wrapper" h="full" spacing={8}>
         <Logo />
         <ColorModeButton />
         <Spacer />
-        <Link href="/">Провести турнир</Link>
         <Link href={paths.tourneys.path}>Турниры</Link>
         <Link border="2px solid" href="/">
           Войти как организатор

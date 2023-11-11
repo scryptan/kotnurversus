@@ -14,8 +14,8 @@ const TourneysPage = () => (
       containerProps={{ mx: "auto", w: "70%" }}
     />
     <Stack spacing={8}>
-      <TourneysTable title="Будущие турниры" tourneys={mockTourneys} />
       <TourneysTable title="Текущие турниры" tourneys={mockTourneys} />
+      <TourneysTable title="Будущие турниры" tourneys={mockTourneys} />
       <TourneysTable title="Прошедшие турниры" tourneys={mockTourneys} />
     </Stack>
   </Stack>
