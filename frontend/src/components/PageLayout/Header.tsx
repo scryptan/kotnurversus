@@ -8,6 +8,7 @@ import {
   useColorMode,
 } from "@chakra-ui/react";
 import BaseLink from "~/components/Link";
+import LoginButton from "~/components/PageLayout/LoginButton";
 import paths from "~/pages/paths";
 import ColorModeButton from "../ColorModeButton";
 
@@ -27,9 +28,7 @@ const Header = (props: BoxProps) => {
         <ColorModeButton />
         <Spacer />
         <Link href={paths.tourneys.path}>Турниры</Link>
-        <Link border="2px solid" href="/">
-          Войти как организатор
-        </Link>
+        <LoginButton />
       </HStack>
     </Box>
   );
@@ -46,21 +45,16 @@ const Logo = () => (
   </BaseLink>
 );
 
-const Link = (props: LinkProps) => {
-  const { colorMode } = useColorMode();
-
-  return (
-    <BaseLink
-      {...props}
-      px={6}
-      py={2}
-      fontSize="lg"
-      fontWeight="semibold"
-      borderRadius="full"
-      borderColor={`text.${colorMode}.main`}
-      _hover={{ color: "secondary", borderColor: "secondary" }}
-    />
-  );
-};
+const Link = (props: LinkProps) => (
+  <BaseLink
+    {...props}
+    px={6}
+    py={2}
+    fontSize="lg"
+    fontWeight="semibold"
+    borderRadius="full"
+    _hover={{ color: "secondary", borderColor: "secondary" }}
+  />
+);
 
 export default Header;

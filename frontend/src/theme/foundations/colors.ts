@@ -18,7 +18,7 @@ const colors = {
       },
     },
     dark: {
-      main: "#FFFFFF",
+      main: "#DDDDDD",
       extra: {
         1: "#858585", // whiteAlpha.600
         2: "#ADADAD", // whiteAlpha.400

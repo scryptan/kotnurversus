@@ -11,6 +11,10 @@ export default {
     pathTemplate: "/match/:matchId",
     path: (matchId: number | string) => `/match/${matchId}`,
   },
+  profile: {
+    pathTemplate: "/profile",
+    path: "/profile",
+  },
   main: {
     pathTemplate: "/*",
     path: "/",
