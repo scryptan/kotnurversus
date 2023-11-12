@@ -6,7 +6,7 @@ import {
   Text,
   useColorMode,
 } from "@chakra-ui/react";
-import dayjs from "dayjs";
+import { format } from "date-fns";
 import { ReactNode } from "react";
 import Breadcrumb from "~/components/Breadcrumb";
 import paths from "~/pages/paths";
@@ -41,7 +41,7 @@ const TourneyInfo = ({ tourney, ...props }: Props) => (
         {tourney.type.toLowerCase()}
       </TourneyInfoRow>
       <TourneyInfoRow name="Дата">
-        {dayjs(tourney.startDate).format("D MMMM YYYY")}
+        {format(tourney.startDate, "d MMMM yyyy")}
       </TourneyInfoRow>
       <TourneyInfoRow name="Место проведения">
         {tourney.location}

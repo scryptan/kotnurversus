@@ -3,6 +3,7 @@ import paths from "./paths";
 import MainPage from "./MainPage";
 
 const TourneysPage = lazy(() => import("./TourneysPage"));
+const CreateTourneyPage = lazy(() => import("./CreateTourneyPage"));
 const TourneyPage = lazy(() => import("./TourneyPage"));
 const MatchPage = lazy(() => import("./MatchPage"));
 const ProfilePage = lazy(() => import("./ProfilePage"));
@@ -11,6 +12,10 @@ export default {
   tourneys: {
     path: paths.tourneys.pathTemplate,
     Component: TourneysPage,
+  },
+  createTourney: {
+    path: paths.createTourney.pathTemplate,
+    Component: CreateTourneyPage,
   },
   tourney: {
     path: paths.tourney.pathTemplate,

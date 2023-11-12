@@ -75,12 +75,12 @@ const LoginWindow = (props: WindowProps) => {
   return (
     <Window
       heading="Вход"
-      contentProps={{ w: "450px" }}
+      contentProps={{ w: "400px" }}
       submitProps={{ onClick: handleSubmit, children: "Вход" }}
       {...props}
     >
       <Stack spacing={4}>
-        <Input label="Логин" />
+        <Input isRequired label="Логин" />
         <PasswordInput label="Пароль" />
       </Stack>
     </Window>

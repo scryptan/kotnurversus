@@ -3,6 +3,10 @@ export default {
     pathTemplate: "/tourneys",
     path: "/tourneys",
   },
+  createTourney: {
+    pathTemplate: "/tourneys/create",
+    path: `/tourneys/create`,
+  },
   tourney: {
     pathTemplate: "/tourneys/:tourneyId",
     path: (tourneyId: number) => `/tourneys/${tourneyId}`,

@@ -23,6 +23,7 @@ export type InputProps = {
 const Input = forwardRef<HTMLInputElement, InputProps>(
   (
     {
+      size,
       label,
       errorMessage,
       isRequired,
@@ -41,7 +42,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
       isRequired={isRequired}
       {...containerProps}
     >
-      <InputGroup>
+      <InputGroup size={size}>
         {leftElement && (
           <InputLeftElement {...leftElementProps} children={leftElement} />
         )}

@@ -106,7 +106,7 @@ const Window = ({
           {heading && (
             <ModalHeader px={6} py={4} {...headerProps}>
               <Heading
-                fontSize="lg"
+                fontSize="2xl"
                 noOfLines={1}
                 wordBreak="break-all"
                 children={heading}

@@ -7,7 +7,7 @@ import {
   Text,
   TextProps,
 } from "@chakra-ui/react";
-import dayjs from "dayjs";
+import { format } from "date-fns";
 import { memo } from "react";
 import Link from "~/components/Link";
 import paths from "~/pages/paths";
@@ -62,7 +62,7 @@ const BodyRow = memo(
     >
       <BodyCell>{tourney.name}</BodyCell>
       <BodyCell textAlign="center">
-        {dayjs(tourney.startDate).format("DD.MM")}
+        {format(tourney.startDate, "dd.MM")}
       </BodyCell>
       <BodyCell textAlign="center">{tourney.type}</BodyCell>
     </Grid>

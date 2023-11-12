@@ -1,12 +1,19 @@
-import { Heading, Stack } from "@chakra-ui/react";
+import { Button, HStack, Heading, Stack } from "@chakra-ui/react";
+import { Link } from "react-router-dom";
 import Input from "~/components/Input";
+import PlusIcon from "~/icons/PlusIcon";
 import SearchIcon from "~/icons/SearchIcon";
-import TourneysTable from "./TourneysTable";
+import paths from "~/pages/paths";
 import { Tourney } from "~/types/tourney";
+import { useAuthContext } from "~/utils/auth-context";
+import TourneysTable from "./TourneysTable";
 
 const TourneysPage = () => (
   <Stack mx="auto" p={8} w="full" maxW="wrapper" flex={1} spacing={10}>
-    <Heading fontSize="4xl">Турниры по архитектуре приложений</Heading>
+    <HStack justify="space-between">
+      <Heading fontSize="4xl">Турниры по архитектуре приложений</Heading>
+      <CreateTourneyButton />
+    </HStack>
     <Input
       placeholder="Поиск по названию турнира"
       rightElement={<SearchIcon boxSize={6} />}
@@ -21,11 +28,30 @@ const TourneysPage = () => (
   </Stack>
 );
 
+const CreateTourneyButton = () => {
+  const { isAuthenticated } = useAuthContext();
+
+  if (!isAuthenticated) {
+    return null;
+  }
+
+  return (
+    <Button
+      as={Link}
+      size="lg"
+      colorScheme="teal"
+      to={paths.createTourney.path}
+      leftIcon={<PlusIcon boxSize={6} />}
+      children="Создать турнир"
+    />
+  );
+};
+
 const mockTourneys: Tourney[] = [...Array(5)].map((_, i) => ({
   id: i + 1,
   name: `Турнир ${i + 1}`,
   startDate: new Date(),
-  type: "Очно",
+  type: "Оффлайн",
 }));
 
 export default TourneysPage;
