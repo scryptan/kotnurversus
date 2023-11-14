@@ -36,10 +36,9 @@ const DateInput = forwardRef<DateInputProps, "input">(
 
     const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
       const value = e.currentTarget.value;
-      if (value.length !== 10) return;
-
       const day = parse(value, "dd.MM.yyyy", new Date());
-      const normalizedDay = isValid(day) ? day : undefined;
+      const normalizedDay =
+        value.length === 10 && isValid(day) ? day : undefined;
       setSelectedMonth(normalizedDay);
       onChange?.(normalizedDay);
     };

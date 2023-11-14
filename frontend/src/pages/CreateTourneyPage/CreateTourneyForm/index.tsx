@@ -1,31 +1,117 @@
-import { Grid, Input, Text, useId } from "@chakra-ui/react";
+import { Button, Grid, Radio, RadioGroup, Text, useId } from "@chakra-ui/react";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { ReactNode } from "react";
+import { Controller, useForm } from "react-hook-form";
 import DateInput from "~/components/DateInput";
+import Input from "~/components/Input";
 import TimeInput from "~/components/TimeInput";
+import { TourneyType } from "~/types/tourney";
+import { TOURNEY_TYPE_NAMES } from "~/utils/tourney";
+import { TourneyFormSchema, tourneyFormSchema } from "./tourney-form-schema";
 
-const CreateTourneyForm = () => (
-  <Grid gridTemplateColumns="300px 500px" gridColumnGap={16} gridRowGap={8}>
-    <FormLabel isRequired label="Название турнира">
-      {(id) => <Input id={id} size="md" />}
-    </FormLabel>
-    <FormLabel isRequired label="Дата проведения турнира">
-      {(id) => <DateInput id={id} size="md" containerProps={{ w: "200px" }} />}
-    </FormLabel>
-    <FormLabel isRequired label="Время турнира">
-      {(id) => (
-        <TimeInput
-          id={id}
-          size="md"
-          containerProps={{ w: "110px" }}
-          onChange={console.log}
+const CreateTourneyForm = () => {
+  const {
+    control,
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<TourneyFormSchema>({
+    resolver: zodResolver(tourneyFormSchema),
+  });
+
+  const onSubmit = handleSubmit(console.log);
+
+  return (
+    <Grid
+      as="form"
+      gridTemplateColumns="300px 500px"
+      gridColumnGap={16}
+      gridRowGap={8}
+      onSubmit={onSubmit}
+    >
+      <FormLabel isRequired label="Название турнира">
+        {(id) => (
+          <Input
+            id={id}
+            size="md"
+            errorMessage={errors.name?.message}
+            {...register("name")}
+          />
+        )}
+      </FormLabel>
+      <FormLabel isRequired label="Дата проведения турнира">
+        {(id) => (
+          <Controller
+            name="day"
+            control={control}
+            render={({ field, fieldState: { error } }) => (
+              <DateInput
+                {...field}
+                id={id}
+                size="md"
+                containerProps={{ w: "200px" }}
+                errorMessage={error?.message}
+              />
+            )}
+          />
+        )}
+      </FormLabel>
+      <FormLabel isRequired label="Время турнира">
+        {(id) => (
+          <Controller
+            name="time"
+            control={control}
+            render={({ field, fieldState: { error } }) => (
+              <TimeInput
+                {...field}
+                id={id}
+                size="md"
+                containerProps={{ w: "110px" }}
+                errorMessage={error?.message}
+              />
+            )}
+          />
+        )}
+      </FormLabel>
+      <FormLabel label="Место проведения">
+        <Controller
+          name="type"
+          control={control}
+          render={({ field }) => (
+            <RadioGroup
+              colorScheme="teal"
+              display="flex"
+              gap={4}
+              {...field}
+              defaultValue={TourneyType.Offline}
+            >
+              {Object.entries(TOURNEY_TYPE_NAMES).map(([value, name]) => (
+                <Radio key={value} value={value} children={name} />
+              ))}
+            </RadioGroup>
+          )}
         />
-      )}
-    </FormLabel>
-    <FormLabel label="Место проведения">
-      {(id) => <Input id={id} size="md" />}
-    </FormLabel>
-  </Grid>
-);
+      </FormLabel>
+      <FormLabel label="Место проведения">
+        {(id) => <Input {...register("location")} id={id} size="md" />}
+      </FormLabel>
+      <FormLabel label="Темы бизнес-сценариев">
+        {(id) => <Input id={id} size="md" />}
+      </FormLabel>
+      <FormLabel label="Дополнительные требования">
+        {(id) => <Input id={id} size="md" />}
+      </FormLabel>
+      <Button
+        mt={8}
+        w="50%"
+        gridColumn="2 / -1"
+        colorScheme="teal"
+        type="submit"
+        children="Создать турнир"
+      />
+    </Grid>
+  );
+};
 
 type FormLabelProps = {
   label: string;

@@ -12,6 +12,7 @@ import { memo } from "react";
 import Link from "~/components/Link";
 import paths from "~/pages/paths";
 import { Tourney } from "~/types/tourney";
+import { TOURNEY_TYPE_NAMES } from "~/utils/tourney";
 
 type Props = {
   title: string;
@@ -64,7 +65,7 @@ const BodyRow = memo(
       <BodyCell textAlign="center">
         {format(tourney.startDate, "dd.MM")}
       </BodyCell>
-      <BodyCell textAlign="center">{tourney.type}</BodyCell>
+      <BodyCell textAlign="center">{TOURNEY_TYPE_NAMES[tourney.type]}</BodyCell>
     </Grid>
   ),
   (prev, next) => prev.tourney.id === next.tourney.id

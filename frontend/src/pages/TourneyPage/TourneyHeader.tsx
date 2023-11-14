@@ -11,6 +11,7 @@ import { ReactNode } from "react";
 import Breadcrumb from "~/components/Breadcrumb";
 import paths from "~/pages/paths";
 import { TourneyFullInfo } from "~/types/tourney";
+import { TOURNEY_TYPE_NAMES } from "~/utils/tourney";
 
 type Props = {
   tourney: TourneyFullInfo;
@@ -38,7 +39,7 @@ const TourneyInfo = ({ tourney, ...props }: Props) => (
     </Stack>
     <Stack spacing={2} justify="center" justifySelf="flex-end">
       <TourneyInfoRow name="Формат">
-        {tourney.type.toLowerCase()}
+        {TOURNEY_TYPE_NAMES[tourney.type]?.toLowerCase()}
       </TourneyInfoRow>
       <TourneyInfoRow name="Дата">
         {format(tourney.startDate, "d MMMM yyyy")}

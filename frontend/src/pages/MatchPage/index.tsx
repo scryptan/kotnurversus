@@ -3,6 +3,7 @@ import { Match, MatchState } from "~/types/match";
 import MatchHeader from "./MatchHeader";
 import MatchStateSection from "./MatchStateSection";
 import MatchTaskSection from "./MatchTaskSection";
+import { TourneyType } from "~/types/tourney";
 
 const MatchPage = () => (
   <Stack px={2} pb={20} mx="auto" w="full" maxW="wrapper" flex={1} spacing={8}>
@@ -22,7 +23,7 @@ const mockMatch: Match = {
     id: 1,
     name: "RuCode",
     startDate: new Date(),
-    type: "Очно",
+    type: TourneyType.Offline,
   },
   teams: [
     {

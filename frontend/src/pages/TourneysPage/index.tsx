@@ -4,7 +4,7 @@ import Input from "~/components/Input";
 import PlusIcon from "~/icons/PlusIcon";
 import SearchIcon from "~/icons/SearchIcon";
 import paths from "~/pages/paths";
-import { Tourney } from "~/types/tourney";
+import { Tourney, TourneyType } from "~/types/tourney";
 import { useAuthContext } from "~/utils/auth-context";
 import TourneysTable from "./TourneysTable";
 
@@ -51,7 +51,7 @@ const mockTourneys: Tourney[] = [...Array(5)].map((_, i) => ({
   id: i + 1,
   name: `Турнир ${i + 1}`,
   startDate: new Date(),
-  type: "Оффлайн",
+  type: TourneyType.Offline,
 }));
 
 export default TourneysPage;
