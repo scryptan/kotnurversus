@@ -1,6 +1,7 @@
 import { Grid, Input, Text, useId } from "@chakra-ui/react";
 import { ReactNode } from "react";
 import DateInput from "~/components/DateInput";
+import TimeInput from "~/components/TimeInput";
 
 const CreateTourneyForm = () => (
   <Grid gridTemplateColumns="300px 500px" gridColumnGap={16} gridRowGap={8}>
@@ -9,6 +10,16 @@ const CreateTourneyForm = () => (
     </FormLabel>
     <FormLabel isRequired label="Дата проведения турнира">
       {(id) => <DateInput id={id} size="md" containerProps={{ w: "200px" }} />}
+    </FormLabel>
+    <FormLabel isRequired label="Время турнира">
+      {(id) => (
+        <TimeInput
+          id={id}
+          size="md"
+          containerProps={{ w: "110px" }}
+          onChange={console.log}
+        />
+      )}
     </FormLabel>
     <FormLabel label="Место проведения">
       {(id) => <Input id={id} size="md" />}

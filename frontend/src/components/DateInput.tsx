@@ -16,72 +16,74 @@ import useOutsideAction from "~/hooks/useOutsideAction";
 import CalendarIcon from "~/icons/CalendarIcon";
 
 export type DateInputProps = {
-  pickerProps?: React.ComponentProps<typeof DayPicker>;
-} & InputProps;
+  value?: Date;
+  onChange?: (newValue?: Date) => void;
+} & Omit<InputProps, "value" | "onChange">;
 
-const DateInput = forwardRef<DateInputProps, "input">((props, ref) => {
-  const boxRef = useRef<HTMLDivElement>(null);
-  const inputRef = useRef<HTMLInputElement>(null);
-  const inputRefs = useMergeRefs(inputRef, ref);
-  const [isOpen, setIsOpen] = useBoolean(false);
-  const [selectedDay, setSelectedDay] = useState<Date | undefined>();
-  const [selectedMonth, setSelectedMonth] = useState<Date | undefined>();
+const DateInput = forwardRef<DateInputProps, "input">(
+  ({ value, onChange, ...props }, ref) => {
+    const boxRef = useRef<HTMLDivElement>(null);
+    const inputRef = useRef<HTMLInputElement>(null);
+    const inputRefs = useMergeRefs(inputRef, ref);
+    const [isOpen, setIsOpen] = useBoolean(false);
+    const [selectedMonth, setSelectedMonth] = useState<Date | undefined>(value);
 
-  useOutsideAction({
-    boxRef,
-    isActive: isOpen,
-    callBackOnExit: setIsOpen.off,
-  });
+    useOutsideAction({
+      boxRef,
+      isActive: isOpen,
+      callBackOnExit: setIsOpen.off,
+    });
 
-  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const value = e.currentTarget.value;
-    if (value.length !== 10) return;
+    const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+      const value = e.currentTarget.value;
+      if (value.length !== 10) return;
 
-    const day = parse(value, "dd.MM.yyyy", new Date());
-    const normalizedDay = isValid(day) ? day : undefined;
-    setSelectedMonth(normalizedDay);
-    setSelectedDay(normalizedDay);
-  };
+      const day = parse(value, "dd.MM.yyyy", new Date());
+      const normalizedDay = isValid(day) ? day : undefined;
+      setSelectedMonth(normalizedDay);
+      onChange?.(normalizedDay);
+    };
 
-  const handleSelect: SelectSingleEventHandler = (day) => {
-    if (inputRef.current) {
-      inputRef.current.value = day ? format(day, "dd.MM.yyyy") : "";
-    }
-    setSelectedDay(day);
-  };
+    const handleSelect: SelectSingleEventHandler = (day) => {
+      if (inputRef.current) {
+        inputRef.current.value = day ? format(day, "dd.MM.yyyy") : "";
+      }
+      onChange?.(day);
+    };
 
-  return (
-    <Box ref={boxRef} {...props.containerProps}>
-      <Input
-        {...props}
-        ref={inputRefs}
-        placeholder="дд.мм.гггг"
-        onClick={setIsOpen.on}
-        onInput={maskDate}
-        onChange={handleChange}
-        rightElement={<CalendarIcon />}
-        rightElementProps={{ pointerEvents: "none" }}
-      />
-      <Popper
-        isOpen={isOpen}
-        isSameWidth={false}
-        anchorRef={inputRef}
-        placement="bottom-start"
-        {...dayPickerStyles}
-      >
-        <DayPicker
-          mode="single"
-          showOutsideDays
-          locale={ru}
-          month={selectedMonth}
-          onMonthChange={setSelectedMonth}
-          selected={selectedDay}
-          onSelect={handleSelect}
+    return (
+      <Box ref={boxRef} {...props.containerProps}>
+        <Input
+          {...props}
+          ref={inputRefs}
+          placeholder="дд.мм.гггг"
+          onClick={setIsOpen.on}
+          onInput={maskDate}
+          onChange={handleChange}
+          rightElement={<CalendarIcon />}
+          rightElementProps={{ pointerEvents: "none" }}
         />
-      </Popper>
-    </Box>
-  );
-});
+        <Popper
+          isOpen={isOpen}
+          isSameWidth={false}
+          anchorRef={inputRef}
+          placement="bottom-start"
+          {...dayPickerStyles}
+        >
+          <DayPicker
+            mode="single"
+            showOutsideDays
+            locale={ru}
+            month={selectedMonth}
+            onMonthChange={setSelectedMonth}
+            selected={value}
+            onSelect={handleSelect}
+          />
+        </Popper>
+      </Box>
+    );
+  }
+);
 
 const maskDate = (e: FormEvent<HTMLInputElement>) => {
   let value = e.currentTarget.value.replace(/\D/g, "").slice(0, 8);
