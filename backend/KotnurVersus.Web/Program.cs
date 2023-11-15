@@ -32,7 +32,7 @@ builder.UseVostokHosting(
             c =>
             {
                 c.SetupSourceFor<WebSecrets>();
-                
+
                 c.AddSource(new EnvironmentVariablesSource());
                 c.AddJsonFile("config/config.json");
             });
