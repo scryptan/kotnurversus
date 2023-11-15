@@ -15,6 +15,7 @@ const TourneysPage = () => (
       <CreateTourneyButton />
     </HStack>
     <Input
+      size="lg"
       placeholder="Поиск по названию турнира"
       rightElement={<SearchIcon boxSize={6} />}
       rightElementProps={{ pointerEvents: "none" }}

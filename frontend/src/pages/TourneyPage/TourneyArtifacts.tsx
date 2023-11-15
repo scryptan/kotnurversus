@@ -55,13 +55,14 @@ const ControlHeader = ({ isOpen, onToggle }: ControlHeaderProps) => {
       <Heading fontSize="3xl">Дополнительные материалы</Heading>
       <IconButton
         ref={buttonRef}
-        size="xs"
+        size="sm"
         variant="unstyled"
         pointerEvents="none"
         onClick={onToggle}
         icon={
           <ArrowDownIcon
-            transition="transform 300ms ease-out"
+            boxSize={8}
+            transition="transform 200ms ease-out"
             transform={`rotate(${isOpen ? -180 : 0}deg)`}
           />
         }

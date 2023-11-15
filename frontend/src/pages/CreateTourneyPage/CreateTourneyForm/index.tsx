@@ -7,6 +7,8 @@ import Input from "~/components/Input";
 import TimeInput from "~/components/TimeInput";
 import { TourneyType } from "~/types/tourney";
 import { TOURNEY_TYPE_NAMES } from "~/utils/tourney";
+import RequirementsInput from "./RequirementsInput";
+import ScenariosInput from "./ScenariosInput";
 import { TourneyFormSchema, tourneyFormSchema } from "./tourney-form-schema";
 
 const CreateTourneyForm = () => {
@@ -33,7 +35,6 @@ const CreateTourneyForm = () => {
         {(id) => (
           <Input
             id={id}
-            size="md"
             errorMessage={errors.name?.message}
             {...register("name")}
           />
@@ -48,7 +49,6 @@ const CreateTourneyForm = () => {
               <DateInput
                 {...field}
                 id={id}
-                size="md"
                 containerProps={{ w: "200px" }}
                 errorMessage={error?.message}
               />
@@ -65,7 +65,6 @@ const CreateTourneyForm = () => {
               <TimeInput
                 {...field}
                 id={id}
-                size="md"
                 containerProps={{ w: "110px" }}
                 errorMessage={error?.message}
               />
@@ -79,10 +78,10 @@ const CreateTourneyForm = () => {
           control={control}
           render={({ field }) => (
             <RadioGroup
-              colorScheme="teal"
-              display="flex"
-              gap={4}
               {...field}
+              gap={4}
+              display="flex"
+              colorScheme="teal"
               defaultValue={TourneyType.Offline}
             >
               {Object.entries(TOURNEY_TYPE_NAMES).map(([value, name]) => (
@@ -93,13 +92,37 @@ const CreateTourneyForm = () => {
         />
       </FormLabel>
       <FormLabel label="Место проведения">
-        {(id) => <Input {...register("location")} id={id} size="md" />}
+        {(id) => <Input {...register("location")} id={id} />}
       </FormLabel>
       <FormLabel label="Темы бизнес-сценариев">
-        {(id) => <Input id={id} size="md" />}
+        {(id) => (
+          <Controller
+            name="scenarioIds"
+            control={control}
+            render={({ field }) => (
+              <ScenariosInput
+                {...field}
+                id={id}
+                placeholder="Введите тему бизнес-сценария"
+              />
+            )}
+          />
+        )}
       </FormLabel>
       <FormLabel label="Дополнительные требования">
-        {(id) => <Input id={id} size="md" />}
+        {(id) => (
+          <Controller
+            name="requirementIds"
+            control={control}
+            render={({ field }) => (
+              <RequirementsInput
+                {...field}
+                id={id}
+                placeholder="Введите название дополнительного требования"
+              />
+            )}
+          />
+        )}
       </FormLabel>
       <Button
         mt={8}
@@ -124,7 +147,14 @@ const FormLabel = ({ label, isRequired, children }: FormLabelProps) => {
 
   return (
     <>
-      <Text as="label" htmlFor={id} mt={2} fontSize="lg" justifySelf="flex-end">
+      <Text
+        as="label"
+        htmlFor={id}
+        mt={2}
+        h="fit-content"
+        fontSize="lg"
+        justifySelf="flex-end"
+      >
         {label}
         {isRequired && <Text as="span" ml={2} color="red.500" children="*" />}
       </Text>

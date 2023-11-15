@@ -20,7 +20,8 @@ import {
 } from "@chakra-ui/react";
 import { useRef } from "react";
 
-export type WindowProps<T = Record<string, unknown>> = Props & T;
+export type WindowProps<T = Record<string, unknown>> = T &
+  Omit<Props, "children">;
 
 type Props = {
   isLoading?: boolean;

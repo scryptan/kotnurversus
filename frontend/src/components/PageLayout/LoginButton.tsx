@@ -51,7 +51,6 @@ const Button = forwardRef<ButtonProps, "button">((props, ref) => {
     <BaseButton
       ref={ref}
       px={6}
-      size="md"
       variant="unstyled"
       fontSize="lg"
       fontWeight="semibold"
@@ -80,8 +79,8 @@ const LoginWindow = (props: WindowProps) => {
       {...props}
     >
       <Stack spacing={4}>
-        <Input isRequired label="Логин" />
-        <PasswordInput label="Пароль" />
+        <Input isRequired label="Логин" size="lg" />
+        <PasswordInput label="Пароль" size="lg" />
       </Stack>
     </Window>
   );

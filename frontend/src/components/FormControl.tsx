@@ -26,6 +26,7 @@ const FormControl = forwardRef<HTMLDivElement, FormControlProps>(
       {children}
       {errorMessage && (
         <FormHelperText
+          mx={1}
           mt={2}
           color="red.500"
           _dark={{ color: "red.300" }}

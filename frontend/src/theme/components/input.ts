@@ -139,7 +139,7 @@ export default defineMultiStyleConfig({
   sizes,
   variants,
   defaultProps: {
-    size: "lg",
+    size: "md",
     variant: "primary",
   },
 });
