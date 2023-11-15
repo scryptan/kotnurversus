@@ -1,4 +1,4 @@
-import { Button, Grid, Radio, RadioGroup, Text, useId } from "@chakra-ui/react";
+import { Grid, Radio, RadioGroup, Text, useId } from "@chakra-ui/react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ReactNode } from "react";
 import { Controller, useForm } from "react-hook-form";
@@ -11,25 +11,31 @@ import RequirementsInput from "./RequirementsInput";
 import ScenariosInput from "./ScenariosInput";
 import { TourneyFormSchema, tourneyFormSchema } from "./tourney-form-schema";
 
-const CreateTourneyForm = () => {
+type Props = {
+  id?: string;
+  defaultValue?: Partial<TourneyFormSchema>;
+  onSubmit: (data: TourneyFormSchema) => void;
+};
+
+const TourneyForm = ({ id, defaultValue, onSubmit }: Props) => {
   const {
     control,
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<TourneyFormSchema>({
+    defaultValues: defaultValue,
     resolver: zodResolver(tourneyFormSchema),
   });
 
-  const onSubmit = handleSubmit(console.log);
-
   return (
     <Grid
+      id={id}
       as="form"
-      gridTemplateColumns="300px 500px"
-      gridColumnGap={16}
       gridRowGap={8}
-      onSubmit={onSubmit}
+      gridColumnGap={16}
+      gridTemplateColumns="300px 500px"
+      onSubmit={handleSubmit(onSubmit)}
     >
       <FormLabel isRequired label="Название турнира">
         {(id) => (
@@ -124,14 +130,6 @@ const CreateTourneyForm = () => {
           />
         )}
       </FormLabel>
-      <Button
-        mt={8}
-        w="50%"
-        gridColumn="2 / -1"
-        colorScheme="teal"
-        type="submit"
-        children="Создать турнир"
-      />
     </Grid>
   );
 };
@@ -163,4 +161,4 @@ const FormLabel = ({ label, isRequired, children }: FormLabelProps) => {
   );
 };
 
-export default CreateTourneyForm;
+export default TourneyForm;
