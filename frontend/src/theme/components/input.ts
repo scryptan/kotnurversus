@@ -103,14 +103,14 @@ const variantPrimary = definePartsStyle((props) => {
       borderColor: "transparent",
       bg: mode("blackAlpha.50", "whiteAlpha.50")(props),
       _hover: {
-        bg: mode("blackAlpha.100", "whiteAlpha.100")(props),
+        borderColor: mode("blackAlpha.50", "whiteAlpha.50")(props),
       },
       _readOnly: {
         boxShadow: "none !important",
         userSelect: "all",
       },
       _placeholder: {
-        color: "#ADADAD",
+        color: mode("blackAlpha.500", "whiteAlpha.500")(props),
       },
       _invalid: {
         borderColor: errorBorderColor,
@@ -125,7 +125,7 @@ const variantPrimary = definePartsStyle((props) => {
       bg: mode("blackAlpha.50", "whiteAlpha.50")(props),
     },
     element: {
-      color: "#ADADAD",
+      color: mode("blackAlpha.700", "whiteAlpha.700")(props),
     },
   };
 });
@@ -139,7 +139,7 @@ export default defineMultiStyleConfig({
   sizes,
   variants,
   defaultProps: {
-    size: "lg",
+    size: "md",
     variant: "primary",
   },
 });

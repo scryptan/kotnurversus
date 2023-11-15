@@ -4,8 +4,13 @@ export type Tourney = {
   id: number;
   name: string;
   startDate: Date;
-  type: string;
+  type: TourneyType;
 };
+
+export enum TourneyType {
+  Offline = "offline",
+  Online = "online",
+}
 
 export type TourneyFullInfo = Tourney & {
   organizer: string;

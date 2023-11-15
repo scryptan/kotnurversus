@@ -1,6 +1,6 @@
 import { Stack } from "@chakra-ui/react";
 import { Team } from "~/types/team";
-import { TourneyFullInfo } from "~/types/tourney";
+import { TourneyFullInfo, TourneyType } from "~/types/tourney";
 import TourneyArtifacts from "./TourneyArtifacts";
 import TourneyBracket from "./TourneyBracket";
 import TourneyHeader from "./TourneyHeader";
@@ -111,7 +111,7 @@ const mockTourney: TourneyFullInfo = {
   id: 1,
   name: "RuCode",
   startDate: new Date(),
-  type: "Очный",
+  type: TourneyType.Offline,
   location: "г. Екатеринбург, улица Универсиады, 7",
   organizer: "УрФУ",
   matches: [

@@ -1,5 +1,5 @@
 import { Box, BoxProps, Grid, Spacer, Stack, Text } from "@chakra-ui/react";
-import dayjs from "dayjs";
+import { addSeconds } from "date-fns";
 import IconButtonWithTooltip, {
   IconButtonWithTooltipProps,
 } from "~/components/IconButtonWithTooltip";
@@ -38,7 +38,7 @@ const StateCard = ({ match, ...props }: Props & BoxProps) => (
       textTransform="uppercase"
       children={matchStateMap[match.state] || match.state}
     />
-    <Timer endDate={dayjs().add(75, "s").toDate()} />
+    <Timer endDate={addSeconds(new Date(), 75)} />
   </Stack>
 );
 

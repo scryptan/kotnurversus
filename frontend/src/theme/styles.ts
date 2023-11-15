@@ -4,7 +4,7 @@ const styles: Styles = {
   global: ({ colorMode }) => ({
     html: {
       h: "100%",
-      background: colorMode === "light" ? "bg.light.1" : "bg.dark.2",
+      background: `bg.${colorMode}.1`,
       scrollBehavior: "smooth",
       scrollbarGutter: "stable",
     },
@@ -14,7 +14,7 @@ const styles: Styles = {
       "&::-webkit-scrollbar": {
         w: "8px",
         h: "8px",
-        background: colorMode === "light" ? "bg.light.1" : "bg.dark.2",
+        background: `bg.${colorMode}.1`,
       },
       "&::-webkit-scrollbar-thumb": {
         bg: colorMode === "light" ? "#00000029" : "#ffffff29",
@@ -26,7 +26,7 @@ const styles: Styles = {
     "#root": {
       h: "100%",
       pos: "relative",
-      background: colorMode === "light" ? "bg.light.1" : "bg.dark.2",
+      background: `bg.${colorMode}.1`,
     },
   }),
 };

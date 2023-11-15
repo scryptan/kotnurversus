@@ -8,8 +8,7 @@ import styles from "./styles";
 import foundations from "./foundations";
 
 const config: ThemeConfig = {
-  initialColorMode: "light",
-  // initialColorMode: "system",
+  initialColorMode: "dark",
 };
 
 // https://github.com/chakra-ui/chakra-ui/blob/main/packages/components/theme/src

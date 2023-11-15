@@ -7,7 +7,6 @@ const ColorModeButton = () => {
   const { colorMode, toggleColorMode } = useColorMode();
 
   const Icon = colorMode === "light" ? DarkIcon : LightIcon;
-  const iconColor = colorMode === "light" ? "#AAB3BA" : "#454D54";
 
   return (
     <IconButtonWithTooltip
@@ -16,7 +15,7 @@ const ColorModeButton = () => {
       label="Переключить тему"
       placement="right"
       onClick={toggleColorMode}
-      icon={<Icon color={iconColor} boxSize={6} />}
+      icon={<Icon color="#AAB3BA" boxSize={6} />}
     />
   );
 };
