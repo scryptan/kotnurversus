@@ -20,8 +20,8 @@ export type TourneyFullInfo = Tourney & {
 };
 
 export type TourneyMatch = {
-  id: number;
-  nextMatchId: number | null;
+  id: string;
+  nextMatchId: string | null;
   startTime: string;
   state: MatchState;
   participants: TourneyTeam[];
