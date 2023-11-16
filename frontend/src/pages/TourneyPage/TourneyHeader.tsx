@@ -42,7 +42,7 @@ const TourneyInfo = ({ tourney, ...props }: Props) => (
         {TOURNEY_TYPE_NAMES[tourney.type]?.toLowerCase()}
       </TourneyInfoRow>
       <TourneyInfoRow name="Дата">
-        {format(tourney.startDate, "d MMMM yyyy")}
+        {format(tourney.startDate, "d MMMM yyyy HH:mm")}
       </TourneyInfoRow>
       <TourneyInfoRow name="Место проведения">
         {tourney.location}

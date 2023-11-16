@@ -112,6 +112,7 @@ const TimerButton = (props: IconButtonWithTooltipProps) => (
 );
 
 const matchStateMap: Record<MatchState, string> = {
+  [MatchState.Init]: "Инициализация",
   [MatchState.WalkOver]: "Завершено",
   [MatchState.Prepare]: "Подготовка",
   [MatchState.Play]: "Презентация",

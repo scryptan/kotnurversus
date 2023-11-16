@@ -28,8 +28,8 @@ const MatchTaskSection = ({ task }: Props) => {
         Описание задачи
       </Heading>
       <Accordion allowMultiple>
-        {items.map((item) => (
-          <AccordionItem>
+        {items.map((item, i) => (
+          <AccordionItem key={i}>
             <AccordionButton py={3}>
               <Text as="span" flex={1} textAlign="left" children={item.name} />
               <AccordionIcon />

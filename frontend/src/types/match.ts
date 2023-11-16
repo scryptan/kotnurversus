@@ -11,6 +11,7 @@ export type Match = {
 
 export enum MatchState {
   WalkOver = "WALK_OVER",
+  Init = "INIT",
   Prepare = "PREPARE",
   Play = "PLAY",
   Defense = "DEFENSE",

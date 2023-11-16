@@ -1,6 +1,7 @@
 import { lazy } from "react";
 import paths from "./paths";
 import MainPage from "./MainPage";
+import { Spacer } from "@chakra-ui/react";
 
 const TourneysPage = lazy(() => import("./TourneysPage"));
 const CreateTourneyPage = lazy(() => import("./CreateTourneyPage"));
@@ -16,6 +17,10 @@ export default {
   createTourney: {
     path: paths.createTourney.pathTemplate,
     Component: CreateTourneyPage,
+  },
+  editTourney: {
+    path: paths.editTourney.pathTemplate,
+    Component: Spacer,
   },
   tourney: {
     path: paths.tourney.pathTemplate,
