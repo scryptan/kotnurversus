@@ -63,43 +63,53 @@ type SideProps = {
   resultText?: string | null;
 } & FlexProps;
 
-const Side = ({ isWon, isDone, name, resultText, ...props }: SideProps) => (
-  <Flex
-    h="full"
-    align="center"
-    justify="space-between"
-    opacity={!isWon && isDone ? 0.5 : 1}
-    _first={{
-      borderBottom: "none",
-      borderTopRadius: 4,
-      ".score": { borderTopRightRadius: 4 },
-    }}
-    _last={{
-      borderTop: "none",
-      borderBottomRadius: 4,
-      ".score": { borderBottomRightRadius: 4 },
-    }}
-    {...props}
-  >
-    <Text px={2} noOfLines={1} wordBreak="break-all" children={name} />
-    {isDone && (
-      <Center
-        className="score"
-        minW="15%"
-        w="15%"
-        h="full"
-        color="text.light.main"
-        bg={isWon ? "#7EA973" : "#BBBBBB"}
-      >
-        <Text
-          fontSize="lg"
-          noOfLines={1}
-          wordBreak="break-all"
-          children={resultText || 0}
-        />
-      </Center>
-    )}
-  </Flex>
-);
+const Side = ({ isWon, isDone, name, resultText, ...props }: SideProps) => {
+  const hasName = name && name != "TBD";
+
+  return (
+    <Flex
+      h="full"
+      align="center"
+      justify="space-between"
+      opacity={!isWon && isDone ? 0.5 : 1}
+      _first={{
+        borderBottom: "none",
+        borderTopRadius: 4,
+        ".score": { borderTopRightRadius: 4 },
+      }}
+      _last={{
+        borderTop: "none",
+        borderBottomRadius: 4,
+        ".score": { borderBottomRightRadius: 4 },
+      }}
+      {...props}
+    >
+      <Text
+        px={2}
+        noOfLines={1}
+        wordBreak="break-all"
+        opacity={hasName ? 1 : 0.5}
+        children={hasName ? name : "Не определено"}
+      />
+      {isDone && (
+        <Center
+          className="score"
+          minW="15%"
+          w="15%"
+          h="full"
+          color="text.light.main"
+          bg={isWon ? "#7EA973" : "#BBBBBB"}
+        >
+          <Text
+            fontSize="lg"
+            noOfLines={1}
+            wordBreak="break-all"
+            children={resultText || 0}
+          />
+        </Center>
+      )}
+    </Flex>
+  );
+};
 
 export default Match;

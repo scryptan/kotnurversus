@@ -1,9 +1,9 @@
 import { Stack } from "@chakra-ui/react";
+import { useState } from "react";
 import { MatchState } from "~/types/match";
 import { Team } from "~/types/team";
 import { TourneyFullInfo, TourneyType } from "~/types/tourney";
 import { useAuthContext } from "~/utils/auth-context";
-import { createMatchesFromTeams } from "~/utils/tourney";
 import TourneyActionButtons from "./TourneyActionButtons";
 import TourneyArtifacts from "./TourneyArtifacts";
 import TourneyBracket from "./TourneyBracket";
@@ -12,7 +12,7 @@ import TourneyTeams from "./TourneyTeams";
 
 const TourneyPage = () => {
   const { isAuthenticated } = useAuthContext();
-  const matches = createMatchesFromTeams(mockTeams);
+  const [teams, setTeams] = useState(mockTeams);
 
   return (
     <Stack
@@ -26,8 +26,8 @@ const TourneyPage = () => {
     >
       <TourneyHeader tourney={mockTourney} />
       {isAuthenticated && <TourneyActionButtons tourneyId={mockTourney.id} />}
-      <TourneyBracket matches={matches} />
-      <TourneyTeams teams={mockTeams} />
+      <TourneyBracket teams={teams} />
+      <TourneyTeams teams={teams} onChange={setTeams} />
       <TourneyArtifacts artifacts={mockTourney.artifacts} />
     </Stack>
   );
