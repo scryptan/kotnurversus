@@ -40,6 +40,7 @@ const TourneyForm = ({ id, defaultValue, onSubmit }: Props) => {
         {(id) => (
           <Input
             id={id}
+            placeholder="Введите название турнира"
             errorMessage={errors.name?.message}
             {...register("name")}
           />
@@ -61,7 +62,7 @@ const TourneyForm = ({ id, defaultValue, onSubmit }: Props) => {
           />
         )}
       </FormLabel>
-      <FormLabel isRequired label="Время турнира">
+      <FormLabel isRequired label="Время начала турнира">
         {(id) => (
           <Controller
             name="time"
@@ -70,14 +71,14 @@ const TourneyForm = ({ id, defaultValue, onSubmit }: Props) => {
               <TimeInput
                 {...field}
                 id={id}
-                containerProps={{ w: "110px" }}
+                containerProps={{ w: "140px" }}
                 errorMessage={error?.message}
               />
             )}
           />
         )}
       </FormLabel>
-      <FormLabel label="Место проведения">
+      <FormLabel isRequired label="Формат проведения">
         <Controller
           name="type"
           control={control}
@@ -97,7 +98,13 @@ const TourneyForm = ({ id, defaultValue, onSubmit }: Props) => {
         />
       </FormLabel>
       <FormLabel label="Место проведения">
-        {(id) => <Input {...register("location")} id={id} />}
+        {(id) => (
+          <Input
+            {...register("location")}
+            id={id}
+            placeholder="Введите место проведения"
+          />
+        )}
       </FormLabel>
       <FormLabel label="Дополнительные требования">
         {(id) => (
@@ -135,6 +142,7 @@ const FormLabel = ({ label, isRequired, children }: FormLabelProps) => {
         mt={2}
         h="fit-content"
         fontSize="lg"
+        fontWeight="medium"
         justifySelf="flex-end"
       >
         {label}
