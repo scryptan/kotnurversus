@@ -24,14 +24,14 @@ internal abstract class BaseEntityClient<T, TCreationArgs, TInvalidDataReason> :
         Route = route;
     }
 
-    public async Task<OperationResult<T, TInvalidDataReason>> Get(Guid id)
+    public async Task<OperationResult<T, TInvalidDataReason>> GetAsync(Guid id)
     {
         var request = Request.Get($"{Route}/{id}");
         var res = await SendRequestAsync<T, TInvalidDataReason>(request);
         return res;
     }
 
-    public async Task<OperationResult<T, TInvalidDataReason>> Create(TCreationArgs creationArgs)
+    public async Task<OperationResult<T, TInvalidDataReason>> CreateAsync(TCreationArgs creationArgs)
     {
         var request = Request
             .Post($"{Route}")
@@ -41,7 +41,7 @@ internal abstract class BaseEntityClient<T, TCreationArgs, TInvalidDataReason> :
         return res;
     }
 
-    public async Task<OperationResult<T, TInvalidDataReason>> Patch(Guid id, JsonPatchDocument<T> patch)
+    public async Task<OperationResult<T, TInvalidDataReason>> PatchAsync(Guid id, JsonPatchDocument<T> patch)
     {
         var request = Request
             .Patch($"{Route}")
@@ -51,7 +51,7 @@ internal abstract class BaseEntityClient<T, TCreationArgs, TInvalidDataReason> :
         return res;
     }
 
-    public async Task<VoidOperationResult> Delete(Guid id)
+    public async Task<VoidOperationResult> DeleteAsync(Guid id)
     {
         var request = Request.Delete($"{Route}/{id}");
         var res = await SendVoidRequestAsync(request);

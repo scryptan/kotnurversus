@@ -5,7 +5,7 @@ using Vostok.Logging.Abstractions;
 
 namespace Client;
 
-public class ApiClient
+public class ApiClient : IApiClient
 {
     public ApiClient(Uri uri, ILog log)
         : this(
@@ -24,6 +24,6 @@ public class ApiClient
 
         Challenges = new ChallengeClient(clusterClient, log, "challenges");
     }
-    
+
     public IChallengeClient Challenges { get; }
 }

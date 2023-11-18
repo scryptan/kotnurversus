@@ -9,8 +9,8 @@ public interface IBaseClient<T, TCreationArgs, TInvalidDataReason>
     where TCreationArgs : EntityCreationArgs
     where T : class
 {
-    public Task<OperationResult<T, TInvalidDataReason>> Get(Guid id);
-    public Task<OperationResult<T, TInvalidDataReason>> Create(TCreationArgs creationArgs);
-    public Task<OperationResult<T, TInvalidDataReason>> Patch(Guid id, JsonPatchDocument<T> patch);
-    public Task<VoidOperationResult> Delete(Guid id);
+    public Task<OperationResult<T, TInvalidDataReason>> GetAsync(Guid id);
+    public Task<OperationResult<T, TInvalidDataReason>> CreateAsync(TCreationArgs creationArgs);
+    public Task<OperationResult<T, TInvalidDataReason>> PatchAsync(Guid id, JsonPatchDocument<T> patch);
+    public Task<VoidOperationResult> DeleteAsync(Guid id);
 }
