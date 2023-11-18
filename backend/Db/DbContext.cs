@@ -1,4 +1,6 @@
 using Db.Dbo.Challenges;
+using Db.Dbo.Games;
+using Db.Dbo.Rounds;
 using Db.Dbo.Users;
 using Microsoft.EntityFrameworkCore;
 
@@ -12,6 +14,10 @@ public class DbContext : Microsoft.EntityFrameworkCore.DbContext
     {
         this.settings = settings;
     }
+
+    public DbSet<RoundDbo> Rounds { get; set; } = null!;
+    public DbSet<GameDbo> Games { get; set; } = null!;
+    public DbSet<ChallengeDbo> Challenge { get; set; } = null!;
 
     protected override void OnConfiguring(DbContextOptionsBuilder builder)
     {

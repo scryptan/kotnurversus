@@ -3,6 +3,7 @@ using Domain.Context;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.EntityFrameworkCore;
 using Models;
+using DbContext = Db.DbContext;
 
 namespace Domain.Services.Base;
 
@@ -39,7 +40,7 @@ public abstract class EntityServiceBase<T, TDbo> : IEntityService<T>
     public async Task AddAsync(T entity)
     {
         var dbo = new TDbo();
-        await FillDboAsync(entity, dbo);
+        await FillDboAsync(dbo, entity);
 
         await getMainDbSet(Context.DbContext).AddAsync(dbo);
     }
@@ -51,7 +52,7 @@ public abstract class EntityServiceBase<T, TDbo> : IEntityService<T>
             throw new ArgumentException("Entity not exists");
 
         patchDocument.ApplyTo(entity);
-        await FillDboAsync(entity, dbo);
+        await FillDboAsync(dbo, entity);
     }
 
     public async Task DeleteAsync(T entity)
@@ -65,7 +66,7 @@ public abstract class EntityServiceBase<T, TDbo> : IEntityService<T>
     }
 
     protected virtual Task AfterDeleteAsync(T entity) => Task.CompletedTask;
-    protected abstract Task FillDboAsync(T entity, TDbo dbo);
+    protected abstract Task FillDboAsync(TDbo dbo, T entity);
     protected abstract Task FillEntityAsync(T entity, TDbo dbo);
 
     private async Task<TDbo?> ReadDboAsync(Guid id) =>

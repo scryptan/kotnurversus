@@ -1,6 +1,8 @@
+using System.ComponentModel.DataAnnotations.Schema;
+
 namespace Db.Dbo.Games;
 
-public class GameDbo
+[Table("games")]
+public class GameDbo : Dbo
 {
-    
 }
