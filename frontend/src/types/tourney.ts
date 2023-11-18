@@ -34,6 +34,13 @@ export type TourneyTeam = {
   isWinner?: boolean;
 };
 
+export type TourneyScenario = {
+  id: string;
+  name: string;
+  description?: string | undefined;
+  requirements?: string | undefined;
+};
+
 export type TourneyArtifact = {
   name: string;
   link: string;

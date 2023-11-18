@@ -7,6 +7,7 @@ import TourneyActionButtons from "./TourneyActionButtons";
 import TourneyArtifacts from "./TourneyArtifacts";
 import TourneyBracket from "./TourneyBracket";
 import TourneyHeader from "./TourneyHeader";
+import TourneyScenariosSettings from "./TourneyScenariosSettings";
 import TourneyTeams from "./TourneyTeams";
 import TourneyTimersSettings from "./TourneyTimersSettings";
 
@@ -28,6 +29,7 @@ const TourneyPage = () => {
       <TourneyBracket teams={teams} />
       <TourneyTeams teams={teams} onChange={setTeams} />
       <TourneyTimersSettings tourneyId={mockTourney.id} />
+      <TourneyScenariosSettings tourneyId={mockTourney.id} />
       <TourneyArtifacts artifacts={mockTourney.artifacts} />
     </Stack>
   );

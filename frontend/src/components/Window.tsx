@@ -14,11 +14,12 @@ import {
   ModalHeaderProps,
   ModalOverlay,
   ModalProps,
+  Spacer,
   Spinner,
   useColorMode,
   useForceUpdate,
 } from "@chakra-ui/react";
-import { useRef } from "react";
+import { ReactNode, useRef } from "react";
 
 export type WindowProps<T = Record<string, unknown>> = T &
   Omit<Props, "children">;
@@ -36,6 +37,7 @@ type Props = {
   headerProps?: ModalHeaderProps;
   bodyProps?: ModalBodyProps;
   footerProps?: ModalFooterProps;
+  ExtraButton?: () => ReactNode;
 } & ModalProps;
 
 const Window = ({
@@ -53,6 +55,7 @@ const Window = ({
   headerProps,
   bodyProps,
   footerProps,
+  ExtraButton,
   children,
   ...props
 }: WindowProps<Props>) => {
@@ -102,7 +105,7 @@ const Window = ({
           borderRadius={10}
           {...contentProps}
         >
-          {!isHideClose && <ModalCloseButton zIndex={2} />}
+          {!isHideClose && <ModalCloseButton />}
 
           {heading && (
             <ModalHeader px={6} py={4} {...headerProps}>
@@ -125,7 +128,9 @@ const Window = ({
           />
 
           {(!isHideSubmit || !isHideCancel) && (
-            <ModalFooter px={6} py={4} {...footerProps}>
+            <ModalFooter px={6} py={4} gap={4} {...footerProps}>
+              {ExtraButton && <ExtraButton />}
+              <Spacer />
               {!isHideCancel && (
                 <Button
                   variant="ghost"
@@ -137,7 +142,6 @@ const Window = ({
               )}
               {!isHideSubmit && (
                 <Button
-                  ml={4}
                   variant="solid"
                   colorScheme="teal"
                   isLoading={isLoading}
