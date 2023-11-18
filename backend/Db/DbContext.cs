@@ -24,6 +24,13 @@ public class DbContext : Microsoft.EntityFrameworkCore.DbContext
         builder.UseNpgsql(settings.ConnectionString, o => o.EnableRetryOnFailure(settings.MaxRetryOnFailureCount));
     }
 
+    protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
+    {
+        configurationBuilder
+            .Properties<DateTimeOffset>()
+            .HaveConversion<DateTimeOffsetConverter>();
+    }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         var user = modelBuilder.Entity<UserDbo>();

@@ -9,6 +9,10 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using Models.Rounds;
+using Models.Settings;
+using Models.Specifications;
+using Models.Teams;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
@@ -76,12 +80,12 @@ namespace Db.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("form");
 
-                    b.Property<SettingsDbo>("Settings")
+                    b.Property<Settings>("Settings")
                         .IsRequired()
                         .HasColumnType("jsonb")
                         .HasColumnName("settings");
 
-                    b.Property<List<SpecificationDbo>>("Specifications")
+                    b.Property<List<Specification>>("Specifications")
                         .IsRequired()
                         .HasColumnType("jsonb")
                         .HasColumnName("specifications");
@@ -90,7 +94,7 @@ namespace Db.Migrations
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("start_date");
 
-                    b.Property<List<TeamDbo>>("Teams")
+                    b.Property<List<Team>>("Teams")
                         .IsRequired()
                         .HasColumnType("jsonb")
                         .HasColumnName("teams");
@@ -111,7 +115,7 @@ namespace Db.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("id");
 
-                    b.Property<List<ArtifactDbo>>("Artifacts")
+                    b.Property<List<Artifact>>("Artifacts")
                         .IsRequired()
                         .HasColumnType("jsonb")
                         .HasColumnName("artifacts");
@@ -120,7 +124,7 @@ namespace Db.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("game_id");
 
-                    b.Property<List<HistoryItemDbo>>("History")
+                    b.Property<List<HistoryItem>>("History")
                         .IsRequired()
                         .HasColumnType("jsonb")
                         .HasColumnName("history");
@@ -133,12 +137,12 @@ namespace Db.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("order");
 
-                    b.Property<List<ParticipantDbo>>("Participants")
+                    b.Property<List<Participant>>("Participants")
                         .IsRequired()
                         .HasColumnType("jsonb")
                         .HasColumnName("participants");
 
-                    b.Property<SpecificationDbo>("Specification")
+                    b.Property<Specification>("Specification")
                         .HasColumnType("jsonb")
                         .HasColumnName("specification");
 

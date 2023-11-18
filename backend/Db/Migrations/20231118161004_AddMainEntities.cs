@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 using Models.Rounds;
 using Models.Settings;
 using Models.Specifications;
+using Models.Teams;
 
 #nullable disable
 
@@ -50,7 +51,7 @@ namespace Db.Migrations
                 columns: table => new
                 {
                     id = table.Column<Guid>(type: "uuid", nullable: false),
-                    teams = table.Column<List<TeamDbo>>(type: "jsonb", nullable: false),
+                    teams = table.Column<List<Team>>(type: "jsonb", nullable: false),
                     settings = table.Column<Settings>(type: "jsonb", nullable: false),
                     specifications = table.Column<List<Specification>>(type: "jsonb", nullable: false),
                     title = table.Column<string>(type: "text", nullable: false),
