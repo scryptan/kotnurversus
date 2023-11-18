@@ -1,3 +1,4 @@
+using System.ComponentModel.Design;
 using Db.Dbo;
 using Domain.Context;
 using Microsoft.AspNetCore.JsonPatch;
@@ -39,6 +40,8 @@ public abstract class EntityServiceBase<T, TDbo> : IEntityService<T>
 
     public async Task AddAsync(T entity)
     {
+        await PreprocessAsync(entity);
+
         var dbo = new TDbo();
         await FillDboAsync(dbo, entity);
 
@@ -68,6 +71,7 @@ public abstract class EntityServiceBase<T, TDbo> : IEntityService<T>
     protected virtual Task AfterDeleteAsync(T entity) => Task.CompletedTask;
     protected abstract Task FillDboAsync(TDbo dbo, T entity);
     protected abstract Task FillEntityAsync(T entity, TDbo dbo);
+    protected virtual Task PreprocessAsync(T? entity) => Task.CompletedTask;
 
     private async Task<TDbo?> ReadDboAsync(Guid id) =>
         await getMainDbSet(Context.DbContext).Where(x => x.Id == id).AsTracking().FirstOrDefaultAsync();

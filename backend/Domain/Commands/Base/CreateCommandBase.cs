@@ -48,6 +48,11 @@ public abstract class CreateCommandBase<T, TCreationArgs, TInvalidDataReason> : 
                 {
                     if (string.IsNullOrEmpty(pe.ConstraintName))
                         throw;
+                    
+                    var errorInfo = TryHandleConstraintViolation(pe.ConstraintName, entity);
+                    if (errorInfo == null)
+                        throw;
+                    return errorInfo;
                 }
 
                 return entity;
@@ -57,4 +62,5 @@ public abstract class CreateCommandBase<T, TCreationArgs, TInvalidDataReason> : 
     protected virtual T ConvertToEntity(TCreationArgs args) => throw new NotSupportedException();
 
     protected virtual Task<T> ConvertToEntityAsync(TCreationArgs args) => Task.FromResult(ConvertToEntity(args));
+    protected virtual CreateErrorInfo<CreateEntityError, TInvalidDataReason>? TryHandleConstraintViolation(string constraintName, T entity) => null;
 }

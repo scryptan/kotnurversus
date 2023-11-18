@@ -13,6 +13,6 @@ public abstract class ApiTestBase
     public void SetUp()
     {
         Log = new SynchronousConsoleLog();
-        Client = new ApiClient(new Uri("http://localhost:4001"), Log);
+        Client = new ApiClient(new Uri("http://localhost:4000"), Log);
     }
 }

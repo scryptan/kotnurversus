@@ -1,7 +1,11 @@
 using System.Reflection;
+using System.Security.Cryptography.Xml;
 using KotnurVersus.Web.Configuration;
 using KotnurVersus.Web.Helpers;
 using KotnurVersus.Web.Helpers.DI;
+using Microsoft.VisualBasic;
+using Vostok.Applications.AspNetCore;
+using Vostok.Applications.AspNetCore.Configuration;
 using Vostok.Configuration.Sources.Environment;
 using Vostok.Hosting.Abstractions;
 using Vostok.Hosting.AspNetCore;
@@ -53,6 +57,8 @@ builder.Services.AddApplicationServices(
 
 builder.Services.AddLazy();
 
+builder.Services.AddVostokRequestLogging(_ => {});
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
@@ -65,7 +71,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
+app.UseVostokRequestLogging();
+// app.UseHttpsRedirection();
 
 app.UseAuthorization();
 

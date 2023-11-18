@@ -21,7 +21,7 @@ internal abstract class BaseEntityClient<T, TCreationArgs, TInvalidDataReason> :
     {
         Client = client;
         Log = log;
-        Route = route;
+        Route = $"api/v1/{route}";
     }
 
     public async Task<OperationResult<T, TInvalidDataReason>> GetAsync(Guid id)
