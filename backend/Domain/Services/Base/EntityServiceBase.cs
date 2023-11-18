@@ -1,6 +1,5 @@
 using Db.Dbo;
 using Domain.Context;
-using Domain.Helpers;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.EntityFrameworkCore;
 using Models;
@@ -34,7 +33,7 @@ public abstract class EntityServiceBase<T, TDbo> : IEntityService<T>
         var result = new T();
         await FillEntityAsync(result, dbos);
 
-        return result.CopyEntity();
+        return result;
     }
 
     public async Task AddAsync(T entity)

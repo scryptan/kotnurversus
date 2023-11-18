@@ -23,7 +23,7 @@ public class VoidActionResult<TError> : IConvertToActionResult
     private IActionResult? Result { get; }
     public TError? Error { get; }
 
-    public static readonly VoidActionResult<TError> Success = new VoidActionResult<TError>();
+    public static readonly VoidActionResult<TError> Success = new();
 
     public static implicit operator VoidActionResult<TError>(TError error)
     {
