@@ -3,12 +3,19 @@ import { Link } from "react-router-dom";
 import PenIcon from "~/icons/PenIcon";
 import UnlockIcon from "~/icons/UnlockIcon";
 import paths from "~/pages/paths";
+import { useAuthContext } from "~/utils/auth-context";
 
 type Props = {
   tourneyId: number;
 };
 
 const TourneyActionButtons = ({ tourneyId }: Props) => {
+  const { isAuthenticated } = useAuthContext();
+
+  if (!isAuthenticated) {
+    return null;
+  }
+
   return (
     <HStack px={3} spacing={4}>
       <Button

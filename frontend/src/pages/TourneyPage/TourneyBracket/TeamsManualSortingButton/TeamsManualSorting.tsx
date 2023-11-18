@@ -126,7 +126,7 @@ const DraggableOverlay = ({ team }: DraggableItemProps) => {
   return (
     <Portal appendToParentPortal>
       <DragOverlay zIndex={1500} dropAnimation={dropAnimationConfig}>
-        {active && team ? <Draggable team={team} /> : null}
+        {active && team ? <Draggable isOverlay team={team} /> : null}
       </DragOverlay>
     </Portal>
   );
@@ -147,16 +147,22 @@ const dropAnimationConfig: DropAnimation = {
 
 type DraggableProps = {
   team: Team;
+  isOverlay?: boolean;
   listeners?: DraggableSyntheticListeners;
   transform?: Transform | null;
 } & ButtonProps;
 
 export const Draggable = forwardRef<HTMLButtonElement, DraggableProps>(
-  ({ team, listeners, transform, ...props }, ref) => {
+  ({ team, isOverlay, listeners, transform, ...props }, ref) => {
     const styles = {
       "--translate-x": `${transform?.x || 0}px`,
       "--translate-y": `${transform?.y || 0}px`,
     } as React.CSSProperties;
+
+    const overlayStyles = {
+      cursor: "grabbing",
+      _dark: { bg: "#464646" },
+    };
 
     return (
       <Button
@@ -164,10 +170,10 @@ export const Draggable = forwardRef<HTMLButtonElement, DraggableProps>(
         {...listeners}
         ref={ref}
         w="full"
-        colorScheme="pink"
         transition="none"
         transform="translate3d(var(--translate-x, 0), var(--translate-y, 0), 0)"
         style={styles}
+        {...(isOverlay ? overlayStyles : {})}
       >
         <Text noOfLines={1} wordBreak="break-all" children={team.name} />
       </Button>

@@ -3,15 +3,14 @@ import { useState } from "react";
 import { MatchState } from "~/types/match";
 import { Team } from "~/types/team";
 import { TourneyFullInfo, TourneyType } from "~/types/tourney";
-import { useAuthContext } from "~/utils/auth-context";
 import TourneyActionButtons from "./TourneyActionButtons";
 import TourneyArtifacts from "./TourneyArtifacts";
 import TourneyBracket from "./TourneyBracket";
 import TourneyHeader from "./TourneyHeader";
 import TourneyTeams from "./TourneyTeams";
+import TourneyTimersSettings from "./TourneyTimersSettings";
 
 const TourneyPage = () => {
-  const { isAuthenticated } = useAuthContext();
   const [teams, setTeams] = useState(mockTeams);
 
   return (
@@ -25,9 +24,10 @@ const TourneyPage = () => {
       spacing={8}
     >
       <TourneyHeader tourney={mockTourney} />
-      {isAuthenticated && <TourneyActionButtons tourneyId={mockTourney.id} />}
+      <TourneyActionButtons tourneyId={mockTourney.id} />
       <TourneyBracket teams={teams} />
       <TourneyTeams teams={teams} onChange={setTeams} />
+      <TourneyTimersSettings tourneyId={mockTourney.id} />
       <TourneyArtifacts artifacts={mockTourney.artifacts} />
     </Stack>
   );
