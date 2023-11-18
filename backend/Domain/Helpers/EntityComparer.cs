@@ -11,17 +11,7 @@ namespace Domain.Helpers;
 // ReSharper disable ReturnValueOfPureMethodIsNotUsed
 public static class EntityComparer
 {
-    private static readonly ConcurrentDictionary<Type, Func<object?, object?, bool>> equalsDelegates = new ConcurrentDictionary<Type, Func<object?, object?, bool>>();
-
-    public static bool EntityEquals(object? a, object? b, Type type)
-    {
-        if (a == null && b == null)
-            return true;
-        if (a == null || b == null)
-            return false;
-        var equals = equalsDelegates.GetOrAdd(type, EmitEquals);
-        return equals(a, b);
-    }
+    private static readonly ConcurrentDictionary<Type, Func<object?, object?, bool>> equalsDelegates = new();
 
     public static bool EntityEquals(object? a, object? b)
     {

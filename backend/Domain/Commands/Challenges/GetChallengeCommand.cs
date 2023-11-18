@@ -7,7 +7,7 @@ namespace Domain.Commands.Challenges;
 
 public class GetChallengeCommand : GetCommandBase<Challenge, InvalidChallengeDataReason>
 {
-    public GetChallengeCommand(IDataContextAccessor dataContextAccessor, IEntityService<Challenge, InvalidChallengeDataReason> repository)
+    public GetChallengeCommand(IDataContextAccessor dataContextAccessor, IEntityService<Challenge> repository)
         : base(dataContextAccessor, repository)
     {
     }

@@ -7,7 +7,7 @@ namespace Domain.Commands.Rounds;
 
 public class CreateRoundCommand : CreateCommandBase<Round, RoundCreationArgs, InvalidRoundDataReason>
 {
-    public CreateRoundCommand(IDataContextAccessor dataContextAccessor, IEntityService<Round, InvalidRoundDataReason> repository)
+    public CreateRoundCommand(IDataContextAccessor dataContextAccessor, IEntityService<Round> repository)
         : base(dataContextAccessor, repository)
     {
     }

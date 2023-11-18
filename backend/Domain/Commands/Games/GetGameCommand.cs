@@ -7,7 +7,7 @@ namespace Domain.Commands.Games;
 
 public class GetGameCommand : GetCommandBase<Game, InvalidGameDataReason>
 {
-    public GetGameCommand(IDataContextAccessor dataContextAccessor, IEntityService<Game, InvalidGameDataReason> repository)
+    public GetGameCommand(IDataContextAccessor dataContextAccessor, IEntityService<Game> repository)
         : base(dataContextAccessor, repository)
     {
     }

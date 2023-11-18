@@ -1,5 +1,3 @@
-using System.ComponentModel.DataAnnotations.Schema;
-
 namespace Models.Challenges;
 
 public class Challenge : EntityInfo, IEntity
