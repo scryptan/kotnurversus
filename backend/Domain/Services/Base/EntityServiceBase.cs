@@ -1,4 +1,3 @@
-using System.ComponentModel.Design;
 using Db.Dbo;
 using Domain.Context;
 using Microsoft.AspNetCore.JsonPatch;

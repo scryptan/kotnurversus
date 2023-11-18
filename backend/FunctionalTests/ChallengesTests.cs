@@ -1,7 +1,6 @@
 using FluentAssertions;
 using FunctionalTests.Base;
 using Models.Challenges;
-using Vostok.Clusterclient.Core.Model;
 
 namespace FunctionalTests;
 

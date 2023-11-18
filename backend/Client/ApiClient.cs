@@ -1,4 +1,5 @@
 ﻿using Client.Challenges;
+using Client.Games;
 using Vostok.Clusterclient.Core;
 using Vostok.Clusterclient.Transport;
 using Vostok.Logging.Abstractions;
@@ -23,7 +24,9 @@ public class ApiClient : IApiClient
         var clusterClient = new ClusterClient(log.ForContext<ApiClient>(), setup);
 
         Challenges = new ChallengeClient(clusterClient, log, "challenges");
+        Games = new GameClient(clusterClient, log, "games");
     }
 
     public IChallengeClient Challenges { get; }
+    public IGameClient Games { get; }
 }

@@ -24,10 +24,10 @@ internal abstract class BaseEntityClient<T, TCreationArgs, TInvalidDataReason> :
         Route = $"api/v1/{route}";
     }
 
-    public async Task<OperationResult<T, TInvalidDataReason>> GetAsync(Guid id)
+    public async Task<OperationResult<T, AccessSingleEntityError>> GetAsync(Guid id)
     {
         var request = Request.Get($"{Route}/{id}");
-        var res = await SendRequestAsync<T, TInvalidDataReason>(request);
+        var res = await SendRequestAsync<T, AccessSingleEntityError>(request);
         return res;
     }
 
@@ -51,10 +51,10 @@ internal abstract class BaseEntityClient<T, TCreationArgs, TInvalidDataReason> :
         return res;
     }
 
-    public async Task<VoidOperationResult> DeleteAsync(Guid id)
+    public async Task<VoidOperationResult<AccessSingleEntityError>> DeleteAsync(Guid id)
     {
         var request = Request.Delete($"{Route}/{id}");
-        var res = await SendVoidRequestAsync(request);
+        var res = await SendVoidRequestAsync<AccessSingleEntityError>(request);
         return res;
     }
 }

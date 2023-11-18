@@ -1,6 +1,6 @@
 namespace Models.Settings;
 
-public class Settings
+public record Settings
 {
     public int TimeoutsCount { get; set; } = 2;
     public int TimeoutSeconds { get; set; } = 60;

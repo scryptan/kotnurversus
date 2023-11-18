@@ -1,7 +1,6 @@
 using Db.Dbo.Rounds;
 using Domain.Context;
 using Domain.Services.Base;
-using Microsoft.EntityFrameworkCore;
 using Models.Rounds;
 
 namespace Domain.Services.Rounds;

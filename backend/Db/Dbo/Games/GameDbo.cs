@@ -2,6 +2,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using Models.Games;
 using Models.Settings;
 using Models.Specifications;
+using Models.Teams;
 
 namespace Db.Dbo.Games;
 
@@ -9,7 +10,7 @@ namespace Db.Dbo.Games;
 public class GameDbo : Dbo
 {
     [Column("teams", TypeName = "jsonb")]
-    public List<TeamDbo> Teams { get; set; } = new();
+    public List<Team> Teams { get; set; } = new();
 
     [Column("settings", TypeName = "jsonb")]
     public Settings Settings { get; set; } = null!;
@@ -28,4 +29,7 @@ public class GameDbo : Dbo
 
     [Column("form")]
     public GameForm Form { get; set; }
+
+    [Column("state")]
+    public GameState State { get; set; }
 }
