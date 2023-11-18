@@ -7,10 +7,10 @@ import {
   Text,
   useColorMode,
 } from "@chakra-ui/react";
+import ColorModeButton from "~/components/ColorModeButton";
 import BaseLink from "~/components/Link";
-import LoginButton from "~/components/PageLayout/LoginButton";
 import paths from "~/pages/paths";
-import ColorModeButton from "../ColorModeButton";
+import AuthButton from "./AuthButton";
 
 const Header = (props: BoxProps) => {
   const { colorMode } = useColorMode();
@@ -28,7 +28,7 @@ const Header = (props: BoxProps) => {
         <ColorModeButton />
         <Spacer />
         <Link href={paths.tourneys.path}>Турниры</Link>
-        <LoginButton />
+        <AuthButton />
       </HStack>
     </Box>
   );
