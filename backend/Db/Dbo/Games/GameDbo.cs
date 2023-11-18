@@ -1,5 +1,7 @@
 using System.ComponentModel.DataAnnotations.Schema;
 using Models.Games;
+using Models.Settings;
+using Models.Specifications;
 
 namespace Db.Dbo.Games;
 
@@ -10,10 +12,10 @@ public class GameDbo : Dbo
     public List<TeamDbo> Teams { get; set; } = new();
 
     [Column("settings", TypeName = "jsonb")]
-    public SettingsDbo Settings { get; set; } = null!;
+    public Settings Settings { get; set; } = null!;
 
     [Column("specifications", TypeName = "jsonb")]
-    public List<SpecificationDbo> Specifications { get; set; } = new();
+    public List<Specification> Specifications { get; set; } = new();
 
     [Column("title")]
     public string Title { get; set; } = null!;
