@@ -8,7 +8,6 @@ import TimeInput from "~/components/TimeInput";
 import { TourneyType } from "~/types/tourney";
 import { TOURNEY_TYPE_NAMES } from "~/utils/tourney";
 import RequirementsInput from "./RequirementsInput";
-import ScenariosInput from "./ScenariosInput";
 import { TourneyFormSchema, tourneyFormSchema } from "./tourney-form-schema";
 
 type Props = {
@@ -99,21 +98,6 @@ const TourneyForm = ({ id, defaultValue, onSubmit }: Props) => {
       </FormLabel>
       <FormLabel label="Место проведения">
         {(id) => <Input {...register("location")} id={id} />}
-      </FormLabel>
-      <FormLabel label="Темы бизнес-сценариев">
-        {(id) => (
-          <Controller
-            name="scenarioIds"
-            control={control}
-            render={({ field }) => (
-              <ScenariosInput
-                {...field}
-                id={id}
-                placeholder="Введите тему бизнес-сценария"
-              />
-            )}
-          />
-        )}
       </FormLabel>
       <FormLabel label="Дополнительные требования">
         {(id) => (

@@ -7,7 +7,6 @@ export const tourneyFormSchema = z.object({
   time: z.string({ required_error: "Заполните поле" }).min(5, "Заполните поле"),
   type: z.nativeEnum(TourneyType).default(TourneyType.Offline),
   location: z.string().optional(),
-  scenarioIds: z.number().array().default([]),
   requirementIds: z.number().array().default([]),
 });
 
