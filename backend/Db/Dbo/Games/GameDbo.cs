@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations.Schema;
+using Models.Games;
 
 namespace Db.Dbo.Games;
 

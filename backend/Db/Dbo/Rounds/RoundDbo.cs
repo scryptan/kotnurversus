@@ -11,7 +11,7 @@ public class RoundDbo : Dbo
     [Column("game_id")]
     public Guid GameId { get; set; }
     
-    [Column("specification")]
+    [Column("specification", TypeName = "jsonb")]
     public SpecificationDbo? Specification { get; set; }
 
     [Column("participants", TypeName = "jsonb")]

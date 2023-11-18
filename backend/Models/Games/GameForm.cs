@@ -1,4 +1,4 @@
-namespace Db.Dbo.Games;
+namespace Models.Games;
 
 public enum GameForm
 {
