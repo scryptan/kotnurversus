@@ -17,6 +17,7 @@ import PasswordInput from "~/components/PasswordInput";
 import Window, { WindowProps } from "~/components/Window";
 import paths from "~/pages/paths";
 import { useAuthContext } from "~/utils/auth-context";
+import { loginFormSchema, registerFormSchema } from "~/utils/auth-schemas";
 
 const AuthButton = () => {
   const window = useDisclosure();
@@ -114,8 +115,8 @@ const LoginForm = ({ id, onSubmit }: AuthFormProps) => {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<z.infer<typeof loginSchema>>({
-    resolver: zodResolver(loginSchema),
+  } = useForm<z.infer<typeof loginFormSchema>>({
+    resolver: zodResolver(loginFormSchema),
   });
 
   return (
@@ -143,22 +144,13 @@ const LoginForm = ({ id, onSubmit }: AuthFormProps) => {
   );
 };
 
-const loginSchema = z.object({
-  login: z
-    .string({ required_error: "Заполните поле" })
-    .min(1, "Заполните поле"),
-  password: z
-    .string({ required_error: "Заполните поле" })
-    .min(1, "Заполните поле"),
-});
-
 const RegisterForm = ({ id, onSubmit }: AuthFormProps) => {
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<z.infer<typeof registerSchema>>({
-    resolver: zodResolver(registerSchema),
+  } = useForm<z.infer<typeof registerFormSchema>>({
+    resolver: zodResolver(registerFormSchema),
   });
 
   return (
@@ -192,25 +184,5 @@ const RegisterForm = ({ id, onSubmit }: AuthFormProps) => {
     </Stack>
   );
 };
-
-const registerSchema = z
-  .object({
-    login: z
-      .string({ required_error: "Заполните поле" })
-      .min(5, "Минимальная длина 5 символов"),
-    password: z
-      .string({ required_error: "Заполните поле" })
-      .min(5, "Минимальная длина 5 символов")
-      .regex(/[a-z]/, "Пароль должен содержать строчную английскую букву")
-      .regex(/[A-Z]/, "Пароль должен содержать заглавную английскую букву")
-      .regex(/[0-9]/, "Пароль должен содержать цифру"),
-    confirmPassword: z
-      .string({ required_error: "Заполните поле" })
-      .min(1, "Заполните поле"),
-  })
-  .refine((values) => values.password === values.confirmPassword, {
-    path: ["confirmPassword"],
-    message: "Пароли должны совпадать",
-  });
 
 export default AuthButton;
