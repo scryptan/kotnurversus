@@ -7,8 +7,8 @@ namespace Domain.Commands.Rounds;
 
 public class PatchRoundCommand : PatchCommandBase<Round, InvalidRoundDataReason>
 {
-    public PatchRoundCommand(IDataContextAccessor dataContextAccessor, IEntityService<Round> repository)
-        : base(dataContextAccessor, repository)
+    public PatchRoundCommand(IDataContextAccessor dataContextAccessor, IEntityService<Round> service)
+        : base(dataContextAccessor, service)
     {
     }
 }

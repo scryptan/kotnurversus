@@ -5,7 +5,7 @@ using Models.Rounds;
 
 namespace Domain.Services.Rounds;
 
-public class RoundsService : EntityServiceBase<Round, RoundDbo>, IRoundsService
+public class RoundsService : EntityServiceBase<Round, RoundDbo, RoundSearchRequest>, IRoundsService
 {
     public RoundsService(IDataContext context)
         : base(context, x => x.Rounds)

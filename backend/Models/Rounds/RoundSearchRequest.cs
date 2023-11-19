@@ -1,6 +1,7 @@
+using Models.Search;
+
 namespace Models.Rounds;
 
-public class RoundSearchRequest
+public class RoundSearchRequest : SearchRequestBase
 {
-    
 }

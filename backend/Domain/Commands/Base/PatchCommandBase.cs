@@ -12,14 +12,14 @@ public abstract class PatchCommandBase<T, TInvalidDataReason> : IPatchCommand<T,
     where TInvalidDataReason : struct, Enum
 {
     private readonly IDataContextAccessor dataContextAccessor;
-    private readonly IEntityService<T> repository;
+    private readonly IEntityService<T> service;
 
     protected PatchCommandBase(
         IDataContextAccessor dataContextAccessor,
-        IEntityService<T> repository)
+        IEntityService<T> service)
     {
         this.dataContextAccessor = dataContextAccessor;
-        this.repository = repository;
+        this.service = service;
     }
 
     public Task<DomainResult<T, PatchEntityError, PatchErrorInfo<PatchEntityError, TInvalidDataReason>>> RunAsync(
@@ -30,11 +30,11 @@ public abstract class PatchCommandBase<T, TInvalidDataReason> : IPatchCommand<T,
         return dataContextAccessor.AccessDataAsync<DomainResult<T, PatchEntityError, PatchErrorInfo<PatchEntityError, TInvalidDataReason>>>(
             async dbContext =>
             {
-                var old = await repository.FindAsync(id);
+                var old = await service.FindAsync(id);
                 if (old == null)
                     return new PatchErrorInfo<PatchEntityError, TInvalidDataReason>(PatchEntityError.NotFound, $"{typeof(T).Name} {id} not found");
 
-                await repository.PatchAsync(old, patch);
+                await service.PatchAsync(old, patch);
 
                 try
                 {
@@ -50,7 +50,7 @@ public abstract class PatchCommandBase<T, TInvalidDataReason> : IPatchCommand<T,
                     return errorInfo;
                 }
 
-                var entity = await repository.FindAsync(id);
+                var entity = await service.FindAsync(id);
 
                 return entity!;
             });

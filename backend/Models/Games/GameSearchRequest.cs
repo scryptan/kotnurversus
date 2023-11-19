@@ -1,6 +1,7 @@
+using Models.Search;
+
 namespace Models.Games;
 
-public class GameSearchRequest
+public class GameSearchRequest : SearchRequestBase
 {
-    
 }

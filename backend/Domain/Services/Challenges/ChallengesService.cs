@@ -5,7 +5,7 @@ using Models.Challenges;
 
 namespace Domain.Services.Challenges;
 
-public class ChallengesService : EntityServiceBase<Challenge, ChallengeDbo>, IChallengesService
+public class ChallengesService : EntityServiceBase<Challenge, ChallengeDbo, ChallengeSearchRequest>, IChallengesService
 {
     public ChallengesService(IDataContext context)
         : base(context, x => x.Challenge)
