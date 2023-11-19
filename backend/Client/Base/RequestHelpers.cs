@@ -1,4 +1,5 @@
 using System.Globalization;
+using Models.Search;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Linq;
@@ -9,7 +10,8 @@ namespace Client.Base;
 
 internal static class RequestHelpers
 {
-    private static readonly string[] dateFormats = {
+    private static readonly string[] dateFormats =
+    {
         "ddd, d MMM yyyy H:m:s 'GMT'",
         "ddd, d MMM yyyy H:m:s",
         "d MMM yyyy H:m:s 'GMT'",
@@ -38,48 +40,19 @@ internal static class RequestHelpers
         FloatParseHandling = FloatParseHandling.Decimal,
     };
 
-    // public static Request WithFieldFilter<T>(this Request request, T? filter)
-    //     where T : class, IFieldFiltersContainer
-    // {
-    //     if (filter == null)
-    //         return request;
-    //
-    //     var url = new RequestUrlBuilder(request.Url.ToString());
-    //     AppendValueToQuery(url, filter, "");
-    //     return request.WithUrl(url.Build());
-    // }
+    public static Request WithFieldFilter<T>(this Request request, T? filter)
+        where T : SearchRequestBase
+    {
+        if (filter == null)
+            return request;
 
-    // private static void AppendValueToQuery(RequestUrlBuilder url, object value, string prefix)
-    // {
-    //     foreach (var prop in value.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance | BindingFlags.FlattenHierarchy))
-    //     {
-    //         var propValue = prop.GetValue(value);
-    //         switch (propValue)
-    //         {
-    //             case null:
-    //                 continue;
-    //             case IEnumerable<IFieldFilter> enumerableValue:
-    //             {
-    //                 foreach (var v in enumerableValue.Where(v => v != null))
-    //                     url.AppendToQuery($"{prefix}{ToCamelCase(prop.Name)}", v.ToString());
-    //
-    //                 break;
-    //             }
-    //
-    //             case IFieldFiltersContainer _:
-    //                 AppendValueToQuery(url, propValue, $"{prefix}{ToCamelCase(prop.Name)}.");
-    //                 break;
-    //
-    //             case DateTimeOffset dto:
-    //                 url.AppendToQuery($"{prefix}{ToCamelCase(prop.Name)}", dto.ToString("O"));
-    //                 break;
-    //
-    //             default:
-    //                 url.AppendToQuery($"{prefix}{ToCamelCase(prop.Name)}", Convert.ToString(propValue, CultureInfo.InvariantCulture));
-    //                 break;
-    //         }
-    //     }
-    // }
+        var url = new RequestUrlBuilder(request.Url.ToString());
+        var filterDict = Deserialize<Dictionary<string, object>>(Serialize(filter));
+        foreach (var (key, val) in filterDict)
+            url.AppendToQuery(key, val);
+
+        return request.WithUrl(url.Build());
+    }
 
     public static Request WithBearerAuthorizationHeader(this Request request, string bearerToken)
     {

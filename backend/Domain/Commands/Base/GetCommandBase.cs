@@ -9,14 +9,14 @@ public abstract class GetCommandBase<T, TInvalidDataReason> : IGetCommand<T>
     where TInvalidDataReason : struct, Enum
 {
     private readonly IDataContextAccessor dataContextAccessor;
-    private readonly IEntityService<T> repository;
+    private readonly IEntityService<T> service;
 
     protected GetCommandBase(
         IDataContextAccessor dataContextAccessor,
-        IEntityService<T> repository)
+        IEntityService<T> service)
     {
         this.dataContextAccessor = dataContextAccessor;
-        this.repository = repository;
+        this.service = service;
     }
 
     public Task<DomainResult<T, AccessSingleEntityError>> RunAsync(Guid id)
@@ -24,7 +24,7 @@ public abstract class GetCommandBase<T, TInvalidDataReason> : IGetCommand<T>
         return dataContextAccessor.AccessDataAsync<DomainResult<T, AccessSingleEntityError>>(
             async _ =>
             {
-                var existing = await repository.FindAsync(id);
+                var existing = await service.FindAsync(id);
                 if (existing == null)
                     return new ErrorInfo<AccessSingleEntityError>(AccessSingleEntityError.NotFound, $"{typeof(T).Name} {id} not found");
 

@@ -12,14 +12,14 @@ public abstract class CreateCommandBase<T, TCreationArgs, TInvalidDataReason> : 
     where TInvalidDataReason : struct, Enum
 {
     private readonly IDataContextAccessor dataContextAccessor;
-    private readonly IEntityService<T> repository;
+    private readonly IEntityService<T> service;
 
     protected CreateCommandBase(
         IDataContextAccessor dataContextAccessor,
-        IEntityService<T> repository)
+        IEntityService<T> service)
     {
         this.dataContextAccessor = dataContextAccessor;
-        this.repository = repository;
+        this.service = service;
     }
 
     public Task<DomainResult<T, CreateEntityError, CreateErrorInfo<CreateEntityError, TInvalidDataReason>>> RunAsync(
@@ -30,7 +30,7 @@ public abstract class CreateCommandBase<T, TCreationArgs, TInvalidDataReason> : 
         return dataContextAccessor.AccessDataAsync<DomainResult<T, CreateEntityError, CreateErrorInfo<CreateEntityError, TInvalidDataReason>>>(
             async dbContext =>
             {
-                var existing = await repository.FindAsync(id);
+                var existing = await service.FindAsync(id);
                 if (existing != null)
                 {
                     return existing;
@@ -39,7 +39,7 @@ public abstract class CreateCommandBase<T, TCreationArgs, TInvalidDataReason> : 
                 var entity = await ConvertToEntityAsync(args);
                 entity.Id = id;
 
-                await repository.AddAsync(entity);
+                await service.AddAsync(entity);
                 try
                 {
                     await dbContext.SaveChangesAsync(cancellationToken);

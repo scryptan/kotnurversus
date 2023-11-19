@@ -1,7 +1,12 @@
+using Core.Helpers;
 using FluentAssertions;
 using FunctionalTests.Base;
+using Microsoft.AspNetCore.JsonPatch;
+using Microsoft.AspNetCore.JsonPatch.Operations;
 using Models.Rounds;
 using Models.Settings;
+using Newtonsoft.Json.Serialization;
+using Vostok.Logging.Abstractions;
 
 namespace FunctionalTests;
 
@@ -63,6 +68,59 @@ public class RoundsTests : ApiTestBase
     }
 
     [Test]
+    public async Task Patch_CreatedWithCorrectData_ShouldBeSuccessful()
+    {
+        var creationArgs = new RoundCreationArgs
+        {
+            GameId = Guid.NewGuid(),
+            Order = 1
+        };
+        var defaultSettings = new Settings();
+        var entityRes = await Client.Rounds.CreateAsync(creationArgs);
+
+        entityRes.EnsureSuccess();
+        var entity = entityRes.Result;
+
+        var newHistory = new List<HistoryItem>
+        {
+            new()
+            {
+                Order = 0,
+                State = RoundState.None,
+                Value = "my data"
+            }
+        };
+        var result = await Client.Rounds.PatchAsync(
+            entity.Id,
+            new JsonPatchDocument<Round>(
+                new List<Operation<Round>>
+                {
+                    new()
+                    {
+                        op = "replace",
+                        path = "history",
+                        value = newHistory
+                    }
+                },
+                new DefaultContractResolver()));
+        result.EnsureSuccess();
+
+        entity = result.Result;
+        Log.Warn(Serializer.Serialize(entity));
+
+        entity.Id.Should().NotBe(Guid.Empty);
+        entity.Settings.Should().Be(defaultSettings);
+        entity.GameId.Should().Be(creationArgs.GameId);
+        entity.Order.Should().Be(creationArgs.Order);
+        entity.Artifacts.Should().BeEmpty();
+        entity.History.Should().BeEquivalentTo(newHistory);
+        entity.Specification.Should().BeNull();
+        entity.CurrentState.Should().BeEquivalentTo(newHistory.Single());
+        entity.WinnerId.Should().BeNull();
+        entity.NextRoundId.Should().BeNull();
+    }
+
+    [Test]
     public async Task Delete_CreatedWithCorrectData_ShouldBeSuccessful()
     {
         var creationArgs = new RoundCreationArgs
@@ -81,5 +139,24 @@ public class RoundsTests : ApiTestBase
 
         var result = await Client.Rounds.GetAsync(entity.Id);
         result.EnsureErrorInfo();
+    }
+
+    [Test]
+    public async Task Search_CreatedWithCorrectData_ShouldBeSuccessful()
+    {
+        var creationArgs = new RoundCreationArgs
+        {
+            GameId = Guid.NewGuid(),
+            Order = 1
+        };
+
+        var entityRes = await Client.Rounds.CreateAsync(creationArgs);
+
+        entityRes.EnsureSuccess();
+
+        var searchAsync = await Client.Rounds.SearchAsync();
+        searchAsync.EnsureSuccess();
+
+        searchAsync.Result.Count.Should().BeGreaterThan(0);
     }
 }

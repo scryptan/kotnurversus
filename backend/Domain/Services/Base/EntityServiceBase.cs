@@ -1,17 +1,21 @@
+using Core.Helpers;
 using Db.Dbo;
 using Domain.Context;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.EntityFrameworkCore;
 using Models;
+using Models.Search;
 using DbContext = Db.DbContext;
 
 namespace Domain.Services.Base;
 
-public abstract class EntityServiceBase<T, TDbo> : IEntityService<T>
+public abstract class EntityServiceBase<T, TDbo, TSearchRequest> : IEntityService<T, TSearchRequest>
     where T : EntityInfo, IEntity, new()
     where TDbo : Dbo, new()
+    where TSearchRequest : SearchRequestBase, ISearchRequest
 {
     private readonly Func<DbContext, DbSet<TDbo>> getMainDbSet;
+    protected const int MaxLimit = 100;
 
     protected EntityServiceBase(
         IDataContext context,
@@ -67,6 +71,37 @@ public abstract class EntityServiceBase<T, TDbo> : IEntityService<T>
         await AfterDeleteAsync(entity);
     }
 
+    public async Task<SearchResult<T>> SearchAsync(TSearchRequest searchRequest, CancellationToken cancellationToken)
+    {
+        var queryable = ReadDbosAsync();
+        queryable = await ApplyFilterAsync(queryable, searchRequest);
+
+        var dbos = await queryable
+            .AsEnumerable()
+            .Select(async x => await ToApiAsync(x))
+            .ToArrayAsync();
+
+        var result = new SearchResult<T>(dbos);
+
+        return result;
+    }
+
+    protected virtual Task<IQueryable<TDbo>> ApplyFilterAsync(IQueryable<TDbo> queryable, TSearchRequest searchRequest)
+    {
+        if (searchRequest.Limit != null)
+            queryable = queryable.Take(searchRequest.Limit.Value);
+
+        return Task.FromResult(queryable);
+    }
+
+    protected async Task<T> ToApiAsync(TDbo dbos)
+    {
+        var result = new T();
+
+        await FillEntityAsync(result, dbos);
+        return result;
+    }
+
     protected virtual Task AfterDeleteAsync(T entity) => Task.CompletedTask;
     protected abstract Task FillDboAsync(TDbo dbo, T entity);
     protected abstract Task FillEntityAsync(T entity, TDbo dbo);
@@ -74,4 +109,7 @@ public abstract class EntityServiceBase<T, TDbo> : IEntityService<T>
 
     private async Task<TDbo?> ReadDboAsync(Guid id) =>
         await getMainDbSet(Context.DbContext).Where(x => x.Id == id).AsTracking().FirstOrDefaultAsync();
+
+    private IQueryable<TDbo> ReadDbosAsync() =>
+        getMainDbSet(Context.DbContext).AsQueryable();
 }
