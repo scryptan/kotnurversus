@@ -5,6 +5,6 @@ namespace Client;
 
 public interface IApiClient
 {
-    IChallenge Challenges { get; }
-    IGame Games { get; }
+    IChallengeClient Challenges { get; }
+    IGameClient Games { get; }
 }

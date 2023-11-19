@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations.Schema;
 using Models.Rounds;
+using Models.Settings;
 using Models.Specifications;
 
 namespace Db.Dbo.Rounds;
@@ -9,16 +10,19 @@ public class RoundDbo : Dbo
 {
     [Column("history", TypeName = "jsonb")]
     public List<HistoryItem> History { get; set; } = new();
-    
+
     [Column("game_id")]
     public Guid GameId { get; set; }
-    
+
     [Column("specification", TypeName = "jsonb")]
     public Specification? Specification { get; set; }
 
+    [Column("settings", TypeName = "jsonb")]
+    public Settings Settings { get; set; } = null!;
+
     [Column("participants", TypeName = "jsonb")]
     public List<Participant> Participants { get; set; } = new();
-    
+
     [Column("next_round_id")]
     public Guid? NextRoundId { get; set; }
 
