@@ -140,4 +140,23 @@ public class RoundsTests : ApiTestBase
         var result = await Client.Rounds.GetAsync(entity.Id);
         result.EnsureErrorInfo();
     }
+
+    [Test]
+    public async Task Search_CreatedWithCorrectData_ShouldBeSuccessful()
+    {
+        var creationArgs = new RoundCreationArgs
+        {
+            GameId = Guid.NewGuid(),
+            Order = 1
+        };
+
+        var entityRes = await Client.Rounds.CreateAsync(creationArgs);
+
+        entityRes.EnsureSuccess();
+
+        var searchAsync = await Client.Rounds.SearchAsync();
+        searchAsync.EnsureSuccess();
+
+        searchAsync.Result.Count.Should().BeGreaterThan(0);
+    }
 }

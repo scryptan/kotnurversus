@@ -129,4 +129,26 @@ public class GamesTests : ApiTestBase
         var result = await Client.Games.GetAsync(entity.Id);
         result.EnsureErrorInfo();
     }
+
+    [Test]
+    public async Task Search_CreatedWithCorrectData_ShouldBeSuccessful()
+    {
+        var creationArgs = new GameCreationArgs
+        {
+            Description = "Some me",
+            Title = $"Im Bob Cat {Guid.NewGuid()}",
+            StartDate = DateTimeOffset.Now,
+            Settings = new Settings(),
+            Form = GameForm.Online,
+        };
+
+        var entityRes = await Client.Games.CreateAsync(creationArgs);
+
+        entityRes.EnsureSuccess();
+
+        var searchAsync = await Client.Games.SearchAsync();
+        searchAsync.EnsureSuccess();
+
+        searchAsync.Result.Count.Should().BeGreaterThan(0);
+    }
 }

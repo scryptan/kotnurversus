@@ -113,4 +113,24 @@ public class ChallengesTests : ApiTestBase
         var result = await Client.Challenges.GetAsync(entity.Id);
         result.EnsureErrorInfo();
     }
+
+    [Test]
+    public async Task Search_CreatedWithCorrectData_ShouldBeSuccessful()
+    {
+        var creationArgs = new ChallengeCreationArgs
+        {
+            Description = "Some me",
+            Theme = "Cat in the box",
+            Title = $"Im Bob Cat {Guid.NewGuid()}"
+        };
+
+        var entityRes = await Client.Challenges.CreateAsync(creationArgs);
+
+        entityRes.EnsureSuccess();
+
+        var searchAsync = await Client.Challenges.SearchAsync();
+        searchAsync.EnsureSuccess();
+
+        searchAsync.Result.Count.Should().BeGreaterThan(0);
+    }
 }
