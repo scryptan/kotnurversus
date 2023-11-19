@@ -3,6 +3,6 @@ using Models.Challenges;
 
 namespace Client.Challenges;
 
-public interface IChallengeClient : IClientBase<Challenge, ChallengeCreationArgs, InvalidChallengeDataReason>
+public interface IChallengeClient : IClientBase<Models.Challenges.Challenge, ChallengeCreationArgs, InvalidChallengeDataReason>
 {
 }

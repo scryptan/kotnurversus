@@ -11,4 +11,15 @@ public class CreateRoundCommand : CreateCommandBase<Round, RoundCreationArgs, In
         : base(dataContextAccessor, repository)
     {
     }
+
+    protected override Round ConvertToEntity(RoundCreationArgs args) => new()
+    {
+        GameId = args.GameId,
+        NextRoundId = args.NextRoundId,
+        Order = args.Order,
+        Settings = new(),
+        Artifacts = new(),
+        History = new(),
+        Participants = new()
+    };
 }
