@@ -1,6 +1,9 @@
 using FluentAssertions;
 using FunctionalTests.Base;
+using Microsoft.AspNetCore.JsonPatch;
+using Microsoft.AspNetCore.JsonPatch.Operations;
 using Models.Challenges;
+using Newtonsoft.Json.Serialization;
 
 namespace FunctionalTests;
 
@@ -47,6 +50,44 @@ public class ChallengesTests : ApiTestBase
         entity = result.Result;
         entity.Id.Should().NotBe(Guid.Empty);
         entity.Description.Should().Be(creationArgs.Description);
+        entity.Theme.Should().Be(creationArgs.Theme);
+        entity.Title.Should().Be(creationArgs.Title);
+    }
+
+    [Test]
+    public async Task Patch_CreatedWithCorrectData_ShouldBeSuccessful()
+    {
+        var creationArgs = new ChallengeCreationArgs
+        {
+            Description = "Some me",
+            Theme = "Cat in the box",
+            Title = $"Im Bob Cat {Guid.NewGuid()}"
+        };
+
+        var entityRes = await Client.Challenges.CreateAsync(creationArgs);
+
+        entityRes.EnsureSuccess();
+        var entity = entityRes.Result;
+
+        var newDescription = "My favorite desrioption";
+        var result = await Client.Challenges.PatchAsync(
+            entity.Id,
+            new JsonPatchDocument<Challenge>(
+                new List<Operation<Challenge>>
+                {
+                    new()
+                    {
+                        op = "replace",
+                        path = "/description",
+                        value = newDescription
+                    }
+                },
+                new DefaultContractResolver()));
+        result.EnsureSuccess();
+
+        entity = result.Result;
+        entity.Id.Should().NotBe(Guid.Empty);
+        entity.Description.Should().Be(newDescription);
         entity.Theme.Should().Be(creationArgs.Theme);
         entity.Title.Should().Be(creationArgs.Title);
     }

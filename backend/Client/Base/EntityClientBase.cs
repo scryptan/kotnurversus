@@ -27,6 +27,7 @@ internal abstract class EntityClientBase<T, TCreationArgs, TInvalidDataReason> :
     public async Task<OperationResult<T, AccessSingleEntityError>> GetAsync(Guid id)
     {
         var request = Request.Get($"{Route}/{id}");
+
         var res = await SendRequestAsync<T, AccessSingleEntityError>(request);
         return res;
     }
@@ -44,7 +45,7 @@ internal abstract class EntityClientBase<T, TCreationArgs, TInvalidDataReason> :
     public async Task<OperationResult<T, TInvalidDataReason>> PatchAsync(Guid id, JsonPatchDocument<T> patch)
     {
         var request = Request
-            .Patch($"{Route}")
+            .Patch($"{Route}/{id}")
             .WithJsonContent(patch);
 
         var res = await SendRequestAsync<T, TInvalidDataReason>(request);
@@ -54,6 +55,7 @@ internal abstract class EntityClientBase<T, TCreationArgs, TInvalidDataReason> :
     public async Task<VoidOperationResult<AccessSingleEntityError>> DeleteAsync(Guid id)
     {
         var request = Request.Delete($"{Route}/{id}");
+
         var res = await SendVoidRequestAsync<AccessSingleEntityError>(request);
         return res;
     }
