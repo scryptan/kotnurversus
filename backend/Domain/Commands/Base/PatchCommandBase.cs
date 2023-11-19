@@ -50,7 +50,9 @@ public abstract class PatchCommandBase<T, TInvalidDataReason> : IPatchCommand<T,
                     return errorInfo;
                 }
 
-                return old;
+                var entity = await repository.FindAsync(id);
+
+                return entity!;
             });
     }
 
