@@ -1,5 +1,6 @@
 using Domain.Commands;
 using KotnurVersus.Web.Helpers;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Models;
 
@@ -17,6 +18,16 @@ public abstract class CreatableEntityControllerBase<T, TCreationArgs, TInvalidDa
         [FromBody] TCreationArgs args)
     {
         var result = await createCommand.RunAsync(Guid.NewGuid(), args, HttpContext.RequestAborted);
+        return result.ToActionResult();
+    }
+
+    [HttpPatch("{id:guid}")]
+    public async Task<ActionResult<T, PatchErrorInfo<PatchEntityError, TInvalidDataReason>>> Patch(
+        [FromServices] IPatchCommand<T, TInvalidDataReason> createCommand,
+        [FromRoute] Guid id,
+        [FromBody] JsonPatchDocument<T> patch)
+    {
+        var result = await createCommand.RunAsync(id, patch, HttpContext.RequestAborted);
         return result.ToActionResult();
     }
 }
