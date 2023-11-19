@@ -23,7 +23,7 @@ const PasswordInput = forwardRef<InputProps, "input">((props, ref) => {
           border="none"
           tabIndex={-1}
           label={label}
-          icon={<Icon boxSize={6} />}
+          icon={<Icon boxSize={props.size === "lg" ? 6 : 5} />}
           onClick={setIsShowPassword.toggle}
         />
       }
