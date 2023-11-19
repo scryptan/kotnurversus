@@ -1,14 +1,15 @@
 using Microsoft.AspNetCore.JsonPatch;
 using Models;
+using Models.Search;
 using Vostok.Clusterclient.Core;
 using Vostok.Clusterclient.Core.Model;
 using Vostok.Logging.Abstractions;
 
 namespace Client.Base;
 
-internal abstract class EntityClientBase<T, TCreationArgs, TInvalidDataReason> : ClientBase, IClientBase<T, TCreationArgs, TInvalidDataReason>
+internal abstract class EntityClientBase<T, TCreationArgs, TSearchRequest, TInvalidDataReason> : ClientBase, IClientBase<T, TCreationArgs, TSearchRequest, TInvalidDataReason>
     where TInvalidDataReason : struct, Enum
-    // where TSearchRequest : class, ISearchRequest
+    where TSearchRequest : SearchRequestBase, ISearchRequest
     where TCreationArgs : EntityCreationArgs
     where T : class
 {
@@ -57,6 +58,16 @@ internal abstract class EntityClientBase<T, TCreationArgs, TInvalidDataReason> :
         var request = Request.Delete($"{Route}/{id}");
 
         var res = await SendVoidRequestAsync<AccessSingleEntityError>(request);
+        return res;
+    }
+
+    public async Task<OperationResult<SearchResult<T>, AccessMultipleEntitiesError>> SearchAsync(TSearchRequest? searchRequest = null)
+    {
+        var request = Request
+            .Get($"{Route}")
+            .WithFieldFilter(searchRequest);
+
+        var res = await SendRequestAsync<SearchResult<T>, AccessMultipleEntitiesError>(request);
         return res;
     }
 }

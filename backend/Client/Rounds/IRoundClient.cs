@@ -3,6 +3,6 @@ using Models.Rounds;
 
 namespace Client.Rounds;
 
-public interface IRoundClient : IClientBase<Round, RoundCreationArgs, InvalidRoundDataReason>
+public interface IRoundClient : IClientBase<Round, RoundCreationArgs, RoundSearchRequest, InvalidRoundDataReason>
 {
 }

@@ -24,7 +24,7 @@ public class ApiClient : IApiClient
     {
         var clusterClient = new ClusterClient(log.ForContext<ApiClient>(), setup);
 
-        Challenges = new Challenge(clusterClient, log, "challenges");
+        Challenges = new ChallengeClient(clusterClient, log, "challenges");
         Games = new GameClient(clusterClient, log, "games");
         Rounds = new RoundClient(clusterClient, log, "rounds");
     }

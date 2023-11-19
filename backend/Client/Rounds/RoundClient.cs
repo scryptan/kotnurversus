@@ -5,7 +5,7 @@ using Vostok.Logging.Abstractions;
 
 namespace Client.Rounds;
 
-internal class RoundClient : EntityClientBase<Round, RoundCreationArgs, InvalidRoundDataReason>, IRoundClient
+internal class RoundClient : EntityClientBase<Round, RoundCreationArgs, RoundSearchRequest, InvalidRoundDataReason>, IRoundClient
 {
     public RoundClient(IClusterClient client, ILog log, string route)
         : base(client, log, route)
