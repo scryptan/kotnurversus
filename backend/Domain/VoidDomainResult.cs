@@ -4,13 +4,13 @@ namespace Domain;
 
 public class VoidDomainResult
 {
-    public static readonly VoidDomainResult Success = new VoidDomainResult();
+    public static readonly VoidDomainResult Success = new();
 }
 
 public class VoidDomainResult<TErrorStatus> : VoidDomainResult<TErrorStatus, ErrorInfo<TErrorStatus>>
     where TErrorStatus : struct, Enum
 {
-    private static readonly VoidDomainResult<TErrorStatus> success = new VoidDomainResult<TErrorStatus>();
+    private static readonly VoidDomainResult<TErrorStatus> success = new();
 
     public static implicit operator VoidDomainResult<TErrorStatus>(VoidDomainResult _) => success;
 
@@ -27,7 +27,7 @@ public class VoidDomainResult<TErrorStatus, TErrorInfo>
     where TErrorInfo : ErrorInfo<TErrorStatus>
     where TErrorStatus : struct, Enum
 {
-    private static readonly VoidDomainResult<TErrorStatus, TErrorInfo> success = new VoidDomainResult<TErrorStatus, TErrorInfo>();
+    private static readonly VoidDomainResult<TErrorStatus, TErrorInfo> success = new();
 
     public TErrorInfo? ErrorInfo { get; protected set; }
 

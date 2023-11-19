@@ -1,70 +1,77 @@
+using Db.Dbo;
 using Domain.Context;
-using Domain.Helpers;
-using Domain.Repositories.Base;
+using Microsoft.AspNetCore.JsonPatch;
+using Microsoft.EntityFrameworkCore;
 using Models;
+using DbContext = Db.DbContext;
 
 namespace Domain.Services.Base;
 
-public abstract class EntityServiceBase<T, TInvalidDataReason> : IEntityService<T, TInvalidDataReason>
-    where T : EntityInfo, IEntity
-    where TInvalidDataReason : struct, Enum
+public abstract class EntityServiceBase<T, TDbo> : IEntityService<T>
+    where T : EntityInfo, IEntity, new()
+    where TDbo : Dbo, new()
 {
-    private readonly IEntityRepository<T> storage;
+    private readonly Func<DbContext, DbSet<TDbo>> getMainDbSet;
 
     protected EntityServiceBase(
         IDataContext context,
-        IEntityRepository<T> storage)
+        Func<DbContext, DbSet<TDbo>> getMainDbSet)
     {
         Context = context;
-        this.storage = storage;
+        this.getMainDbSet = getMainDbSet;
     }
 
     protected IDataContext Context { get; }
 
     public async Task<T?> FindAsync(Guid id)
     {
-        var entity = await storage.FindAsync(id);
-        if (entity != null)
+        var dbos = await ReadDboAsync(id);
+        if (dbos == null)
         {
-            RemoveSensitiveData(entity);
+            return null;
         }
 
-        return entity;
+        var result = new T();
+        await FillEntityAsync(result, dbos);
+
+        return result;
+    }
+
+    public async Task AddAsync(T entity)
+    {
+        await PreprocessAsync(entity);
+
+        var dbo = new TDbo();
+        await FillDboAsync(dbo, entity);
+
+        await getMainDbSet(Context.DbContext).AddAsync(dbo);
+    }
+
+    public async Task PatchAsync(T entity, JsonPatchDocument<T> patchDocument)
+    {
+        var dbo = await ReadDboAsync(entity.Id);
+        if (dbo == null)
+            throw new ArgumentException("Entity not exists");
+
+        patchDocument.ApplyTo(entity);
+        await FillDboAsync(dbo, entity);
     }
 
     public async Task DeleteAsync(T entity)
     {
-        await storage.DeleteAsync(entity);
+        var dbo = await ReadDboAsync(entity.Id);
+        if (dbo == null)
+            throw new ArgumentException("Entity not exists");
+
+        getMainDbSet(Context.DbContext).Remove(dbo);
         await AfterDeleteAsync(entity);
     }
 
-    public async Task WriteAsync(T entity, IWriteContext<T, TInvalidDataReason> writeContext)
-    {
-        var old = await storage.FindAsync(entity.Id);
-        await PreprocessAsync(old, entity, writeContext);
-
-        if (old != null)
-        {
-            if (EntityComparer.EntityEquals(old, entity, typeof(T)))
-            {
-                RemoveSensitiveData(entity);
-                return;
-            }
-        }
-
-        if (writeContext.IsSuccess)
-        {
-            await storage.WriteAsync(entity, isRestore: false);
-        }
-
-        RemoveSensitiveData(entity);
-    }
-
-    protected virtual void RemoveSensitiveData(T entity)
-    {
-    }
-
     protected virtual Task AfterDeleteAsync(T entity) => Task.CompletedTask;
+    protected abstract Task FillDboAsync(TDbo dbo, T entity);
+    protected abstract Task FillEntityAsync(T entity, TDbo dbo);
+    protected virtual Task PreprocessAsync(T? entity) => Task.CompletedTask;
 
-    protected virtual Task PreprocessAsync(T? old, T entity, IWriteContext<T, TInvalidDataReason> writeContext) => Task.CompletedTask;
+    private async Task<TDbo?> ReadDboAsync(Guid id) =>
+        await getMainDbSet(Context.DbContext).Where(x => x.Id == id).AsTracking().FirstOrDefaultAsync();
 }

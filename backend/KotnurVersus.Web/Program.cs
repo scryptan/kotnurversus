@@ -2,6 +2,10 @@ using System.Reflection;
 using KotnurVersus.Web.Configuration;
 using KotnurVersus.Web.Helpers;
 using KotnurVersus.Web.Helpers.DI;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
+using Newtonsoft.Json.Serialization;
+using Vostok.Applications.AspNetCore;
 using Vostok.Configuration.Sources.Environment;
 using Vostok.Hosting.Abstractions;
 using Vostok.Hosting.AspNetCore;
@@ -12,7 +16,18 @@ using Vostok.Logging.Context;
 
 var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
-builder.Services.AddControllers();
+builder.Services
+    .AddControllers()
+    .AddNewtonsoftJson(
+        options =>
+        {
+            options.SerializerSettings.Converters.Add(new StringEnumConverter(new CamelCaseNamingStrategy()));
+            options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver
+                {NamingStrategy = new CamelCaseNamingStrategy(false, true)};
+            options.SerializerSettings.NullValueHandling = NullValueHandling.Ignore;
+            options.SerializerSettings.Formatting = Formatting.None;
+            options.SerializerSettings.FloatParseHandling = FloatParseHandling.Decimal;
+        });
 
 builder.UseVostokHosting(
     environmentBuilder =>
@@ -32,7 +47,7 @@ builder.UseVostokHosting(
             c =>
             {
                 c.SetupSourceFor<WebSecrets>();
-                
+
                 c.AddSource(new EnvironmentVariablesSource());
                 c.AddJsonFile("config/config.json");
             });
@@ -53,6 +68,8 @@ builder.Services.AddApplicationServices(
 
 builder.Services.AddLazy();
 
+builder.Services.AddVostokRequestLogging(_ => {});
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
@@ -65,7 +82,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
+app.UseVostokRequestLogging();
+// app.UseHttpsRedirection();
 
 app.UseAuthorization();
 
