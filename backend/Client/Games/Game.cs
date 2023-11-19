@@ -5,9 +5,9 @@ using Vostok.Logging.Abstractions;
 
 namespace Client.Games;
 
-internal class GameClient : BaseEntityClient<Game, GameCreationArgs, InvalidGameDataReason>, IGameClient
+internal class Game : EntityClientBase<Models.Games.Game, GameCreationArgs, InvalidGameDataReason>, IGame
 {
-    public GameClient(IClusterClient client, ILog log, string route)
+    public Game(IClusterClient client, ILog log, string route)
         : base(client, log, route)
     {
     }

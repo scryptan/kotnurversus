@@ -6,7 +6,7 @@ using Vostok.Logging.Abstractions;
 
 namespace Client.Base;
 
-internal abstract class BaseEntityClient<T, TCreationArgs, TInvalidDataReason> : ClientBase, IBaseClient<T, TCreationArgs, TInvalidDataReason>
+internal abstract class EntityClientBase<T, TCreationArgs, TInvalidDataReason> : ClientBase, IClientBase<T, TCreationArgs, TInvalidDataReason>
     where TInvalidDataReason : struct, Enum
     // where TSearchRequest : class, ISearchRequest
     where TCreationArgs : EntityCreationArgs
@@ -16,7 +16,7 @@ internal abstract class BaseEntityClient<T, TCreationArgs, TInvalidDataReason> :
     protected readonly ILog Log;
     protected string Route;
 
-    protected BaseEntityClient(IClusterClient client, ILog log, string route)
+    protected EntityClientBase(IClusterClient client, ILog log, string route)
         : base(client)
     {
         Client = client;

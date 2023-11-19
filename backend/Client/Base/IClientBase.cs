@@ -3,7 +3,7 @@ using Models;
 
 namespace Client.Base;
 
-public interface IBaseClient<T, TCreationArgs, TInvalidDataReason>
+public interface IClientBase<T, TCreationArgs, TInvalidDataReason>
     where TInvalidDataReason : struct, Enum
     // where TSearchRequest : class, ISearchRequest
     where TCreationArgs : EntityCreationArgs
