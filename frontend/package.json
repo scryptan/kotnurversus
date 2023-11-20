@@ -18,6 +18,7 @@
     "@emotion/styled": "^11.11.0",
     "@g-loot/react-tournament-brackets": "^1.0.30",
     "@hookform/resolvers": "^3.3.2",
+    "axios": "^1.6.2",
     "date-fns": "^2.30.0",
     "framer-motion": "^10.16.4",
     "react": "^18.2.0",
