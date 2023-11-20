@@ -17,7 +17,7 @@ export const tourneyFormSchema = z.object({
     .min(5, "Заполните поле")
     .regex(timeRegex, "Некорректное время"),
   type: z.nativeEnum(TourneyType).default(TourneyType.Offline),
-  location: z.string().optional(),
+  description: z.string().optional(),
   requirementIds: z.number().array().default([]),
 });
 

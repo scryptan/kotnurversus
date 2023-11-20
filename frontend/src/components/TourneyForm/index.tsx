@@ -7,8 +7,7 @@ import Input from "~/components/Input";
 import TimeInput from "~/components/TimeInput";
 import { TourneyType } from "~/types/tourney";
 import { TOURNEY_TYPE_NAMES } from "~/utils/tourney";
-import RequirementsInput from "./RequirementsInput";
-import { TourneyFormSchema, tourneyFormSchema } from "./tourney-form-schema";
+import { TourneyFormSchema, tourneyFormSchema } from "./schema";
 
 type Props = {
   id?: string;
@@ -100,24 +99,9 @@ const TourneyForm = ({ id, defaultValue, onSubmit }: Props) => {
       <FormLabel label="Место проведения">
         {(id) => (
           <Input
-            {...register("location")}
+            {...register("description")}
             id={id}
             placeholder="Введите место проведения"
-          />
-        )}
-      </FormLabel>
-      <FormLabel label="Дополнительные требования">
-        {(id) => (
-          <Controller
-            name="requirementIds"
-            control={control}
-            render={({ field }) => (
-              <RequirementsInput
-                {...field}
-                id={id}
-                placeholder="Введите название дополнительного требования"
-              />
-            )}
           />
         )}
       </FormLabel>

@@ -7,6 +7,29 @@ export type Tourney = {
   type: TourneyType;
 };
 
+export type CreateTourney = {
+  title: string;
+  form: TourneyType;
+  startDate: Date;
+  description?: string;
+  settings?: TourneySettings;
+  specifications?: TourneySpecification[];
+};
+
+export type TourneySettings = {
+  timeoutsCount: number;
+  timeoutSeconds: number;
+  prepareSeconds: number;
+  presentationSeconds: number;
+  defenseSeconds: number;
+};
+
+export type TourneySpecification = {
+  title: string;
+  businessDescription: string;
+  techDescription: string;
+};
+
 export enum TourneyType {
   Offline = "offline",
   Online = "online",
