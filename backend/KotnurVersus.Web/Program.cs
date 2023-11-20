@@ -21,12 +21,12 @@ builder.Services
     .AddNewtonsoftJson(
         options =>
         {
-            options.SerializerSettings.Converters.Add(new StringEnumConverter(new CamelCaseNamingStrategy()));
             options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver
                 {NamingStrategy = new CamelCaseNamingStrategy(false, true)};
             options.SerializerSettings.NullValueHandling = NullValueHandling.Ignore;
             options.SerializerSettings.Formatting = Formatting.None;
             options.SerializerSettings.FloatParseHandling = FloatParseHandling.Decimal;
+            options.SerializerSettings.Converters.Add(new StringEnumConverter(new CamelCaseNamingStrategy()));
         });
 
 builder.UseVostokHosting(
@@ -67,6 +67,7 @@ builder.Services.AddApplicationServices(
     assemblyHelper.ExcludeDiTypes.ToHashSet());
 
 builder.Services.AddLazy();
+builder.Services.AddSwaggerGenNewtonsoftSupport();
 
 builder.Services.AddVostokRequestLogging(_ => {});
 
