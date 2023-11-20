@@ -4,6 +4,7 @@ import { CommonTreeProps } from "@g-loot/react-tournament-brackets/dist/src/type
 import { useEffect, useRef, useState } from "react";
 import ShuffleIcon from "~/icons/ShuffleIcon";
 import { Team } from "~/types/team";
+import { isDefined } from "~/utils";
 import { useAuthContext } from "~/utils/auth-context";
 import { createMatchesFromTeams } from "~/utils/tourney";
 import Match from "./Match";
@@ -24,9 +25,9 @@ const TourneyBracket = ({ teams }: Props) => {
   const teamsKey = teams.map((t) => `${t.id}:${t.name}`).join("|");
 
   useEffect(() => {
-    const currentTeams = sortedTeams.current.filter((team) =>
-      teams.find((t) => team.id === t.id)
-    );
+    const currentTeams = sortedTeams.current
+      .map((team) => teams.find((t) => team.id === t.id))
+      .filter(isDefined);
     const newTeams = teams.filter(
       (team) => !sortedTeams.current.find((t) => t.id === team.id)
     );

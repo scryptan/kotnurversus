@@ -68,11 +68,14 @@ const ScenariosListItem = forwardRef<HTMLDivElement, Props>(
           <Button
             {...window.getButtonProps()}
             minW="200px"
+            maxW="50vw"
             variant="link"
             color="text.light.main"
             _dark={{ color: "text.dark.main" }}
             fontSize="lg"
             fontWeight="normal"
+            whiteSpace="normal"
+            textAlign="start"
             justifyContent="flex-start"
             onClick={window.onOpen}
             children={scenario.name}
@@ -102,6 +105,7 @@ const HandleButton = forwardRef<HTMLButtonElement, ButtonProps>(
       opacity={0}
       icon={<DragHandleIcon />}
       aria-label="Кнопка для перетаскивания"
+      _focusVisible={{ opacity: 1, boxShadow: "outline" }}
       {...props}
     />
   )
