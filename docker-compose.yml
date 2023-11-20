@@ -1,6 +1,6 @@
 services:
   api:
-    image: kotnurverus:debug
+    image: scryptan/versus:debug
     environment:
       DbConnectionString: "Host=postgres;Port=5432;Database=kot;Username=kot;Password=kot"
       POSTGRES_USER: "kot"

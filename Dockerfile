@@ -21,4 +21,5 @@ RUN dotnet publish "KotnurVersus.Web.csproj" -c Release -o /app/publish /p:UseAp
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
+RUN rm -rf /app/config
 ENTRYPOINT ["dotnet", "KotnurVersus.Web.dll"]
