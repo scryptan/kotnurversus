@@ -120,9 +120,7 @@ const variantPrimary = definePartsStyle((props) => {
       },
     },
     addon: {
-      border: "2px solid",
-      borderColor: "transparent",
-      bg: mode("blackAlpha.50", "whiteAlpha.50")(props),
+      bg: mode("blackAlpha.100", "whiteAlpha.100")(props),
     },
     element: {
       color: mode("blackAlpha.700", "whiteAlpha.700")(props),

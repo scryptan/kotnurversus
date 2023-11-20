@@ -10,6 +10,8 @@ type Props = {
   children: ReactElement;
 };
 
+let lastWidth = 0;
+
 const SvgViewer = ({
   bracketWidth,
   bracketHeight,
@@ -17,7 +19,7 @@ const SvgViewer = ({
   containerProps,
   children,
 }: Props) => {
-  const [width, setWidth] = useState(0);
+  const [width, setWidth] = useState(lastWidth);
   const [value, setValue] = useState<Value>({} as Value);
   const bgColor = useColorModeValue("#FFFFFF", "#222222");
   const containerRef = useRef<HTMLDivElement>(null);
@@ -34,8 +36,11 @@ const SvgViewer = ({
 
     const updateWidth = () => {
       const rect = container.getBoundingClientRect();
+      if (rect.width <= 0) return;
       const width = rect.width - 4;
-      setWidth(width > bracketWidth ? bracketWidth : width);
+      const newWidth = Math.max(0, width > bracketWidth ? bracketWidth : width);
+      lastWidth = newWidth;
+      setWidth(newWidth);
     };
 
     const resizeObserver = new ResizeObserver(updateWidth);

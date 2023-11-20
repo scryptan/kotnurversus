@@ -8,7 +8,6 @@ import TimeInput from "~/components/TimeInput";
 import { TourneyType } from "~/types/tourney";
 import { TOURNEY_TYPE_NAMES } from "~/utils/tourney";
 import RequirementsInput from "./RequirementsInput";
-import ScenariosInput from "./ScenariosInput";
 import { TourneyFormSchema, tourneyFormSchema } from "./tourney-form-schema";
 
 type Props = {
@@ -41,6 +40,7 @@ const TourneyForm = ({ id, defaultValue, onSubmit }: Props) => {
         {(id) => (
           <Input
             id={id}
+            placeholder="Введите название турнира"
             errorMessage={errors.name?.message}
             {...register("name")}
           />
@@ -62,7 +62,7 @@ const TourneyForm = ({ id, defaultValue, onSubmit }: Props) => {
           />
         )}
       </FormLabel>
-      <FormLabel isRequired label="Время турнира">
+      <FormLabel isRequired label="Время начала турнира">
         {(id) => (
           <Controller
             name="time"
@@ -71,14 +71,14 @@ const TourneyForm = ({ id, defaultValue, onSubmit }: Props) => {
               <TimeInput
                 {...field}
                 id={id}
-                containerProps={{ w: "110px" }}
+                containerProps={{ w: "140px" }}
                 errorMessage={error?.message}
               />
             )}
           />
         )}
       </FormLabel>
-      <FormLabel label="Место проведения">
+      <FormLabel isRequired label="Формат проведения">
         <Controller
           name="type"
           control={control}
@@ -98,20 +98,11 @@ const TourneyForm = ({ id, defaultValue, onSubmit }: Props) => {
         />
       </FormLabel>
       <FormLabel label="Место проведения">
-        {(id) => <Input {...register("location")} id={id} />}
-      </FormLabel>
-      <FormLabel label="Темы бизнес-сценариев">
         {(id) => (
-          <Controller
-            name="scenarioIds"
-            control={control}
-            render={({ field }) => (
-              <ScenariosInput
-                {...field}
-                id={id}
-                placeholder="Введите тему бизнес-сценария"
-              />
-            )}
+          <Input
+            {...register("location")}
+            id={id}
+            placeholder="Введите место проведения"
           />
         )}
       </FormLabel>
@@ -151,6 +142,7 @@ const FormLabel = ({ label, isRequired, children }: FormLabelProps) => {
         mt={2}
         h="fit-content"
         fontSize="lg"
+        fontWeight="medium"
         justifySelf="flex-end"
       >
         {label}

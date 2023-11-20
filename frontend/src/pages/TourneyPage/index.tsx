@@ -1,20 +1,39 @@
 import { Stack } from "@chakra-ui/react";
+import { useState } from "react";
+import { MatchState } from "~/types/match";
 import { Team } from "~/types/team";
 import { TourneyFullInfo, TourneyType } from "~/types/tourney";
+import TourneyActionButtons from "./TourneyActionButtons";
 import TourneyArtifacts from "./TourneyArtifacts";
 import TourneyBracket from "./TourneyBracket";
 import TourneyHeader from "./TourneyHeader";
+import TourneyScenariosSettings from "./TourneyScenariosSettings";
 import TourneyTeams from "./TourneyTeams";
-import { MatchState } from "~/types/match";
+import TourneyTimersSettings from "./TourneyTimersSettings";
 
-const TourneyPage = () => (
-  <Stack px={2} pb={20} mx="auto" w="full" maxW="wrapper" flex={1} spacing={8}>
-    <TourneyHeader tourney={mockTourney} />
-    <TourneyBracket matches={mockTourney.matches} />
-    <TourneyTeams teams={mockTeams} />
-    <TourneyArtifacts artifacts={mockTourney.artifacts} />
-  </Stack>
-);
+const TourneyPage = () => {
+  const [teams, setTeams] = useState(mockTeams);
+
+  return (
+    <Stack
+      px={2}
+      pb={20}
+      mx="auto"
+      w="full"
+      maxW="wrapper"
+      flex={1}
+      spacing={8}
+    >
+      <TourneyHeader tourney={mockTourney} />
+      <TourneyActionButtons tourneyId={mockTourney.id} />
+      <TourneyBracket teams={teams} />
+      <TourneyTeams teams={teams} onChange={setTeams} />
+      <TourneyTimersSettings tourneyId={mockTourney.id} />
+      <TourneyScenariosSettings tourneyId={mockTourney.id} />
+      <TourneyArtifacts artifacts={mockTourney.artifacts} />
+    </Stack>
+  );
+};
 
 const mockTeams: Team[] = [
   {
@@ -116,10 +135,10 @@ const mockTourney: TourneyFullInfo = {
   organizer: "УрФУ",
   matches: [
     {
-      id: 1,
-      nextMatchId: 5,
+      id: "1",
+      nextMatchId: "5",
       startTime: "2021-05-30",
-      state: MatchState.Done,
+      state: MatchState.Init,
       participants: [
         {
           id: "T1",
@@ -135,8 +154,8 @@ const mockTourney: TourneyFullInfo = {
       ],
     },
     {
-      id: 2,
-      nextMatchId: 5,
+      id: "2",
+      nextMatchId: "5",
       startTime: "2021-05-30",
       state: MatchState.Done,
       participants: [
@@ -154,8 +173,8 @@ const mockTourney: TourneyFullInfo = {
       ],
     },
     {
-      id: 3,
-      nextMatchId: 6,
+      id: "3",
+      nextMatchId: "6",
       startTime: "2021-05-30",
       state: MatchState.Play,
       participants: [
@@ -164,8 +183,8 @@ const mockTourney: TourneyFullInfo = {
       ],
     },
     {
-      id: 4,
-      nextMatchId: 6,
+      id: "4",
+      nextMatchId: "6",
       startTime: "2021-05-30",
       state: MatchState.Prepare,
       participants: [
@@ -174,8 +193,8 @@ const mockTourney: TourneyFullInfo = {
       ],
     },
     {
-      id: 5,
-      nextMatchId: 7,
+      id: "5",
+      nextMatchId: "7",
       startTime: "2021-05-31",
       state: MatchState.Prepare,
       participants: [
@@ -184,8 +203,8 @@ const mockTourney: TourneyFullInfo = {
       ],
     },
     {
-      id: 6,
-      nextMatchId: 7,
+      id: "6",
+      nextMatchId: "7",
       startTime: "2021-05-30",
       state: MatchState.Prepare,
       participants: [
@@ -194,7 +213,7 @@ const mockTourney: TourneyFullInfo = {
       ],
     },
     {
-      id: 7,
+      id: "7",
       nextMatchId: null,
       startTime: "2021-05-30",
       state: MatchState.Prepare,

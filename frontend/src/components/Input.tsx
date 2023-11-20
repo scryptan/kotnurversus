@@ -5,6 +5,7 @@ import {
   InputElementProps,
   InputGroup,
   InputLeftElement,
+  InputRightAddon,
   InputRightElement,
 } from "@chakra-ui/react";
 import { ReactNode, forwardRef } from "react";
@@ -15,6 +16,7 @@ export type InputProps = {
   errorMessage?: string;
   leftElement?: ReactNode;
   rightElement?: ReactNode;
+  rightAddon?: ReactNode;
   leftElementProps?: InputElementProps;
   rightElementProps?: InputElementProps;
   containerProps?: Omit<BoxProps, "children">;
@@ -29,6 +31,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
       isRequired,
       leftElement,
       rightElement,
+      rightAddon,
       leftElementProps,
       rightElementProps,
       containerProps,
@@ -50,6 +53,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
         {rightElement && (
           <InputRightElement {...rightElementProps} children={rightElement} />
         )}
+        {rightAddon && <InputRightAddon children={rightAddon} />}
       </InputGroup>
     </FormControl>
   )

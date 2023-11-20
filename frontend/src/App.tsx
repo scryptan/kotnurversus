@@ -4,6 +4,7 @@ import { ru } from "date-fns/locale";
 import Routers from "~/pages/Routers";
 import theme from "~/theme";
 import { AuthProvider } from "~/utils/auth-context";
+import "~/utils/extensions";
 
 setDefaultOptions({ locale: ru });
 

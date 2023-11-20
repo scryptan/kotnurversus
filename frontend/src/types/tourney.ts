@@ -20,8 +20,8 @@ export type TourneyFullInfo = Tourney & {
 };
 
 export type TourneyMatch = {
-  id: number;
-  nextMatchId: number | null;
+  id: string;
+  nextMatchId: string | null;
   startTime: string;
   state: MatchState;
   participants: TourneyTeam[];
@@ -32,6 +32,13 @@ export type TourneyTeam = {
   name: string;
   resultText?: string;
   isWinner?: boolean;
+};
+
+export type TourneyScenario = {
+  id: string;
+  name: string;
+  description?: string | undefined;
+  requirements?: string | undefined;
 };
 
 export type TourneyArtifact = {

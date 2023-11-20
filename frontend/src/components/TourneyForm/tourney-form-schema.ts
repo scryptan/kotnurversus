@@ -1,13 +1,23 @@
-import { z } from "zod";
+import { ZodIssueCode, z } from "zod";
 import { TourneyType } from "~/types/tourney";
+import { timeRegex } from "~/utils/time";
 
 export const tourneyFormSchema = z.object({
   name: z.string().min(1, "Заполните поле"),
-  day: z.date({ required_error: "Заполните поле" }),
-  time: z.string({ required_error: "Заполните поле" }).min(5, "Заполните поле"),
+  day: z.date({
+    errorMap: (issue) => {
+      const map: Record<string, string> = {
+        [ZodIssueCode.invalid_date]: "Некорректная дата",
+      };
+      return { message: map[issue.code] || "Заполните поле" };
+    },
+  }),
+  time: z
+    .string({ required_error: "Заполните поле" })
+    .min(5, "Заполните поле")
+    .regex(timeRegex, "Некорректное время"),
   type: z.nativeEnum(TourneyType).default(TourneyType.Offline),
   location: z.string().optional(),
-  scenarioIds: z.number().array().default([]),
   requirementIds: z.number().array().default([]),
 });
 

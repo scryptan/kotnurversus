@@ -20,8 +20,7 @@ const TimeInput = forwardRef<TimeInputProps, "input">(
     }, [value]);
 
     const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-      const newValue = e.currentTarget.value;
-      onChange?.(isValidTime(newValue) ? newValue : undefined);
+      onChange?.(e.currentTarget.value);
     };
 
     return (
@@ -47,11 +46,6 @@ const maskDate = (e: FormEvent<HTMLInputElement>) => {
     value = `${value.slice(0, 2)}:${value.slice(2)}`;
   }
   e.currentTarget.value = value;
-};
-
-const isValidTime = (time: string): boolean => {
-  const regexp = /^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/;
-  return regexp.test(time);
 };
 
 export default TimeInput;
