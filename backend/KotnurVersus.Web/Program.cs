@@ -73,6 +73,7 @@ builder.Services.AddVostokRequestLogging(_ => {});
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddCors();
 
 var app = builder.Build();
 
@@ -85,6 +86,11 @@ if (app.Environment.IsDevelopment())
 
 app.UseVostokRequestLogging();
 // app.UseHttpsRedirection();
+app.UseCors(x => x
+    .AllowAnyMethod()
+    .AllowAnyHeader()
+    .AllowCredentials()
+    .SetIsOriginAllowed(_ => true));// Allow any origin
 
 app.UseAuthorization();
 
