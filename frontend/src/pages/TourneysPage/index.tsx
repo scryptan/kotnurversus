@@ -9,6 +9,7 @@ import SearchIcon from "~/icons/SearchIcon";
 import paths from "~/pages/paths";
 import { TourneyState } from "~/types/tourney";
 import { useAuthContext } from "~/utils/auth-context";
+import queryKeys from "~/utils/query-keys";
 import TourneysTable from "./TourneysTable";
 
 const TourneysPage = () => (
@@ -23,7 +24,7 @@ const TourneysPage = () => (
 
 const TourneysSection = () => {
   const tourneysQuery = useQuery({
-    queryKey: api.tourneys.queryKeys.find(),
+    queryKey: queryKeys.tourneys,
     queryFn: api.tourneys.find,
     staleTime: 1000 * 60 * 5,
   });

@@ -22,6 +22,7 @@
     "@tanstack/react-query-devtools": "^5.8.4",
     "axios": "^1.6.2",
     "date-fns": "^2.30.0",
+    "fast-json-patch": "^3.1.1",
     "framer-motion": "^10.16.4",
     "react": "^18.2.0",
     "react-day-picker": "^8.9.1",

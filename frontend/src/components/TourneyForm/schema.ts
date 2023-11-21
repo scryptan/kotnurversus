@@ -1,9 +1,10 @@
+import { startOfDay } from "date-fns";
 import { ZodIssueCode, z } from "zod";
-import { TourneyType } from "~/types/tourney";
-import { timeRegex } from "~/utils/time";
+import { CreateTourney, Tourney, TourneyType } from "~/types/tourney";
+import { extractTimeFromDate, setTimeToDate, timeRegex } from "~/utils/time";
 
 export const tourneyFormSchema = z.object({
-  name: z.string().min(1, "Заполните поле"),
+  title: z.string().min(1, "Заполните поле"),
   day: z.date({
     errorMap: (issue) => {
       const map: Record<string, string> = {
@@ -18,7 +19,23 @@ export const tourneyFormSchema = z.object({
     .regex(timeRegex, "Некорректное время"),
   type: z.nativeEnum(TourneyType).default(TourneyType.Offline),
   description: z.string().optional(),
-  requirementIds: z.number().array().default([]),
 });
 
 export type TourneyFormSchema = z.infer<typeof tourneyFormSchema>;
+
+export const castToFormSchema = (tourney: Tourney): TourneyFormSchema => ({
+  title: tourney.title,
+  day: startOfDay(tourney.startDate),
+  time: extractTimeFromDate(tourney.startDate),
+  type: tourney.form,
+  description: tourney.description,
+});
+
+export const castToCreateTourney = (
+  data: TourneyFormSchema
+): CreateTourney => ({
+  title: data.title,
+  form: data.type,
+  startDate: setTimeToDate(data.day, data.time),
+  description: data.description,
+});

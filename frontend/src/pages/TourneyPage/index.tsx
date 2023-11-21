@@ -1,5 +1,6 @@
 import { Stack } from "@chakra-ui/react";
 import { useState } from "react";
+import { useParams } from "react-router";
 import { v4 as uuid } from "uuid";
 import { Team } from "~/types/team";
 import { Tourney, TourneyState, TourneyType } from "~/types/tourney";
@@ -11,7 +12,12 @@ import TourneyScenariosSettings from "./TourneyScenariosSettings";
 import TourneyTeams from "./TourneyTeams";
 import TourneyTimersSettings from "./TourneyTimersSettings";
 
+type PageParams = {
+  tourneyId: string;
+};
+
 const TourneyPage = () => {
+  const { tourneyId = "" } = useParams<PageParams>();
   const [teams, setTeams] = useState(mockTeams);
 
   return (
@@ -24,12 +30,12 @@ const TourneyPage = () => {
       flex={1}
       spacing={8}
     >
-      <TourneyHeader tourney={mockTourney} />
-      <TourneyActionButtons tourneyId={mockTourney.id} />
+      <TourneyHeader tourney={{ ...mockTourney, id: tourneyId }} />
+      <TourneyActionButtons tourneyId={tourneyId} />
       <TourneyBracket teams={teams} />
       <TourneyTeams teams={teams} onChange={setTeams} />
-      <TourneyTimersSettings tourneyId={mockTourney.id} />
-      <TourneyScenariosSettings tourneyId={mockTourney.id} />
+      <TourneyTimersSettings tourneyId={tourneyId} />
+      <TourneyScenariosSettings tourneyId={tourneyId} />
       {/* TODO move this to match */}
       <TourneyArtifacts artifacts={[]} />
     </Stack>

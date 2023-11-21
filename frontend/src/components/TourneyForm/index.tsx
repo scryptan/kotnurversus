@@ -40,8 +40,8 @@ const TourneyForm = ({ id, defaultValue, onSubmit }: Props) => {
           <Input
             id={id}
             placeholder="Введите название турнира"
-            errorMessage={errors.name?.message}
-            {...register("name")}
+            errorMessage={errors.title?.message}
+            {...register("title")}
           />
         )}
       </FormLabel>

@@ -1,17 +1,19 @@
 import { Button, Heading, Stack } from "@chakra-ui/react";
-import { useMutation } from "@tanstack/react-query";
-import { useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useId } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "~/api";
 import Loading from "~/components/Loading";
 import TourneyForm from "~/components/TourneyForm";
-import { TourneyFormSchema } from "~/components/TourneyForm/schema";
+import {
+  TourneyFormSchema,
+  castToCreateTourney,
+} from "~/components/TourneyForm/schema";
 import useAutoRedirect from "~/hooks/useAutoRedirect";
 import useHandleError from "~/hooks/useHandleError";
 import paths from "~/pages/paths";
 import { useAuthContext } from "~/utils/auth-context";
-import { setTimeToDate } from "~/utils/time";
+import queryKeys from "~/utils/query-keys";
 
 const CreateTourneyPage = () => {
   const formId = useId();
@@ -24,17 +26,12 @@ const CreateTourneyPage = () => {
 
   const createTourney = useMutation({
     mutationFn: async (data: TourneyFormSchema) => {
-      const tourney = await api.tourneys.create({
-        title: data.name,
-        form: data.type,
-        startDate: setTimeToDate(data.day, data.time),
-        description: data.description,
-      });
-      navigate(paths.tourney.path(tourney.id));
-      return tourney;
+      return await api.tourneys.create(castToCreateTourney(data));
     },
-    onSuccess: () => {
-      queryClient.removeQueries({ queryKey: api.tourneys.queryKeys.find() });
+    onSuccess: async (tourney) => {
+      queryClient.setQueryData(queryKeys.tourney(tourney.id), tourney);
+      await queryClient.refetchQueries({ queryKey: queryKeys.tourneys });
+      navigate(paths.tourney.path(tourney.id));
     },
     onError: handleError,
   });

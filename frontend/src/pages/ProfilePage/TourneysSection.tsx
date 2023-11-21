@@ -13,10 +13,11 @@ import Loading from "~/components/Loading";
 import TourneysTable from "~/components/TourneysTable";
 import PlusIcon from "~/icons/PlusIcon";
 import paths from "~/pages/paths";
+import queryKeys from "~/utils/query-keys";
 
 const TourneysSection = (props: BoxProps) => {
   const tourneysQuery = useQuery({
-    queryKey: api.tourneys.queryKeys.find(),
+    queryKey: queryKeys.tourneys,
     queryFn: api.tourneys.find,
     staleTime: 1000 * 60 * 5,
   });

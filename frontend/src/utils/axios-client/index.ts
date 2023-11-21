@@ -42,14 +42,14 @@ export default {
       throw error.response;
     }
   },
-  put: async <T, K>(url: string, data?: K): Promise<T> => {
+  patch: async <T, K>(url: string, data?: K): Promise<T> => {
     try {
-      const res = await axios.put<K, AxiosResponse<T>>(url, data);
-      isDev && console.log(`PUT ${url}`, res.data); // LOG
+      const res = await axios.patch<K, AxiosResponse<T>>(url, data);
+      isDev && console.log(`PATCH ${url}`, res.data); // LOG
       return res.data;
     } catch (err) {
       const error = err as AxiosError;
-      isDev && console.log(`PUT ${url}`, error.response); // LOG
+      isDev && console.log(`PATCH ${url}`, error.response); // LOG
       throw error.response;
     }
   },

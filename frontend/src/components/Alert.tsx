@@ -17,7 +17,7 @@ import { ReactNode, useRef } from "react";
 type Props = {
   isOpen: boolean;
   onClose: () => void;
-  heading: string;
+  heading?: string;
   isLoading?: boolean;
   onSubmit?: () => void;
   submitProps?: ButtonProps;
@@ -28,7 +28,7 @@ type Props = {
 const Alert = ({
   isOpen,
   onClose,
-  heading,
+  heading = "Подтвердите действие",
   isLoading,
   onSubmit,
   submitProps,

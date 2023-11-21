@@ -1,9 +1,8 @@
 import { useId } from "react";
+import ButtonWithAlert from "~/components/ButtonWithAlert";
 import Window, { WindowProps } from "~/components/Window";
-import ScenarioForm, { ScenarioFormSchema } from "./ScenarioForm";
 import { TourneyScenario } from "~/types/tourney";
-import { Button, useDisclosure } from "@chakra-ui/react";
-import Alert from "~/components/Alert";
+import ScenarioForm, { ScenarioFormSchema } from "./ScenarioForm";
 
 type Props = {
   scenario: TourneyScenario;
@@ -41,7 +40,14 @@ const EditScenarioWindow = ({
       heading="Редактирование сценария"
       contentProps={{ w: "800px" }}
       submitProps={{ type: "submit", form: formId }}
-      ExtraButton={() => <RemoveButton onRemove={onRemove} />}
+      ExtraButton={() => (
+        <ButtonWithAlert
+          colorScheme="red"
+          onSubmit={onRemove}
+          buttonText="Удалить сценарий"
+          alertText="Вы уверены, что хотите удалить данный сценарий?"
+        />
+      )}
     >
       <ScenarioForm
         id={formId}
@@ -49,31 +55,6 @@ const EditScenarioWindow = ({
         onSubmit={handleSubmit}
       />
     </Window>
-  );
-};
-
-const RemoveButton = ({ onRemove }: Pick<Props, "onRemove">) => {
-  const alert = useDisclosure();
-
-  if (!onRemove) {
-    return null;
-  }
-
-  return (
-    <>
-      <Button
-        colorScheme="red"
-        onClick={alert.onOpen}
-        children="Удалить сценарий"
-      />
-      <Alert
-        isOpen={alert.isOpen}
-        onClose={alert.onClose}
-        onSubmit={onRemove}
-        heading="Подтвердите действие"
-        children="Вы уверены, что хотите удалить данный сценарий?"
-      />
-    </>
   );
 };
 

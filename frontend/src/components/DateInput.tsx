@@ -54,6 +54,7 @@ const DateInput = forwardRef<DateInputProps, "input">(
         <Input
           {...props}
           ref={inputRefs}
+          defaultValue={value && format(value, "dd.MM.yyyy")}
           placeholder="дд.мм.гггг"
           onClick={setIsOpen.on}
           onInput={maskDate}
