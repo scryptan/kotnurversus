@@ -13,7 +13,7 @@ import { useState } from "react";
 import ScenarioWindow from "~/components/ScenarioWindow";
 
 type Props = {
-  tourneyId: number;
+  tourneyId: string;
 };
 
 const TourneyScenariosSettings = ({ tourneyId: _ }: Props) => {

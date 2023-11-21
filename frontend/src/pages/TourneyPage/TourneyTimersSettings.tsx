@@ -4,7 +4,7 @@ import Input, { InputProps } from "~/components/Input";
 import { useAuthContext } from "~/utils/auth-context";
 
 type Props = {
-  tourneyId: number;
+  tourneyId: string;
 };
 
 const TourneyTimersSettings = ({ tourneyId: _ }: Props) => {

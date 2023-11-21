@@ -1,4 +1,5 @@
-import { Center, Spinner, Stack } from "@chakra-ui/react";
+import { Stack } from "@chakra-ui/react";
+import Loading from "~/components/Loading";
 import useAutoRedirect from "~/hooks/useAutoRedirect";
 import paths from "~/pages/paths";
 import { useAuthContext } from "~/utils/auth-context";
@@ -11,7 +12,7 @@ const ProfilePage = () => {
   useAutoRedirect({ isEnabled: !isAuthenticated, path: paths.main.path });
 
   if (!isAuthenticated) {
-    return <Center flex={1} children={<Spinner size="lg" />} />;
+    return <Loading flex={1} />;
   }
 
   return (

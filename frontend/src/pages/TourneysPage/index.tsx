@@ -1,10 +1,13 @@
-import { Button, HStack, Heading, Stack } from "@chakra-ui/react";
+import { Button, Center, HStack, Heading, Stack } from "@chakra-ui/react";
+import { useQuery } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
+import api from "~/api";
 import Input from "~/components/Input";
+import Loading from "~/components/Loading";
 import PlusIcon from "~/icons/PlusIcon";
 import SearchIcon from "~/icons/SearchIcon";
 import paths from "~/pages/paths";
-import { Tourney, TourneyType } from "~/types/tourney";
+import { TourneyState } from "~/types/tourney";
 import { useAuthContext } from "~/utils/auth-context";
 import TourneysTable from "./TourneysTable";
 
@@ -14,20 +17,49 @@ const TourneysPage = () => (
       <Heading fontSize="4xl">Турниры по архитектуре приложений</Heading>
       <CreateTourneyButton />
     </HStack>
-    <Input
-      size="lg"
-      placeholder="Поиск по названию турнира"
-      rightElement={<SearchIcon boxSize={6} />}
-      rightElementProps={{ pointerEvents: "none" }}
-      containerProps={{ mx: "auto", w: "70%" }}
-    />
-    <Stack spacing={8}>
-      <TourneysTable title="Текущие турниры" tourneys={mockTourneys} />
-      <TourneysTable title="Будущие турниры" tourneys={mockTourneys} />
-      <TourneysTable title="Прошедшие турниры" tourneys={mockTourneys} />
-    </Stack>
+    <TourneysSection />
   </Stack>
 );
+
+const TourneysSection = () => {
+  const tourneysQuery = useQuery({
+    queryKey: api.tourneys.queryKeys.find(),
+    queryFn: api.tourneys.find,
+    staleTime: 1000 * 60 * 5,
+  });
+
+  const tourneys = tourneysQuery.data?.items || [];
+  const currentTourneys = tourneys.filter(
+    (t) => t.state === TourneyState.InProgress
+  );
+  const pastTourneys = tourneys.filter(
+    (t) => t.state === TourneyState.Complete
+  );
+
+  return (
+    <>
+      <Input
+        size="lg"
+        placeholder="Поиск по названию турнира"
+        rightElement={<SearchIcon boxSize={6} />}
+        rightElementProps={{ pointerEvents: "none" }}
+        containerProps={{ mx: "auto", w: "70%" }}
+      />
+      {tourneysQuery.isLoading ? (
+        <Loading py={10} />
+      ) : currentTourneys.length > 0 || pastTourneys.length > 0 ? (
+        <Stack spacing={8}>
+          <TourneysTable title="Текущие турниры" tourneys={currentTourneys} />
+          <TourneysTable title="Прошедшие турниры" tourneys={pastTourneys} />
+        </Stack>
+      ) : (
+        <Center py={10}>
+          <Heading fontSize="2xl">Турниры не найдены</Heading>
+        </Center>
+      )}
+    </>
+  );
+};
 
 const CreateTourneyButton = () => {
   const { isAuthenticated } = useAuthContext();
@@ -47,12 +79,5 @@ const CreateTourneyButton = () => {
     />
   );
 };
-
-const mockTourneys: Tourney[] = [...Array(5)].map((_, i) => ({
-  id: i + 1,
-  name: `Турнир ${i + 1}`,
-  startDate: new Date(),
-  type: TourneyType.Offline,
-}));
 
 export default TourneysPage;

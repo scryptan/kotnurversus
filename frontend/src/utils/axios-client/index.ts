@@ -1,5 +1,6 @@
 import axiosStatic, { AxiosError, AxiosResponse } from "axios";
 import { isDev } from "~/utils";
+import handleDates from "./handle-dates";
 
 const axios = axiosStatic.create({
   baseURL: import.meta.env.VITE_API_URL,
@@ -12,6 +13,11 @@ axios.interceptors.request.use(
   },
   (error) => Promise.reject(error)
 );
+
+axios.interceptors.response.use((response) => {
+  handleDates(response.data);
+  return response;
+});
 
 export default {
   get: async <T>(url: string, params?: object): Promise<T> => {

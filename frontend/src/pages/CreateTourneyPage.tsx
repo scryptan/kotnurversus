@@ -1,8 +1,10 @@
-import { Button, Center, Heading, Spinner, Stack } from "@chakra-ui/react";
+import { Button, Heading, Stack } from "@chakra-ui/react";
 import { useMutation } from "@tanstack/react-query";
+import { useQueryClient } from "@tanstack/react-query";
 import { useId } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "~/api";
+import Loading from "~/components/Loading";
 import TourneyForm from "~/components/TourneyForm";
 import { TourneyFormSchema } from "~/components/TourneyForm/schema";
 import useAutoRedirect from "~/hooks/useAutoRedirect";
@@ -15,7 +17,10 @@ const CreateTourneyPage = () => {
   const formId = useId();
   const navigate = useNavigate();
   const handleError = useHandleError();
+  const queryClient = useQueryClient();
   const { isAuthenticated } = useAuthContext();
+
+  useAutoRedirect({ isEnabled: !isAuthenticated, path: paths.main.path });
 
   const createTourney = useMutation({
     mutationFn: async (data: TourneyFormSchema) => {
@@ -28,13 +33,14 @@ const CreateTourneyPage = () => {
       navigate(paths.tourney.path(tourney.id));
       return tourney;
     },
+    onSuccess: () => {
+      queryClient.removeQueries({ queryKey: api.tourneys.queryKeys.find() });
+    },
     onError: handleError,
   });
 
-  useAutoRedirect({ isEnabled: !isAuthenticated, path: paths.main.path });
-
   if (!isAuthenticated) {
-    return <Center flex={1} children={<Spinner size="lg" />} />;
+    return <Loading flex={1} />;
   }
 
   return (

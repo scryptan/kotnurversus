@@ -19,7 +19,7 @@ const MatchHeader = ({ match, ...props }: Props) => (
 const createBreadcrumbItems = (tourney: Tourney) => [
   { name: "Главная", link: paths.main.path },
   { name: "Турниры", link: paths.tourneys.path },
-  { name: tourney.name, link: paths.tourney.path(tourney.id) },
+  { name: tourney.title, link: paths.tourney.path(tourney.id) },
 ];
 
 export default MatchHeader;

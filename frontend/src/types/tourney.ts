@@ -1,10 +1,16 @@
 import { MatchState } from "~/types/match";
 
 export type Tourney = {
-  id: number;
-  name: string;
+  id: string;
+  title: string;
+  state: TourneyState;
+  form: TourneyType;
   startDate: Date;
-  type: TourneyType;
+  description?: string;
+  settings?: TourneySettings;
+  specifications?: TourneySpecification[];
+  // TODO: fix this
+  teams?: object[];
 };
 
 export type CreateTourney = {
@@ -15,6 +21,17 @@ export type CreateTourney = {
   settings?: TourneySettings;
   specifications?: TourneySpecification[];
 };
+
+export enum TourneyState {
+  Prepare = "prepare",
+  InProgress = "inProgress",
+  Complete = "complete",
+}
+
+export enum TourneyType {
+  Offline = "offline",
+  Online = "online",
+}
 
 export type TourneySettings = {
   timeoutsCount: number;
@@ -28,18 +45,6 @@ export type TourneySpecification = {
   title: string;
   businessDescription: string;
   techDescription: string;
-};
-
-export enum TourneyType {
-  Offline = "offline",
-  Online = "online",
-}
-
-export type TourneyFullInfo = Tourney & {
-  organizer: string;
-  location: string;
-  matches: TourneyMatch[];
-  artifacts: TourneyArtifact[];
 };
 
 export type TourneyMatch = {

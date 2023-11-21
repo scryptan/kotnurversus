@@ -7,13 +7,17 @@ type Props = {
   tourneys: Tourney[];
 };
 
-const TourneysTable = ({ title, tourneys }: Props) => (
-  <Stack spacing={4}>
-    <Heading fontSize="xl" textTransform="uppercase" textAlign="center">
-      {title}
-    </Heading>
-    <BaseTourneysTable tourneys={tourneys} />
-  </Stack>
-);
+const TourneysTable = ({ title, tourneys }: Props) => {
+  if (tourneys.length < 1) return null;
+
+  return (
+    <Stack spacing={4}>
+      <Heading fontSize="xl" textTransform="uppercase" textAlign="center">
+        {title}
+      </Heading>
+      <BaseTourneysTable tourneys={tourneys} />
+    </Stack>
+  );
+};
 
 export default TourneysTable;

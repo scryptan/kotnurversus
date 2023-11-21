@@ -6,7 +6,7 @@ import paths from "~/pages/paths";
 import { useAuthContext } from "~/utils/auth-context";
 
 type Props = {
-  tourneyId: number;
+  tourneyId: string;
 };
 
 const TourneyActionButtons = ({ tourneyId }: Props) => {

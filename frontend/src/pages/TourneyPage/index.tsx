@@ -1,8 +1,8 @@
 import { Stack } from "@chakra-ui/react";
 import { useState } from "react";
-import { MatchState } from "~/types/match";
+import { v4 as uuid } from "uuid";
 import { Team } from "~/types/team";
-import { TourneyFullInfo, TourneyType } from "~/types/tourney";
+import { Tourney, TourneyState, TourneyType } from "~/types/tourney";
 import TourneyActionButtons from "./TourneyActionButtons";
 import TourneyArtifacts from "./TourneyArtifacts";
 import TourneyBracket from "./TourneyBracket";
@@ -30,7 +30,8 @@ const TourneyPage = () => {
       <TourneyTeams teams={teams} onChange={setTeams} />
       <TourneyTimersSettings tourneyId={mockTourney.id} />
       <TourneyScenariosSettings tourneyId={mockTourney.id} />
-      <TourneyArtifacts artifacts={mockTourney.artifacts} />
+      {/* TODO move this to match */}
+      <TourneyArtifacts artifacts={[]} />
     </Stack>
   );
 };
@@ -126,103 +127,13 @@ const mockTeams: Team[] = [
   },
 ];
 
-const mockTourney: TourneyFullInfo = {
-  id: 1,
-  name: "RuCode",
+const mockTourney: Tourney = {
+  id: uuid(),
+  title: "RuCode",
+  state: TourneyState.Prepare,
+  form: TourneyType.Offline,
   startDate: new Date(),
-  type: TourneyType.Offline,
-  location: "г. Екатеринбург, улица Универсиады, 7",
-  organizer: "УрФУ",
-  matches: [
-    {
-      id: "1",
-      nextMatchId: "5",
-      startTime: "2021-05-30",
-      state: MatchState.Init,
-      participants: [
-        {
-          id: "T1",
-          name: "Гномы",
-          resultText: "4",
-          isWinner: true,
-        },
-        {
-          id: "T2",
-          name: "Дворфы",
-          resultText: "3",
-        },
-      ],
-    },
-    {
-      id: "2",
-      nextMatchId: "5",
-      startTime: "2021-05-30",
-      state: MatchState.Done,
-      participants: [
-        {
-          id: "T3",
-          name: "Полурослики",
-          resultText: "4",
-        },
-        {
-          id: "T4",
-          name: "Хоббиты",
-          resultText: "3",
-          isWinner: true,
-        },
-      ],
-    },
-    {
-      id: "3",
-      nextMatchId: "6",
-      startTime: "2021-05-30",
-      state: MatchState.Play,
-      participants: [
-        { id: "T5", name: "Лилипуты" },
-        { id: "T6", name: "Стуканцы" },
-      ],
-    },
-    {
-      id: "4",
-      nextMatchId: "6",
-      startTime: "2021-05-30",
-      state: MatchState.Prepare,
-      participants: [
-        { id: "T7", name: "Гремлины" },
-        { id: "T8", name: "Коротышки" },
-      ],
-    },
-    {
-      id: "5",
-      nextMatchId: "7",
-      startTime: "2021-05-31",
-      state: MatchState.Prepare,
-      participants: [
-        { id: "T4", name: "Хоббиты" },
-        { id: "T1", name: "Гномы" },
-      ],
-    },
-    {
-      id: "6",
-      nextMatchId: "7",
-      startTime: "2021-05-30",
-      state: MatchState.Prepare,
-      participants: [
-        // { id: "T5", name: "Лилипуты" },
-        // { id: "T7", name: "Гремлины" },
-      ],
-    },
-    {
-      id: "7",
-      nextMatchId: null,
-      startTime: "2021-05-30",
-      state: MatchState.Prepare,
-      participants: [],
-    },
-  ],
-  artifacts: [
-    { name: "Ссылка на гугл, чтоб не забывали", link: "https://google.com" },
-  ],
+  description: "г. Екатеринбург, улица Универсиады, 7",
 };
 
 export default TourneyPage;

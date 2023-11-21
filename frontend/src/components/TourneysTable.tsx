@@ -54,11 +54,11 @@ const BodyRow = memo(
         _hover: { bg: "whiteAlpha.100" },
       }}
     >
-      <BodyCell>{tourney.name}</BodyCell>
+      <BodyCell>{tourney.title}</BodyCell>
       <BodyCell textAlign="center">
         {format(tourney.startDate, "dd.MM")}
       </BodyCell>
-      <BodyCell textAlign="center">{TOURNEY_TYPE_NAMES[tourney.type]}</BodyCell>
+      <BodyCell textAlign="center">{TOURNEY_TYPE_NAMES[tourney.form]}</BodyCell>
     </Grid>
   ),
   (prev, next) => prev.tourney.id === next.tourney.id
