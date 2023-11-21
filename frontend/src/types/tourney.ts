@@ -8,7 +8,7 @@ export type Tourney = {
   startDate: Date;
   description?: string;
   settings: TourneySettings;
-  specifications?: TourneySpecification[];
+  specifications: TourneySpecification[];
   // TODO: fix this
   teams?: object[];
 };
@@ -43,9 +43,11 @@ export type TourneySettings = {
 
 export type TourneySpecification = {
   title: string;
-  businessDescription: string;
-  techDescription: string;
+  businessDescription?: string;
+  techDescription?: string;
 };
+
+export type TourneySpecificationWithId = TourneySpecification & { id: string };
 
 export type TourneyMatch = {
   id: string;
@@ -60,13 +62,6 @@ export type TourneyTeam = {
   name: string;
   resultText?: string;
   isWinner?: boolean;
-};
-
-export type TourneyScenario = {
-  id: string;
-  name: string;
-  description?: string | undefined;
-  requirements?: string | undefined;
 };
 
 export type TourneyArtifact = {

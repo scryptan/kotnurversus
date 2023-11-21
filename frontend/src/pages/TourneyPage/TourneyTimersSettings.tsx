@@ -2,7 +2,7 @@ import { HStack, Heading, Stack } from "@chakra-ui/react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { compare } from "fast-json-patch";
-import { FormEvent, forwardRef } from "react";
+import { FormEvent, forwardRef, memo, useRef } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import api from "~/api";
@@ -17,10 +17,11 @@ type Props = {
   settings: TourneySettings;
 };
 
-const TourneyTimersSettings = ({ id, settings }: Props) => {
+const TourneyTimersSettings = ({ id, settings: defaultSettings }: Props) => {
   const debounce = useDebounce(500);
   const queryClient = useQueryClient();
   const { isAuthenticated } = useAuthContext();
+  const settings = useRef(defaultSettings);
 
   const {
     register,
@@ -29,15 +30,19 @@ const TourneyTimersSettings = ({ id, settings }: Props) => {
   } = useForm<SettingsSchema>({
     shouldFocusError: false,
     resolver: zodResolver(settingsSchema),
-    defaultValues: settings,
+    defaultValues: settings.current,
   });
 
-  const editTourney = useMutation({
+  const editSettings = useMutation({
     mutationFn: async (newSettings: TourneySettings) => {
-      const operations = compare({ settings }, { settings: newSettings });
+      const operations = compare(
+        { settings: settings.current },
+        { settings: newSettings }
+      );
       return await api.tourneys.patch(id, operations);
     },
     onSuccess: async (tourney) => {
+      settings.current = tourney.settings;
       queryClient.setQueryData(queryKeys.tourney(tourney.id), tourney);
     },
   });
@@ -47,7 +52,7 @@ const TourneyTimersSettings = ({ id, settings }: Props) => {
   }
 
   const onSubmit = handleSubmit((data) => {
-    debounce.set(() => editTourney.mutateAsync({ ...settings, ...data }));
+    debounce.set(() => editSettings.mutateAsync({ ...settings.current, ...data }));
   });
 
   return (
@@ -101,4 +106,4 @@ const settingsSchema = z.object({
 
 type SettingsSchema = z.infer<typeof settingsSchema>;
 
-export default TourneyTimersSettings;
+export default memo(TourneyTimersSettings, () => true);

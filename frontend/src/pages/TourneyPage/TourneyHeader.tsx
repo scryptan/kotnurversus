@@ -42,9 +42,7 @@ const TourneyInfo = ({ tourney, ...props }: Props) => (
         {format(tourney.startDate, "d MMMM yyyy HH:mm")}
       </TourneyInfoRow>
       {tourney.description && (
-        <TourneyInfoRow name="Место проведения">
-          {tourney.description}
-        </TourneyInfoRow>
+        <TourneyInfoRow name="Описание" children={tourney.description} />
       )}
     </Stack>
   </SimpleGrid>

@@ -1,17 +1,19 @@
 import { useId } from "react";
 import ButtonWithAlert from "~/components/ButtonWithAlert";
 import Window, { WindowProps } from "~/components/Window";
-import { TourneyScenario } from "~/types/tourney";
-import ScenarioForm, { ScenarioFormSchema } from "./ScenarioForm";
+import { TourneySpecificationWithId } from "~/types/tourney";
+import SpecificationForm, {
+  SpecificationFormSchema,
+} from "./SpecificationForm";
 
 type Props = {
-  scenario: TourneyScenario;
-  onSubmit?: (scenario: TourneyScenario) => void;
+  specification: TourneySpecificationWithId;
+  onSubmit?: (specification: TourneySpecificationWithId) => void;
   onRemove?: () => void;
 };
 
-const EditScenarioWindow = ({
-  scenario,
+const EditSpecificationWindow = ({
+  specification,
   onSubmit,
   onRemove,
   ...props
@@ -19,17 +21,17 @@ const EditScenarioWindow = ({
   const formId = useId();
 
   const defaultValue = {
-    name: scenario.name,
-    description: scenario.description,
-    requirements: scenario.requirements,
+    title: specification.title,
+    businessDescription: specification.businessDescription,
+    techDescription: specification.techDescription,
   };
 
-  const handleSubmit = (data: ScenarioFormSchema) => {
+  const handleSubmit = (data: SpecificationFormSchema) => {
     onSubmit?.({
-      id: scenario.id,
-      name: data.name,
-      description: data.description,
-      requirements: data.requirements,
+      id: specification.id,
+      title: data.title,
+      businessDescription: data.businessDescription,
+      techDescription: data.techDescription,
     });
     props.onClose();
   };
@@ -49,7 +51,7 @@ const EditScenarioWindow = ({
         />
       )}
     >
-      <ScenarioForm
+      <SpecificationForm
         id={formId}
         defaultValue={defaultValue}
         onSubmit={handleSubmit}
@@ -58,4 +60,4 @@ const EditScenarioWindow = ({
   );
 };
 
-export default EditScenarioWindow;
+export default EditSpecificationWindow;

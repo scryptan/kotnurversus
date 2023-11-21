@@ -9,29 +9,29 @@ import {
 import { DraggableSyntheticListeners } from "@dnd-kit/core";
 import { Transform } from "@dnd-kit/utilities";
 import React, { forwardRef, memo } from "react";
-import ScenarioWindow from "~/components/ScenarioWindow";
+import SpecificationWindow from "~/components/SpecificationWindow";
 import DragHandleIcon from "~/icons/DragHandleIcon";
-import { TourneyScenario } from "~/types/tourney";
+import { TourneySpecificationWithId } from "~/types/tourney";
 
 type Props = {
   handleRef?: (element: HTMLElement | null) => void;
   isDragging?: boolean;
   isOverlay?: boolean;
-  onUpdate?: (scenario: TourneyScenario) => void;
+  onUpdate?: (specification: TourneySpecificationWithId) => void;
   onRemove?: () => void;
-  scenario: TourneyScenario;
+  specification: TourneySpecificationWithId;
   transform?: Transform | null;
   listeners?: DraggableSyntheticListeners;
   transition?: string | null;
 };
 
-const ScenariosListItem = forwardRef<HTMLDivElement, Props>(
+const SpecificationsListItem = forwardRef<HTMLDivElement, Props>(
   (
     {
       isDragging,
       isOverlay,
       handleRef,
-      scenario,
+      specification,
       onUpdate,
       onRemove,
       transform,
@@ -78,15 +78,15 @@ const ScenariosListItem = forwardRef<HTMLDivElement, Props>(
             textAlign="start"
             justifyContent="flex-start"
             onClick={window.onOpen}
-            children={scenario.name}
+            children={specification.title}
           />
         </Text>
         {onUpdate && (
-          <ScenarioWindow.Edit
+          <SpecificationWindow.Edit
             {...window.getDisclosureProps()}
             isOpen={window.isOpen}
             onClose={window.onClose}
-            scenario={scenario}
+            specification={specification}
             onSubmit={onUpdate}
             onRemove={onRemove}
           />
@@ -117,4 +117,4 @@ const transformProperty = [
   "scaleY(var(--scale-y, 1))",
 ].join(" ");
 
-export default memo(ScenariosListItem);
+export default memo(SpecificationsListItem);

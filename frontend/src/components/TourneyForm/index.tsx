@@ -118,21 +118,22 @@ type FormLabelProps = {
 const FormLabel = ({ label, isRequired, children }: FormLabelProps) => {
   const id = useId();
 
+  const needId = typeof children === "function";
+
   return (
     <>
       <Text
-        as="label"
-        htmlFor={id}
         mt={2}
         h="fit-content"
         fontSize="lg"
         fontWeight="medium"
         justifySelf="flex-end"
+        {...(needId ? { as: "label", htmlFor: id } : {})}
       >
         {label}
         {isRequired && <Text as="span" ml={2} color="red.500" children="*" />}
       </Text>
-      {typeof children === "function" ? children(id) : children}
+      {needId ? children(id) : children}
     </>
   );
 };
