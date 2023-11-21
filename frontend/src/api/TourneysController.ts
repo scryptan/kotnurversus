@@ -1,4 +1,4 @@
-import { compare } from "fast-json-patch";
+import { Operation, compare } from "fast-json-patch";
 import { PaginationResponse } from "~/types/pagination";
 import { CreateTourney, Tourney } from "~/types/tourney";
 import axiosClient from "~/utils/axios-client";
@@ -22,6 +22,10 @@ export class TourneysController {
       { ...tourney, ...newData, startDate: newData.startDate.toJSON() }
     );
     return await axiosClient.patch(`/api/v1/Games/${tourney.id}`, operations);
+  }
+
+  async patch(id: string, operations: Operation[]): Promise<Tourney> {
+    return await axiosClient.patch(`/api/v1/Games/${id}`, operations);
   }
 
   async delete(id: string): Promise<void> {

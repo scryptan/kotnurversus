@@ -7,7 +7,7 @@ export type Tourney = {
   form: TourneyType;
   startDate: Date;
   description?: string;
-  settings?: TourneySettings;
+  settings: TourneySettings;
   specifications?: TourneySpecification[];
   // TODO: fix this
   teams?: object[];
