@@ -1,10 +1,9 @@
 import { Center, Heading, Stack } from "@chakra-ui/react";
 import { useQuery } from "@tanstack/react-query";
-import { useState } from "react";
 import { useParams } from "react-router";
 import api from "~/api";
 import Loading from "~/components/Loading";
-import { Team } from "~/types/team";
+import { TourneyTeam } from "~/types/tourney";
 import queryKeys from "~/utils/query-keys";
 import TourneyActionButtons from "./TourneyActionButtons";
 import TourneyArtifacts from "./TourneyArtifacts";
@@ -20,7 +19,6 @@ type PageParams = {
 
 const TourneyPage = () => {
   const { tourneyId = "" } = useParams<PageParams>();
-  const [teams, setTeams] = useState(mockTeams);
 
   const tourneyQuery = useQuery({
     queryKey: queryKeys.tourney(tourneyId),
@@ -54,8 +52,11 @@ const TourneyPage = () => {
     >
       <TourneyHeader tourney={tourney} />
       <TourneyActionButtons tourneyId={tourney.id} />
-      <TourneyBracket teams={teams} specifications={tourney.specifications} />
-      <TourneyTeams teams={teams} onChange={setTeams} />
+      <TourneyBracket
+        teams={mockTeams}
+        specifications={tourney.specifications}
+      />
+      <TourneyTeams id={tourney.id} teams={tourney.teams} />
       <TourneySpecificationsSettings
         id={tourney.id}
         specifications={tourney.specifications}
@@ -68,11 +69,11 @@ const TourneyPage = () => {
   );
 };
 
-const mockTeams: Team[] = [
+const mockTeams: TourneyTeam[] = [
   {
     id: "T1",
-    name: "Гномы",
-    participants: [
+    title: "Гномы",
+    mates: [
       "Кислицин Денис",
       "Ведешкин Никита",
       "Дон Дарья",
@@ -82,8 +83,8 @@ const mockTeams: Team[] = [
   },
   {
     id: "T2",
-    name: "Дворфы",
-    participants: [
+    title: "Дворфы",
+    mates: [
       "Кислицин Денис",
       "Ведешкин Никита",
       "Дон Дарья",
@@ -93,8 +94,8 @@ const mockTeams: Team[] = [
   },
   {
     id: "T3",
-    name: "Полурослики",
-    participants: [
+    title: "Полурослики",
+    mates: [
       "Кислицин Денис",
       "Ведешкин Никита",
       "Дон Дарья",
@@ -104,8 +105,8 @@ const mockTeams: Team[] = [
   },
   {
     id: "T4",
-    name: "Хоббиты",
-    participants: [
+    title: "Хоббиты",
+    mates: [
       "Кислицин Денис",
       "Ведешкин Никита",
       "Дон Дарья",
@@ -115,8 +116,8 @@ const mockTeams: Team[] = [
   },
   {
     id: "T5",
-    name: "Лилипуты",
-    participants: [
+    title: "Лилипуты",
+    mates: [
       "Кислицин Денис",
       "Ведешкин Никита",
       "Дон Дарья",
@@ -126,8 +127,8 @@ const mockTeams: Team[] = [
   },
   {
     id: "T6",
-    name: "Стуканцы",
-    participants: [
+    title: "Стуканцы",
+    mates: [
       "Кислицин Денис",
       "Ведешкин Никита",
       "Дон Дарья",
@@ -137,8 +138,8 @@ const mockTeams: Team[] = [
   },
   {
     id: "T7",
-    name: "Гремлины",
-    participants: [
+    title: "Гремлины",
+    mates: [
       "Кислицин Денис",
       "Ведешкин Никита",
       "Дон Дарья",
@@ -148,8 +149,8 @@ const mockTeams: Team[] = [
   },
   {
     id: "T8",
-    name: "Коротышки",
-    participants: [
+    title: "Коротышки",
+    mates: [
       "Кислицин Денис",
       "Ведешкин Никита",
       "Дон Дарья",

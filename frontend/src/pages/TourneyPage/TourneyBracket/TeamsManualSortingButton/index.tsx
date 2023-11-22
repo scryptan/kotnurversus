@@ -1,13 +1,13 @@
 import { Button, useDisclosure } from "@chakra-ui/react";
 import { useRef } from "react";
 import Window, { WindowProps } from "~/components/Window";
-import { Team } from "~/types/team";
 import TeamsManualSorting from "./TeamsManualSorting";
 import MoveIcon from "~/icons/MoveIcon";
+import { TourneyTeam } from "~/types/tourney";
 
 type Props = {
-  teams: Team[];
-  onSubmit: (sortedTeams: Team[]) => void;
+  teams: TourneyTeam[];
+  onSubmit: (sortedTeams: TourneyTeam[]) => void;
 };
 
 const TeamsManualSortingButton = ({ teams, onSubmit }: Props) => {
@@ -39,7 +39,7 @@ const TeamsManualSortingWindow = ({
 }: WindowProps<Props>) => {
   const sortedTeams = useRef(teams);
 
-  const handleChange = (teams: Team[]) => {
+  const handleChange = (teams: TourneyTeam[]) => {
     sortedTeams.current = teams;
   };
 

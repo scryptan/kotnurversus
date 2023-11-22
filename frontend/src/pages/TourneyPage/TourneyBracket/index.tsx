@@ -3,8 +3,7 @@ import { SingleEliminationBracket } from "@g-loot/react-tournament-brackets";
 import { CommonTreeProps } from "@g-loot/react-tournament-brackets/dist/src/types";
 import { useEffect, useRef, useState } from "react";
 import ShuffleIcon from "~/icons/ShuffleIcon";
-import { Team } from "~/types/team";
-import { TourneySpecification } from "~/types/tourney";
+import { TourneySpecification, TourneyTeam } from "~/types/tourney";
 import { isDefined } from "~/utils";
 import { useAuthContext } from "~/utils/auth-context";
 import { addSpecificationToRound } from "~/utils/match";
@@ -14,7 +13,7 @@ import SvgViewer from "./SvgViewer";
 import TeamsManualSortingButton from "./TeamsManualSortingButton";
 
 type Props = {
-  teams: Team[];
+  teams: TourneyTeam[];
   specifications: TourneySpecification[];
 };
 
@@ -22,7 +21,7 @@ const TourneyBracket = ({ teams, specifications }: Props) => {
   const { isAuthenticated } = useAuthContext();
   const sortedTeams = useRef(teams);
 
-  const calcMatches = (teams: Team[]) => {
+  const calcMatches = (teams: TourneyTeam[]) => {
     const matches = createMatchesFromTeams(teams);
     return isAuthenticated
       ? matches.map(addSpecificationToRound(specifications))
@@ -33,7 +32,7 @@ const TourneyBracket = ({ teams, specifications }: Props) => {
     calcMatches(sortedTeams.current)
   );
 
-  const teamsKey = teams.map((t) => `${t.id}:${t.name}`).join("|");
+  const teamsKey = teams.map((t) => `${t.id}:${t.title}`).join("|");
   const specificationsKey = specifications.map((s) => s.title).join("|");
 
   useEffect(() => {
@@ -47,7 +46,7 @@ const TourneyBracket = ({ teams, specifications }: Props) => {
     setMatches(calcMatches(sortedTeams.current));
   }, [teamsKey, specificationsKey, isAuthenticated]);
 
-  const handleChange = (teams: Team[]) => {
+  const handleChange = (teams: TourneyTeam[]) => {
     sortedTeams.current = teams;
     setMatches(calcMatches(sortedTeams.current));
   };
@@ -102,8 +101,8 @@ const options: CommonTreeProps["options"] = {
 };
 
 type ActionsButtonProps = {
-  teams: Team[];
-  onTeamsChange: (teams: Team[]) => void;
+  teams: TourneyTeam[];
+  onTeamsChange: (teams: TourneyTeam[]) => void;
 };
 
 const ActionsButton = ({ teams, onTeamsChange }: ActionsButtonProps) => (

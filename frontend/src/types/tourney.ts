@@ -9,8 +9,7 @@ export type Tourney = {
   description?: string;
   settings: TourneySettings;
   specifications: TourneySpecification[];
-  // TODO: fix this
-  teams?: object[];
+  teams: TourneyTeam[];
 };
 
 export type CreateTourney = {
@@ -49,17 +48,23 @@ export type TourneySpecification = {
 
 export type TourneySpecificationWithId = TourneySpecification & { id: string };
 
+export type TourneyTeam = {
+  id: string;
+  title: string;
+  mates: string[];
+};
+
 export type TourneyMatch = {
   id: string;
   nextMatchId: string | null;
   startTime: string;
   state: MatchState;
-  participants: TourneyTeam[];
+  participants: TourneyMatchTeam[];
   specificationTitle?: string | null;
   badgeValue?: number;
 };
 
-export type TourneyTeam = {
+export type TourneyMatchTeam = {
   id: string;
   name: string;
   resultText?: string;

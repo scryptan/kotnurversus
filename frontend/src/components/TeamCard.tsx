@@ -11,19 +11,21 @@ import {
   OrderedList,
   Text,
   forwardRef,
+  useDisclosure,
 } from "@chakra-ui/react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useFieldArray, useForm } from "react-hook-form";
 import { v4 as uuid } from "uuid";
 import { z } from "zod";
+import Alert from "~/components/Alert";
 import IconButtonWithTooltip from "~/components/IconButtonWithTooltip";
 import CrossIcon from "~/icons/CrossIcon";
-import { Team } from "~/types/team";
+import { TourneyTeam } from "~/types/tourney";
 
 type Props = {
   isEditMode?: boolean;
-  team?: Partial<Team>;
-  onChange?: (team: Team) => void;
+  team?: Partial<TourneyTeam>;
+  onChange?: (team: TourneyTeam) => void;
   onRemove?: (teamId: string) => void;
 } & Omit<BoxProps, "onChange">;
 
@@ -53,21 +55,29 @@ const BaseTeamCard = ({
   ...props
 }: Omit<Props, "isEditMode" | "onChange" | "onRemove">) => (
   <TeamCardLayout {...props}>
-    <TeamCardName>
+    <TeamCardTitle>
       <Text
         fontSize="2xl"
         noOfLines={1}
         wordBreak="break-all"
-        children={team?.name || "Команда"}
+        children={team?.title || "Команда"}
       />
-    </TeamCardName>
-    <TeamCardParticipants>
-      {team?.participants?.map((p, i) => (
+    </TeamCardTitle>
+    <TeamCardMates>
+      {team?.mates?.map((p, i) => (
         <ListItem ml={4} key={i}>
           <Text noOfLines={1} wordBreak="break-all" children={p} />
         </ListItem>
       ))}
-    </TeamCardParticipants>
+      {!team?.mates?.length && (
+        <Text
+          py={10}
+          opacity={0.75}
+          textAlign="center"
+          children="Участники не указаны"
+        />
+      )}
+    </TeamCardMates>
   </TeamCardLayout>
 );
 
@@ -79,7 +89,7 @@ const EditableTeamCard = ({ team, onChange, onRemove, ...props }: Props) => {
   });
   const { fields, append, remove } = useFieldArray({
     control,
-    name: "participants",
+    name: "mates",
   });
 
   const handleChange = (data: TeamSchema) => {
@@ -90,11 +100,9 @@ const EditableTeamCard = ({ team, onChange, onRemove, ...props }: Props) => {
     team?.id && onRemove?.(team.id);
   };
 
-  const handleAddParticipant = () => {
+  const handleAddMate = () => {
     remove(
-      getValues("participants").flatMap(({ name }, i) =>
-        name.trim() ? [] : [i]
-      )
+      getValues("mates").flatMap(({ name }, i) => (name.trim() ? [] : [i]))
     );
     append({ name: "" });
   };
@@ -106,28 +114,28 @@ const EditableTeamCard = ({ team, onChange, onRemove, ...props }: Props) => {
       onChange={handleSubmit(handleChange)}
       {...props}
     >
-      <TeamCardName>
+      <TeamCardTitle>
         <Input
           h="42px"
           size="lg"
           placeholder="Название команды"
-          {...register("name")}
+          {...register("title")}
         />
-      </TeamCardName>
-      <TeamCardParticipants>
+      </TeamCardTitle>
+      <TeamCardMates>
         {fields.map((field, i) => (
           <ListItem ml={4} key={field.id}>
             <Input
               h="24px"
               size="md"
               placeholder="Участник"
-              {...register(`participants.${i}.name`)}
+              {...register(`mates.${i}.name`)}
             />
           </ListItem>
         ))}
-      </TeamCardParticipants>
-      <AddParticipantButton onClick={handleAddParticipant} />
-      {team?.id && onRemove && <RemoveButton onClick={handleRemove} />}
+      </TeamCardMates>
+      <AddMateButton onClick={handleAddMate} />
+      {team?.id && onRemove && <RemoveButton onRemove={handleRemove} />}
     </TeamCardLayout>
   );
 };
@@ -150,11 +158,11 @@ const TeamCardLayout = forwardRef<BoxProps, "div">((props, ref) => (
   />
 ));
 
-const TeamCardName = (props: BoxProps) => (
+const TeamCardTitle = (props: BoxProps) => (
   <Flex px={4} h="42px" align="center" {...props} />
 );
 
-const TeamCardParticipants = (props: ListProps) => (
+const TeamCardMates = (props: ListProps) => (
   <OrderedList
     m={0}
     px={4}
@@ -176,7 +184,7 @@ const Input = forwardRef<InputProps, "input">((props, ref) => (
   />
 ));
 
-const AddParticipantButton = (props: ButtonProps) => (
+const AddMateButton = (props: ButtonProps) => (
   <Button
     ml={8}
     mb={2}
@@ -188,40 +196,57 @@ const AddParticipantButton = (props: ButtonProps) => (
   />
 );
 
-const RemoveButton = (props: ButtonProps) => (
-  <IconButtonWithTooltip
-    pos="absolute"
-    right={-3}
-    top={-3}
-    size="xs"
-    colorScheme="red"
-    label="Удалить"
-    borderRadius="full"
-    icon={<CrossIcon boxSize={4} />}
-    {...props}
-  />
-);
+type RemoveButtonProps = {
+  onRemove: () => void;
+} & ButtonProps;
+
+const RemoveButton = ({ onRemove, ...props }: RemoveButtonProps) => {
+  const alert = useDisclosure();
+
+  return (
+    <>
+      <IconButtonWithTooltip
+        pos="absolute"
+        right={-3}
+        top={-3}
+        size="xs"
+        colorScheme="red"
+        label="Удалить"
+        borderRadius="full"
+        onClick={alert.onOpen}
+        icon={<CrossIcon boxSize={4} />}
+        {...props}
+      />
+      <Alert
+        isOpen={alert.isOpen}
+        onClose={alert.onClose}
+        onSubmit={onRemove}
+        children="Вы уверены, что хотите удалить данную команду?"
+      />
+    </>
+  );
+};
 
 const teamSchema = z.object({
-  name: z.string().min(1),
-  participants: z.object({ name: z.string() }).array(),
+  title: z.string().min(1),
+  mates: z.object({ name: z.string() }).array(),
 });
 
 type TeamSchema = z.infer<typeof teamSchema>;
 
-const castToTeamSchema = (team?: Partial<Team>): Partial<TeamSchema> => ({
-  name: team?.name,
-  participants: team?.participants?.length
-    ? team?.participants?.map((name) => ({ name }))
+const castToTeamSchema = (
+  team?: Partial<TourneyTeam>
+): Partial<TeamSchema> => ({
+  title: team?.title,
+  mates: team?.mates?.length
+    ? team?.mates?.map((name) => ({ name }))
     : [{ name: "" }],
 });
 
-const castToTeam = (data: TeamSchema, teamId?: string): Team => ({
+const castToTeam = (data: TeamSchema, teamId?: string): TourneyTeam => ({
   id: teamId || uuid(),
-  name: data.name,
-  participants: data.participants.flatMap((p) =>
-    p.name.trim() ? [p.name.trim()] : []
-  ),
+  title: data.title,
+  mates: data.mates.flatMap((p) => (p.name.trim() ? [p.name.trim()] : [])),
 });
 
 export default TeamCard;

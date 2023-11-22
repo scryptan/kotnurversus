@@ -27,6 +27,7 @@ const mockMatch: Match = {
     startDate: new Date(),
     settings: {} as TourneySettings,
     specifications: [],
+    teams: [],
   },
   teams: [
     {

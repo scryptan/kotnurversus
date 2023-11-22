@@ -1,41 +1,56 @@
 import { Heading, Stack, Wrap } from "@chakra-ui/react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { compare } from "fast-json-patch";
 import { memo, useRef } from "react";
 import { v4 as uuid } from "uuid";
+import api from "~/api";
 import TeamCard from "~/components/TeamCard";
 import useDebounce from "~/hooks/useDebounce";
 import useForceUpdate from "~/hooks/useForceUpdate";
-import { Team } from "~/types/team";
+import { TourneyTeam } from "~/types/tourney";
 import { useAuthContext } from "~/utils/auth-context";
+import queryKeys from "~/utils/query-keys";
 
 type Props = {
-  teams: Team[];
-  onChange: (teams: Team[]) => void;
+  id: string;
+  teams: TourneyTeam[];
 };
 
-const TourneyTeams = ({ teams: defaultTeams, onChange }: Props) => {
-  const debounce = useDebounce(300);
+const TourneyTeams = ({ id, teams: defaultTeams }: Props) => {
+  const debounce = useDebounce(500);
+  const queryClient = useQueryClient();
   const { isAuthenticated } = useAuthContext();
   const { forceUpdate } = useForceUpdate();
   const teams = useRef(defaultTeams);
   const defaultTeam = useRef(createDefaultTeam());
 
-  const updateTeams = (newTeams: Team[]) => {
+  const editTeams = useMutation({
+    mutationFn: async (teams: TourneyTeam[]) => {
+      const operations = compare({}, { teams });
+      return await api.tourneys.patch(id, operations);
+    },
+    onSuccess: async (tourney) => {
+      queryClient.setQueryData(queryKeys.tourney(tourney.id), tourney);
+    },
+  });
+
+  const handleUpdate = (newTeams: TourneyTeam[]) => {
     teams.current = newTeams;
-    debounce.set(() => onChange(newTeams));
+    debounce.set(() => editTeams.mutateAsync(newTeams));
   };
 
-  const handleAdd = (team: Team) => {
-    updateTeams([...teams.current, team]);
+  const handleAdd = (team: TourneyTeam) => {
+    handleUpdate([...teams.current, team]);
     defaultTeam.current = createDefaultTeam();
     forceUpdate();
   };
 
-  const handleChange = (team: Team) => {
-    updateTeams(teams.current.map((t) => (t.id === team.id ? team : t)));
+  const handleChange = (team: TourneyTeam) => {
+    handleUpdate(teams.current.map((t) => (t.id === team.id ? team : t)));
   };
 
   const handleRemove = (teamId: string) => {
-    updateTeams(teams.current.filter((t) => t.id !== teamId));
+    handleUpdate(teams.current.filter((t) => t.id !== teamId));
     forceUpdate();
   };
 
@@ -70,9 +85,9 @@ const TourneyTeams = ({ teams: defaultTeams, onChange }: Props) => {
   );
 };
 
-const createDefaultTeam = (): Partial<Team> => ({
+const createDefaultTeam = (): Partial<TourneyTeam> => ({
   id: uuid(),
-  participants: [""],
+  mates: [""],
 });
 
 export default memo(TourneyTeams, () => true);
