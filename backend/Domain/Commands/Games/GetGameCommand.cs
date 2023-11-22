@@ -5,7 +5,7 @@ using Models.Games;
 
 namespace Domain.Commands.Games;
 
-public class GetGameCommand : GetCommandBase<Game, InvalidGameDataReason>
+public class GetGameCommand : GetCommandBase<Game>
 {
     public GetGameCommand(IDataContextAccessor dataContextAccessor, IEntityService<Game> service)
         : base(dataContextAccessor, service)

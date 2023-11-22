@@ -4,9 +4,8 @@ using Models;
 
 namespace Domain.Commands.Base;
 
-public abstract class GetCommandBase<T, TInvalidDataReason> : IGetCommand<T>
+public abstract class GetCommandBase<T> : IGetCommand<T>
     where T : EntityInfo, IEntity
-    where TInvalidDataReason : struct, Enum
 {
     private readonly IDataContextAccessor dataContextAccessor;
     private readonly IEntityService<T> service;
