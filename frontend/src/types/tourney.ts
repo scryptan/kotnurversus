@@ -55,6 +55,8 @@ export type TourneyMatch = {
   startTime: string;
   state: MatchState;
   participants: TourneyTeam[];
+  specificationTitle?: string | null;
+  badgeValue?: number;
 };
 
 export type TourneyTeam = {

@@ -4,8 +4,10 @@ import { CommonTreeProps } from "@g-loot/react-tournament-brackets/dist/src/type
 import { useEffect, useRef, useState } from "react";
 import ShuffleIcon from "~/icons/ShuffleIcon";
 import { Team } from "~/types/team";
+import { TourneySpecification } from "~/types/tourney";
 import { isDefined } from "~/utils";
 import { useAuthContext } from "~/utils/auth-context";
+import { addSpecificationToRound } from "~/utils/match";
 import { createMatchesFromTeams } from "~/utils/tourney";
 import Match from "./Match";
 import SvgViewer from "./SvgViewer";
@@ -13,16 +15,26 @@ import TeamsManualSortingButton from "./TeamsManualSortingButton";
 
 type Props = {
   teams: Team[];
+  specifications: TourneySpecification[];
 };
 
-const TourneyBracket = ({ teams }: Props) => {
+const TourneyBracket = ({ teams, specifications }: Props) => {
   const { isAuthenticated } = useAuthContext();
   const sortedTeams = useRef(teams);
+
+  const calcMatches = (teams: Team[]) => {
+    const matches = createMatchesFromTeams(teams);
+    return isAuthenticated
+      ? matches.map(addSpecificationToRound(specifications))
+      : matches;
+  };
+
   const [matches, setMatches] = useState(() =>
-    createMatchesFromTeams(sortedTeams.current)
+    calcMatches(sortedTeams.current)
   );
 
   const teamsKey = teams.map((t) => `${t.id}:${t.name}`).join("|");
+  const specificationsKey = specifications.map((s) => s.title).join("|");
 
   useEffect(() => {
     const currentTeams = sortedTeams.current
@@ -32,17 +44,17 @@ const TourneyBracket = ({ teams }: Props) => {
       (team) => !sortedTeams.current.find((t) => t.id === team.id)
     );
     sortedTeams.current = [...currentTeams, ...newTeams];
-    setMatches(createMatchesFromTeams(sortedTeams.current));
-  }, [teamsKey]);
+    setMatches(calcMatches(sortedTeams.current));
+  }, [teamsKey, specificationsKey, isAuthenticated]);
 
   const handleChange = (teams: Team[]) => {
     sortedTeams.current = teams;
-    setMatches(createMatchesFromTeams(sortedTeams.current));
+    setMatches(calcMatches(sortedTeams.current));
   };
 
-  if (teams.length < 3) {
+  if (teams.length < 4) {
     const message = isAuthenticated
-      ? "Создайте минимум 2 команды для построения турнирной сетки"
+      ? "Создайте минимум 4 команды для построения турнирной сетки"
       : "Турнирная сетка ещё не построена";
 
     return <Heading my="100px" mx="auto" fontSize="lg" children={message} />;
@@ -76,9 +88,11 @@ const TourneyBracket = ({ teams }: Props) => {
 
 const options: CommonTreeProps["options"] = {
   style: {
-    width: 256,
-    boxHeight: 84,
+    width: 268,
+    boxHeight: 124,
     spaceBetweenRows: 20,
+    horizontalOffset: 0,
+    roundSeparatorWidth: 50,
     connectorColor: "#ADADAD",
     roundHeader: { isShown: false },
     lineInfo: {

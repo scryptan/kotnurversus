@@ -54,13 +54,13 @@ const TourneyPage = () => {
     >
       <TourneyHeader tourney={tourney} />
       <TourneyActionButtons tourneyId={tourney.id} />
-      <TourneyBracket teams={teams} />
+      <TourneyBracket teams={teams} specifications={tourney.specifications} />
       <TourneyTeams teams={teams} onChange={setTeams} />
-      <TourneyTimersSettings id={tourney.id} settings={tourney.settings} />
       <TourneySpecificationsSettings
         id={tourney.id}
         specifications={tourney.specifications}
       />
+      <TourneyTimersSettings id={tourney.id} settings={tourney.settings} />
 
       {/* TODO move this to match */}
       <TourneyArtifacts artifacts={[]} />
