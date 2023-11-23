@@ -19,6 +19,7 @@ export const tourneyFormSchema = z.object({
     .regex(timeRegex, "Некорректное время"),
   type: z.nativeEnum(TourneyType).default(TourneyType.Offline),
   description: z.string().optional(),
+  enableRepeatChallengesInFinal: z.boolean().default(false),
 });
 
 export type TourneyFormSchema = z.infer<typeof tourneyFormSchema>;
@@ -29,6 +30,7 @@ export const castToFormSchema = (tourney: Tourney): TourneyFormSchema => ({
   time: extractTimeFromDate(tourney.startDate),
   type: tourney.form,
   description: tourney.description,
+  enableRepeatChallengesInFinal: false,
 });
 
 export const castToCreateTourney = (

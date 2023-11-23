@@ -1,4 +1,13 @@
-import { Grid, Radio, RadioGroup, Text, useId } from "@chakra-ui/react";
+import {
+  Box,
+  Grid,
+  Radio,
+  RadioGroup,
+  Switch,
+  Text,
+  Tooltip,
+  useId,
+} from "@chakra-ui/react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ReactNode } from "react";
 import { Controller, useForm } from "react-hook-form";
@@ -103,6 +112,24 @@ const TourneyForm = ({ id, defaultValue, onSubmit }: Props) => {
             id={id}
             placeholder="Введите место проведения"
           />
+        )}
+      </FormLabel>
+      <FormLabel label="Без повторов в финале">
+        {(id) => (
+          <Tooltip
+            hasArrow
+            placement="right"
+            label="Доп. требования, которые уже были использованы на предыдущих этапах, не будут повторяться в финале"
+          >
+            <Box my={1} as="span" w="fit-content">
+              <Switch
+                {...register("enableRepeatChallengesInFinal")}
+                id={id}
+                size="lg"
+                colorScheme="cyan"
+              />
+            </Box>
+          </Tooltip>
         )}
       </FormLabel>
     </Grid>
