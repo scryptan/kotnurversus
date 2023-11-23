@@ -22,7 +22,9 @@ const TourneysSection = (props: BoxProps) => {
     staleTime: 1000 * 60 * 5,
   });
 
-  const tourneys = tourneysQuery.data?.items || [];
+  const tourneys = (tourneysQuery.data?.items || []).sort(
+    (a, b) => a.startDate.getTime() - b.startDate.getTime()
+  );
 
   return (
     <Stack {...props} spacing={8}>

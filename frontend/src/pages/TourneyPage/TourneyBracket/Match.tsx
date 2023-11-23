@@ -20,26 +20,33 @@ const Match = ({
 }: MatchComponentProps) => {
   const { colorMode } = useColorMode();
 
+  const isPrepare = match.state === MatchState.Prepare;
   const isDone = match.state === MatchState.Done;
   const borderColor =
     colorMode === "light" ? "blackAlpha.300" : "whiteAlpha.300";
+
+  const linkProps = isPrepare
+    ? {
+        as: Link,
+        to: paths.match.path(match.id),
+        cursor: "pointer",
+        transition: "opacity 200ms ease-out",
+        _hover: { opacity: 0.75 },
+      }
+    : {};
 
   return (
     <Flex
       ml={3}
       my={5}
-      as={Link}
-      to={paths.match.path(match.id)}
       border="1px solid"
       borderColor={borderColor}
       h="calc(100% - 40px)"
       bg={`bg.${colorMode}.2`}
-      cursor="pointer"
       flexDir="column"
       justify="space-between"
       borderRadius={4}
-      transition="opacity 200ms ease-out"
-      _hover={{ opacity: 0.75 }}
+      {...linkProps}
     >
       <Side
         isDone={isDone}

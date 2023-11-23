@@ -1,7 +1,7 @@
 import {
   BoxProps,
+  Grid,
   Heading,
-  SimpleGrid,
   Stack,
   Text,
   useColorMode,
@@ -30,11 +30,11 @@ const breadcrumbItems = [
 ];
 
 const TourneyInfo = ({ tourney, ...props }: Props) => (
-  <SimpleGrid columns={2} gridGap={8} {...props}>
+  <Grid gridTemplateColumns="1.5fr 1fr" gridGap={8} {...props}>
     <Stack spacing={9}>
       <Heading fontSize="4xl">Турнир "{tourney.title}"</Heading>
     </Stack>
-    <Stack spacing={2} justify="center" justifySelf="flex-end">
+    <Stack spacing={2} justify="center">
       <TourneyInfoRow name="Формат">
         {TOURNEY_TYPE_NAMES[tourney.form]?.toLowerCase() || "неизвестно"}
       </TourneyInfoRow>
@@ -45,7 +45,7 @@ const TourneyInfo = ({ tourney, ...props }: Props) => (
         <TourneyInfoRow name="Описание" children={tourney.description} />
       )}
     </Stack>
-  </SimpleGrid>
+  </Grid>
 );
 
 type TourneyInfoRowProps = {

@@ -1,9 +1,11 @@
 import { Button, Center, HStack, Heading, Stack } from "@chakra-ui/react";
 import { useQuery } from "@tanstack/react-query";
+import { ChangeEvent, useState } from "react";
 import { Link } from "react-router-dom";
 import api from "~/api";
 import Input from "~/components/Input";
 import Loading from "~/components/Loading";
+import useDebounce from "~/hooks/useDebounce";
 import PlusIcon from "~/icons/PlusIcon";
 import SearchIcon from "~/icons/SearchIcon";
 import paths from "~/pages/paths";
@@ -23,24 +25,36 @@ const TourneysPage = () => (
 );
 
 const TourneysSection = () => {
+  const debounce = useDebounce(300);
+  const [searchValue, setSearchValue] = useState("");
+
   const tourneysQuery = useQuery({
     queryKey: queryKeys.tourneys,
     queryFn: api.tourneys.find,
     staleTime: 1000 * 60 * 5,
   });
 
-  const tourneys = tourneysQuery.data?.items || [];
+  const tourneys = (tourneysQuery.data?.items || [])
+    .filter((t) => t.title.toLowerCase().includes(searchValue))
+    .sort((a, b) => a.startDate.getTime() - b.startDate.getTime());
+
   const currentTourneys = tourneys.filter(
-    (t) => t.state === TourneyState.InProgress
+    (t) => t.state !== TourneyState.Complete
   );
   const pastTourneys = tourneys.filter(
     (t) => t.state === TourneyState.Complete
   );
 
+  const handleSearch = (e: ChangeEvent<HTMLInputElement>) => {
+    const value = e.currentTarget.value.trim().toLowerCase();
+    debounce.set(() => setSearchValue(value));
+  };
+
   return (
     <>
       <Input
         size="lg"
+        onChange={handleSearch}
         placeholder="Поиск по названию турнира"
         rightElement={<SearchIcon boxSize={6} />}
         rightElementProps={{ pointerEvents: "none" }}
