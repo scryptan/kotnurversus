@@ -3,7 +3,6 @@ import { useQuery } from "@tanstack/react-query";
 import { useParams } from "react-router";
 import api from "~/api";
 import Loading from "~/components/Loading";
-import { TourneyTeam } from "~/types/tourney";
 import queryKeys from "~/utils/query-keys";
 import TourneyActionButtons from "./TourneyActionButtons";
 import TourneyArtifacts from "./TourneyArtifacts";
@@ -53,7 +52,8 @@ const TourneyPage = () => {
       <TourneyHeader tourney={tourney} />
       <TourneyActionButtons tourneyId={tourney.id} />
       <TourneyBracket
-        teams={mockTeams}
+        id={tourney.id}
+        teams={tourney.teams}
         specifications={tourney.specifications}
       />
       <TourneyTeams id={tourney.id} teams={tourney.teams} />
@@ -68,96 +68,5 @@ const TourneyPage = () => {
     </Stack>
   );
 };
-
-const mockTeams: TourneyTeam[] = [
-  {
-    id: "T1",
-    title: "Гномы",
-    mates: [
-      "Кислицин Денис",
-      "Ведешкин Никита",
-      "Дон Дарья",
-      "Третьяков Максим",
-      "Казаков Салават",
-    ],
-  },
-  {
-    id: "T2",
-    title: "Дворфы",
-    mates: [
-      "Кислицин Денис",
-      "Ведешкин Никита",
-      "Дон Дарья",
-      "Третьяков Максим",
-      "Казаков Салават",
-    ],
-  },
-  {
-    id: "T3",
-    title: "Полурослики",
-    mates: [
-      "Кислицин Денис",
-      "Ведешкин Никита",
-      "Дон Дарья",
-      "Третьяков Максим",
-      "Казаков Салават",
-    ],
-  },
-  {
-    id: "T4",
-    title: "Хоббиты",
-    mates: [
-      "Кислицин Денис",
-      "Ведешкин Никита",
-      "Дон Дарья",
-      "Третьяков Максим",
-      "Казаков Салават",
-    ],
-  },
-  {
-    id: "T5",
-    title: "Лилипуты",
-    mates: [
-      "Кислицин Денис",
-      "Ведешкин Никита",
-      "Дон Дарья",
-      "Третьяков Максим",
-      "Казаков Салават",
-    ],
-  },
-  {
-    id: "T6",
-    title: "Стуканцы",
-    mates: [
-      "Кислицин Денис",
-      "Ведешкин Никита",
-      "Дон Дарья",
-      "Третьяков Максим",
-      "Казаков Салават",
-    ],
-  },
-  {
-    id: "T7",
-    title: "Гремлины",
-    mates: [
-      "Кислицин Денис",
-      "Ведешкин Никита",
-      "Дон Дарья",
-      "Третьяков Максим",
-      "Казаков Салават",
-    ],
-  },
-  {
-    id: "T8",
-    title: "Коротышки",
-    mates: [
-      "Кислицин Денис",
-      "Ведешкин Никита",
-      "Дон Дарья",
-      "Третьяков Максим",
-      "Казаков Салават",
-    ],
-  },
-];
 
 export default TourneyPage;

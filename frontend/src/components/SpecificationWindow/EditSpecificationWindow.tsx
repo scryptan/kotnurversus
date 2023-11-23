@@ -32,6 +32,7 @@ const EditSpecificationWindow = ({
       title: data.title,
       businessDescription: data.businessDescription,
       techDescription: data.techDescription,
+      order: specification.order,
     });
     props.onClose();
   };

@@ -93,7 +93,7 @@ const EditableTeamCard = ({ team, onChange, onRemove, ...props }: Props) => {
   });
 
   const handleChange = (data: TeamSchema) => {
-    onChange?.(castToTeam(data, team?.id));
+    onChange?.(castToTeam(data, team));
   };
 
   const handleRemove = () => {
@@ -243,10 +243,11 @@ const castToTeamSchema = (
     : [{ name: "" }],
 });
 
-const castToTeam = (data: TeamSchema, teamId?: string): TourneyTeam => ({
-  id: teamId || uuid(),
+const castToTeam = (data: TeamSchema, team?: Partial<TourneyTeam>): TourneyTeam => ({
+  id: team?.id || uuid(),
   title: data.title,
   mates: data.mates.flatMap((p) => (p.name.trim() ? [p.name.trim()] : [])),
+  order: team?.order || 0,
 });
 
 export default TeamCard;

@@ -44,6 +44,7 @@ export type TourneySpecification = {
   title: string;
   businessDescription?: string;
   techDescription?: string;
+  order: number
 };
 
 export type TourneySpecificationWithId = TourneySpecification & { id: string };
@@ -52,6 +53,7 @@ export type TourneyTeam = {
   id: string;
   title: string;
   mates: string[];
+  order: number;
 };
 
 export type TourneyMatch = {

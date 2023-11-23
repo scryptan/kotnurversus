@@ -1,25 +1,29 @@
-import { Button, HStack, Heading } from "@chakra-ui/react";
+import { HStack, Heading } from "@chakra-ui/react";
 import { SingleEliminationBracket } from "@g-loot/react-tournament-brackets";
 import { CommonTreeProps } from "@g-loot/react-tournament-brackets/dist/src/types";
-import { useEffect, useRef, useState } from "react";
-import ShuffleIcon from "~/icons/ShuffleIcon";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { compare } from "fast-json-patch";
+import { memo, useEffect, useState } from "react";
+import api from "~/api";
 import { TourneySpecification, TourneyTeam } from "~/types/tourney";
-import { isDefined } from "~/utils";
 import { useAuthContext } from "~/utils/auth-context";
 import { addSpecificationToRound } from "~/utils/match";
+import queryKeys from "~/utils/query-keys";
 import { createMatchesFromTeams } from "~/utils/tourney";
 import Match from "./Match";
 import SvgViewer from "./SvgViewer";
 import TeamsManualSortingButton from "./TeamsManualSortingButton";
+import TeamsShuffleButton from "./TeamsShuffleButton";
 
 type Props = {
+  id: string;
   teams: TourneyTeam[];
   specifications: TourneySpecification[];
 };
 
-const TourneyBracket = ({ teams, specifications }: Props) => {
+const TourneyBracket = ({ id, teams, specifications }: Props) => {
+  const queryClient = useQueryClient();
   const { isAuthenticated } = useAuthContext();
-  const sortedTeams = useRef(teams);
 
   const calcMatches = (teams: TourneyTeam[]) => {
     const matches = createMatchesFromTeams(teams);
@@ -28,27 +32,24 @@ const TourneyBracket = ({ teams, specifications }: Props) => {
       : matches;
   };
 
-  const [matches, setMatches] = useState(() =>
-    calcMatches(sortedTeams.current)
-  );
+  const [matches, setMatches] = useState(() => calcMatches(teams));
 
-  const teamsKey = teams.map((t) => `${t.id}:${t.title}`).join("|");
-  const specificationsKey = specifications.map((s) => s.title).join("|");
+  const editTeams = useMutation({
+    mutationFn: async (teams: TourneyTeam[]) => {
+      const operations = compare({}, { teams });
+      return await api.tourneys.patch(id, operations);
+    },
+    onSuccess: async (tourney) => {
+      queryClient.setQueryData(queryKeys.tourney(tourney.id), tourney);
+    },
+  });
 
   useEffect(() => {
-    const currentTeams = sortedTeams.current
-      .map((team) => teams.find((t) => team.id === t.id))
-      .filter(isDefined);
-    const newTeams = teams.filter(
-      (team) => !sortedTeams.current.find((t) => t.id === team.id)
-    );
-    sortedTeams.current = [...currentTeams, ...newTeams];
-    setMatches(calcMatches(sortedTeams.current));
-  }, [teamsKey, specificationsKey, isAuthenticated]);
+    setMatches(calcMatches(teams));
+  }, [teams, specifications, isAuthenticated]);
 
-  const handleChange = (teams: TourneyTeam[]) => {
-    sortedTeams.current = teams;
-    setMatches(calcMatches(sortedTeams.current));
+  const handleChange = async (newTeams: TourneyTeam[]) => {
+    await editTeams.mutateAsync(newTeams);
   };
 
   if (teams.length < 4) {
@@ -74,10 +75,7 @@ const TourneyBracket = ({ teams, specifications }: Props) => {
     return (
       <>
         {bracket}
-        <ActionsButton
-          teams={sortedTeams.current}
-          onTeamsChange={handleChange}
-        />
+        <ActionsButton teams={teams} onTeamsChange={handleChange} />
       </>
     );
   }
@@ -102,18 +100,27 @@ const options: CommonTreeProps["options"] = {
 
 type ActionsButtonProps = {
   teams: TourneyTeam[];
-  onTeamsChange: (teams: TourneyTeam[]) => void;
+  onTeamsChange: (teams: TourneyTeam[]) => Promise<void>;
 };
 
 const ActionsButton = ({ teams, onTeamsChange }: ActionsButtonProps) => (
   <HStack>
-    <Button
-      leftIcon={<ShuffleIcon boxSize={4} />}
-      onClick={() => onTeamsChange(teams.toShuffle())}
-      children="Перемещать участников"
-    />
+    <TeamsShuffleButton teams={teams} onTeamsChange={onTeamsChange} />
     <TeamsManualSortingButton teams={teams} onSubmit={onTeamsChange} />
   </HStack>
 );
 
-export default TourneyBracket;
+const calcTeamsKey = (teams: TourneyTeam[]) =>
+  teams.map((t) => `${t.id}:${t.title}`).join("|");
+
+const calcSpecificationsKey = (specifications: TourneySpecification[]) =>
+  specifications.map((s) => s.title).join("|");
+
+export default memo(TourneyBracket, (prev, next) => {
+  return (
+    prev.id === next.id &&
+    calcTeamsKey(prev.teams) === calcTeamsKey(next.teams) &&
+    calcSpecificationsKey(prev.specifications) ===
+      calcSpecificationsKey(next.specifications)
+  );
+});

@@ -1,7 +1,7 @@
 import { Heading, Stack, Wrap } from "@chakra-ui/react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { compare } from "fast-json-patch";
-import { memo, useRef } from "react";
+import { memo, useEffect, useRef } from "react";
 import { v4 as uuid } from "uuid";
 import api from "~/api";
 import TeamCard from "~/components/TeamCard";
@@ -24,6 +24,11 @@ const TourneyTeams = ({ id, teams: defaultTeams }: Props) => {
   const teams = useRef(defaultTeams);
   const defaultTeam = useRef(createDefaultTeam());
 
+  useEffect(() => {
+    teams.current = defaultTeams;
+    forceUpdate();
+  }, [defaultTeams]);
+
   const editTeams = useMutation({
     mutationFn: async (teams: TourneyTeam[]) => {
       const operations = compare({}, { teams });
@@ -40,7 +45,7 @@ const TourneyTeams = ({ id, teams: defaultTeams }: Props) => {
   };
 
   const handleAdd = (team: TourneyTeam) => {
-    handleUpdate([...teams.current, team]);
+    handleUpdate([...teams.current, team].map((t, i) => ({ ...t, order: i })));
     defaultTeam.current = createDefaultTeam();
     forceUpdate();
   };
@@ -90,4 +95,12 @@ const createDefaultTeam = (): Partial<TourneyTeam> => ({
   mates: [""],
 });
 
-export default memo(TourneyTeams, () => true);
+const createTeamsKey = (teams: TourneyTeam[]) =>
+  teams.map((t) => t.id).join("|");
+
+export default memo(TourneyTeams, (prev, next) => {
+  return (
+    prev.id === next.id &&
+    createTeamsKey(prev.teams) === createTeamsKey(next.teams)
+  );
+});

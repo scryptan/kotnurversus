@@ -22,6 +22,7 @@ const CreateSpecificationWindow = ({
       title: data.title,
       businessDescription: data.businessDescription,
       techDescription: data.techDescription,
+      order: 0,
     });
     props.onClose();
   };

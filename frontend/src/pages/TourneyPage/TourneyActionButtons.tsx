@@ -27,7 +27,7 @@ const TourneyActionButtons = ({ tourneyId }: Props) => {
       <Button
         colorScheme="teal"
         rightIcon={<UnlockIcon boxSize={6} />}
-        children="Опубликовать турнир"
+        children="Начать турнир"
       />
     </HStack>
   );
