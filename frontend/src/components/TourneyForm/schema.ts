@@ -1,18 +1,20 @@
-import { startOfDay } from "date-fns";
+import { addDays, startOfDay } from "date-fns";
 import { ZodIssueCode, z } from "zod";
 import { CreateTourney, Tourney, TourneyType } from "~/types/tourney";
 import { extractTimeFromDate, setTimeToDate, timeRegex } from "~/utils/time";
 
 export const tourneyFormSchema = z.object({
   title: z.string().min(1, "Заполните поле"),
-  day: z.date({
-    errorMap: (issue) => {
-      const map: Record<string, string> = {
-        [ZodIssueCode.invalid_date]: "Некорректная дата",
-      };
-      return { message: map[issue.code] || "Заполните поле" };
-    },
-  }),
+  day: z
+    .date({
+      errorMap: (issue) => {
+        const map: Record<string, string> = {
+          [ZodIssueCode.invalid_date]: "Некорректная дата",
+        };
+        return { message: map[issue.code] || "Заполните поле" };
+      },
+    })
+    .min(startOfDay(addDays(new Date(), 1)), "Укажите будущую дату"),
   time: z
     .string({ required_error: "Заполните поле" })
     .min(5, "Заполните поле")

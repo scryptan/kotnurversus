@@ -9,6 +9,7 @@ import {
   useId,
 } from "@chakra-ui/react";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { addDays } from "date-fns";
 import { ReactNode } from "react";
 import { Controller, useForm } from "react-hook-form";
 import DateInput from "~/components/DateInput";
@@ -63,6 +64,7 @@ const TourneyForm = ({ id, defaultValue, onSubmit }: Props) => {
               <DateInput
                 {...field}
                 id={id}
+                minDate={addDays(new Date(), 1)}
                 containerProps={{ w: "200px" }}
                 errorMessage={error?.message}
               />
