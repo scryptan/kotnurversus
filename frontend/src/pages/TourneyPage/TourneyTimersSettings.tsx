@@ -1,4 +1,4 @@
-import { HStack, Heading, Stack } from "@chakra-ui/react";
+import { HStack } from "@chakra-ui/react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { compare } from "fast-json-patch";
@@ -11,6 +11,7 @@ import useDebounce from "~/hooks/useDebounce";
 import { TourneySettings } from "~/types/tourney";
 import { useAuthContext } from "~/utils/auth-context";
 import queryKeys from "~/utils/query-keys";
+import TourneySectionLayout from "./TourneySectionLayout";
 
 type Props = {
   id: string;
@@ -52,15 +53,24 @@ const TourneyTimersSettings = ({ id, settings: defaultSettings }: Props) => {
   }
 
   const onSubmit = handleSubmit((data) => {
-    debounce.set(() => editSettings.mutateAsync({ ...settings.current, ...data }));
+    debounce.set(() =>
+      editSettings.mutateAsync({ ...settings.current, ...data })
+    );
   });
 
   return (
-    <Stack spacing={6}>
-      <Heading px={3} fontSize="3xl">
-        Настройки таймера
-      </Heading>
-      <HStack as="form" spacing="124px" align="flex-start" onChange={onSubmit}>
+    <TourneySectionLayout
+      defaultIsOpen
+      heading="Настройки таймера"
+      storageKey={`tourney:${id}:timers-visibility `}
+    >
+      <HStack
+        mt={6}
+        as="form"
+        spacing="124px"
+        align="flex-start"
+        onChange={onSubmit}
+      >
         <SecondsInput
           label="Подготовка"
           {...register("prepareSeconds")}
@@ -77,7 +87,7 @@ const TourneyTimersSettings = ({ id, settings: defaultSettings }: Props) => {
           errorMessage={errors.defenseSeconds?.message}
         />
       </HStack>
-    </Stack>
+    </TourneySectionLayout>
   );
 };
 

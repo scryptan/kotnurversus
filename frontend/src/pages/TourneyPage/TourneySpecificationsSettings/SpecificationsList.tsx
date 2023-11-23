@@ -1,4 +1,4 @@
-import { OrderedList, Portal } from "@chakra-ui/react";
+import { ListProps, OrderedList, Portal } from "@chakra-ui/react";
 import {
   DndContext,
   DragOverlay,
@@ -30,9 +30,9 @@ type Props = {
       oldSpecifications: TourneySpecificationWithId[]
     ) => TourneySpecificationWithId[]
   ) => void;
-};
+} & ListProps;
 
-const SpecificationsList = ({ specifications, onUpdate }: Props) => {
+const SpecificationsList = ({ specifications, onUpdate, ...props }: Props) => {
   const [activeId, setActiveId] = useState<UniqueIdentifier | null>(null);
   const sensors = useSensors(
     useSensor(MouseSensor),
@@ -79,7 +79,7 @@ const SpecificationsList = ({ specifications, onUpdate }: Props) => {
         items={specifications}
         strategy={verticalListSortingStrategy}
       >
-        <OrderedList spacing={2}>
+        <OrderedList spacing={2} {...props}>
           {specifications.map((specification) => (
             <SpecificationsListItem
               key={specification.id}

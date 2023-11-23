@@ -1,4 +1,4 @@
-import { Heading, Stack, Wrap } from "@chakra-ui/react";
+import { Wrap } from "@chakra-ui/react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { compare } from "fast-json-patch";
 import { memo, useEffect, useRef } from "react";
@@ -10,6 +10,7 @@ import useForceUpdate from "~/hooks/useForceUpdate";
 import { TourneyTeam } from "~/types/tourney";
 import { useAuthContext } from "~/utils/auth-context";
 import queryKeys from "~/utils/query-keys";
+import TourneySectionLayout from "./TourneySectionLayout";
 
 type Props = {
   id: string;
@@ -68,11 +69,12 @@ const TourneyTeams = ({ id, teams: defaultTeams }: Props) => {
   }
 
   return (
-    <Stack spacing={6}>
-      <Heading px={3} fontSize="3xl">
-        Участники
-      </Heading>
-      <Wrap spacing={10}>
+    <TourneySectionLayout
+      defaultIsOpen
+      heading="Участники"
+      storageKey={`tourney:${id}:teams-visibility `}
+    >
+      <Wrap mt={6} spacing={10}>
         {allTeams.map((team) => {
           const isDefault = team.id === defaultTeam.current.id;
           return (
@@ -86,7 +88,7 @@ const TourneyTeams = ({ id, teams: defaultTeams }: Props) => {
           );
         })}
       </Wrap>
-    </Stack>
+    </TourneySectionLayout>
   );
 };
 

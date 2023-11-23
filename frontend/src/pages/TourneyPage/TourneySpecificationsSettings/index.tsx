@@ -1,10 +1,4 @@
-import {
-  Button,
-  ButtonProps,
-  Heading,
-  Stack,
-  useDisclosure,
-} from "@chakra-ui/react";
+import { Button, ButtonProps, useDisclosure } from "@chakra-ui/react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { compare } from "fast-json-patch";
 import { memo, useState } from "react";
@@ -12,6 +6,7 @@ import { v4 as uuid } from "uuid";
 import api from "~/api";
 import SpecificationWindow from "~/components/SpecificationWindow";
 import useDebounce from "~/hooks/useDebounce";
+import TourneySectionLayout from "~/pages/TourneyPage/TourneySectionLayout";
 import {
   TourneySpecification,
   TourneySpecificationWithId,
@@ -70,18 +65,20 @@ const TourneySpecificationsSettings = ({
   };
 
   return (
-    <Stack spacing={6}>
-      <Heading px={3} fontSize="3xl">
-        Темы бизнес-сценариев
-      </Heading>
+    <TourneySectionLayout
+      defaultIsOpen
+      heading="Темы бизнес-сценариев"
+      storageKey={`tourney:${id}:specifications-visibility `}
+    >
       {specifications.length > 0 && (
         <SpecificationsList
+          mt={6}
           specifications={specifications}
           onUpdate={handleUpdate}
         />
       )}
-      <CreateSpecificationButton ml={20} onCreate={handleCreate} />
-    </Stack>
+      <CreateSpecificationButton ml={20} mt={6} onCreate={handleCreate} />
+    </TourneySectionLayout>
   );
 };
 
