@@ -18,15 +18,18 @@ import CalendarIcon from "~/icons/CalendarIcon";
 export type DateInputProps = {
   value?: Date;
   onChange?: (newValue?: Date) => void;
+  minDate?: Date;
 } & Omit<InputProps, "value" | "onChange">;
 
 const DateInput = forwardRef<DateInputProps, "input">(
-  ({ value, onChange, ...props }, ref) => {
+  ({ value, onChange, minDate, ...props }, ref) => {
     const boxRef = useRef<HTMLDivElement>(null);
     const inputRef = useRef<HTMLInputElement>(null);
     const inputRefs = useMergeRefs(inputRef, ref);
     const [isOpen, setIsOpen] = useBoolean(false);
-    const [selectedMonth, setSelectedMonth] = useState<Date | undefined>(value);
+    const [selectedMonth, setSelectedMonth] = useState<Date | undefined>(() =>
+      isValid(value) ? value : undefined
+    );
 
     useOutsideAction({
       boxRef,
@@ -49,11 +52,15 @@ const DateInput = forwardRef<DateInputProps, "input">(
       onChange?.(day);
     };
 
+    const defaultValue =
+      value && isValid(value) ? format(value, "dd.MM.yyyy") : undefined;
+
     return (
       <Box ref={boxRef} {...props.containerProps}>
         <Input
           {...props}
           ref={inputRefs}
+          defaultValue={defaultValue}
           placeholder="дд.мм.гггг"
           onClick={setIsOpen.on}
           onInput={maskDate}
@@ -76,6 +83,7 @@ const DateInput = forwardRef<DateInputProps, "input">(
             onMonthChange={setSelectedMonth}
             selected={value}
             onSelect={handleSelect}
+            disabled={minDate ? { before: minDate } : undefined}
           />
         </Popper>
       </Box>

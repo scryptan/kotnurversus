@@ -9,11 +9,11 @@ export default {
   },
   editTourney: {
     pathTemplate: "/tourneys/edit/:tourneyId",
-    path: (tourneyId: number) => `/tourneys/edit/${tourneyId}`,
+    path: (tourneyId: string) => `/tourneys/edit/${tourneyId}`,
   },
   tourney: {
     pathTemplate: "/tourneys/:tourneyId",
-    path: (tourneyId: number) => `/tourneys/${tourneyId}`,
+    path: (tourneyId: string) => `/tourneys/${tourneyId}`,
   },
   match: {
     pathTemplate: "/match/:matchId",

@@ -6,7 +6,7 @@ import paths from "~/pages/paths";
 import { useAuthContext } from "~/utils/auth-context";
 
 type Props = {
-  tourneyId: number;
+  tourneyId: string;
 };
 
 const TourneyActionButtons = ({ tourneyId }: Props) => {
@@ -27,7 +27,7 @@ const TourneyActionButtons = ({ tourneyId }: Props) => {
       <Button
         colorScheme="teal"
         rightIcon={<UnlockIcon boxSize={6} />}
-        children="Опубликовать турнир"
+        children="Начать турнир"
       />
     </HStack>
   );

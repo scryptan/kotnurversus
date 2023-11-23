@@ -1,5 +1,15 @@
-import { Grid, Radio, RadioGroup, Text, useId } from "@chakra-ui/react";
+import {
+  Box,
+  Grid,
+  Radio,
+  RadioGroup,
+  Switch,
+  Text,
+  Tooltip,
+  useId,
+} from "@chakra-ui/react";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { addDays } from "date-fns";
 import { ReactNode } from "react";
 import { Controller, useForm } from "react-hook-form";
 import DateInput from "~/components/DateInput";
@@ -7,8 +17,7 @@ import Input from "~/components/Input";
 import TimeInput from "~/components/TimeInput";
 import { TourneyType } from "~/types/tourney";
 import { TOURNEY_TYPE_NAMES } from "~/utils/tourney";
-import RequirementsInput from "./RequirementsInput";
-import { TourneyFormSchema, tourneyFormSchema } from "./tourney-form-schema";
+import { TourneyFormSchema, tourneyFormSchema } from "./schema";
 
 type Props = {
   id?: string;
@@ -41,8 +50,8 @@ const TourneyForm = ({ id, defaultValue, onSubmit }: Props) => {
           <Input
             id={id}
             placeholder="Введите название турнира"
-            errorMessage={errors.name?.message}
-            {...register("name")}
+            errorMessage={errors.title?.message}
+            {...register("title")}
           />
         )}
       </FormLabel>
@@ -55,6 +64,7 @@ const TourneyForm = ({ id, defaultValue, onSubmit }: Props) => {
               <DateInput
                 {...field}
                 id={id}
+                minDate={addDays(new Date(), 1)}
                 containerProps={{ w: "200px" }}
                 errorMessage={error?.message}
               />
@@ -100,25 +110,28 @@ const TourneyForm = ({ id, defaultValue, onSubmit }: Props) => {
       <FormLabel label="Место проведения">
         {(id) => (
           <Input
-            {...register("location")}
+            {...register("description")}
             id={id}
             placeholder="Введите место проведения"
           />
         )}
       </FormLabel>
-      <FormLabel label="Дополнительные требования">
+      <FormLabel label="Без повторов в финале">
         {(id) => (
-          <Controller
-            name="requirementIds"
-            control={control}
-            render={({ field }) => (
-              <RequirementsInput
-                {...field}
+          <Tooltip
+            hasArrow
+            placement="right"
+            label="Доп. требования, которые уже были использованы на предыдущих этапах, не будут повторяться в финале"
+          >
+            <Box my={1} as="span" w="fit-content">
+              <Switch
+                {...register("enableRepeatChallengesInFinal")}
                 id={id}
-                placeholder="Введите название дополнительного требования"
+                size="lg"
+                colorScheme="cyan"
               />
-            )}
-          />
+            </Box>
+          </Tooltip>
         )}
       </FormLabel>
     </Grid>
@@ -134,21 +147,22 @@ type FormLabelProps = {
 const FormLabel = ({ label, isRequired, children }: FormLabelProps) => {
   const id = useId();
 
+  const needId = typeof children === "function";
+
   return (
     <>
       <Text
-        as="label"
-        htmlFor={id}
         mt={2}
         h="fit-content"
         fontSize="lg"
         fontWeight="medium"
         justifySelf="flex-end"
+        {...(needId ? { as: "label", htmlFor: id } : {})}
       >
         {label}
         {isRequired && <Text as="span" ml={2} color="red.500" children="*" />}
       </Text>
-      {typeof children === "function" ? children(id) : children}
+      {needId ? children(id) : children}
     </>
   );
 };

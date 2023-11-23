@@ -1,18 +1,43 @@
-import { Stack } from "@chakra-ui/react";
-import { useState } from "react";
-import { MatchState } from "~/types/match";
-import { Team } from "~/types/team";
-import { TourneyFullInfo, TourneyType } from "~/types/tourney";
+import { Center, Heading, Stack } from "@chakra-ui/react";
+import { useQuery } from "@tanstack/react-query";
+import { useParams } from "react-router";
+import api from "~/api";
+import Loading from "~/components/Loading";
+import queryKeys from "~/utils/query-keys";
 import TourneyActionButtons from "./TourneyActionButtons";
 import TourneyArtifacts from "./TourneyArtifacts";
 import TourneyBracket from "./TourneyBracket";
 import TourneyHeader from "./TourneyHeader";
-import TourneyScenariosSettings from "./TourneyScenariosSettings";
+import TourneySpecificationsSettings from "./TourneySpecificationsSettings";
 import TourneyTeams from "./TourneyTeams";
 import TourneyTimersSettings from "./TourneyTimersSettings";
 
+type PageParams = {
+  tourneyId: string;
+};
+
 const TourneyPage = () => {
-  const [teams, setTeams] = useState(mockTeams);
+  const { tourneyId = "" } = useParams<PageParams>();
+
+  const tourneyQuery = useQuery({
+    queryKey: queryKeys.tourney(tourneyId),
+    queryFn: () => api.tourneys.getById(tourneyId),
+    staleTime: 1000 * 60 * 5,
+  });
+
+  if (tourneyQuery.isLoading) {
+    return <Loading flex={1} />;
+  }
+
+  const tourney = tourneyQuery.data;
+
+  if (!tourney) {
+    return (
+      <Center flex={1}>
+        <Heading>Турнир не найден</Heading>
+      </Center>
+    );
+  }
 
   return (
     <Stack
@@ -24,205 +49,24 @@ const TourneyPage = () => {
       flex={1}
       spacing={8}
     >
-      <TourneyHeader tourney={mockTourney} />
-      <TourneyActionButtons tourneyId={mockTourney.id} />
-      <TourneyBracket teams={teams} />
-      <TourneyTeams teams={teams} onChange={setTeams} />
-      <TourneyTimersSettings tourneyId={mockTourney.id} />
-      <TourneyScenariosSettings tourneyId={mockTourney.id} />
-      <TourneyArtifacts artifacts={mockTourney.artifacts} />
+      <TourneyHeader tourney={tourney} />
+      <TourneyActionButtons tourneyId={tourney.id} />
+      <TourneyBracket
+        id={tourney.id}
+        teams={tourney.teams}
+        specifications={tourney.specifications}
+      />
+      <TourneyTeams id={tourney.id} teams={tourney.teams} />
+      <TourneySpecificationsSettings
+        id={tourney.id}
+        specifications={tourney.specifications}
+      />
+      <TourneyTimersSettings id={tourney.id} settings={tourney.settings} />
+
+      {/* TODO move this to match */}
+      <TourneyArtifacts artifacts={[]} />
     </Stack>
   );
-};
-
-const mockTeams: Team[] = [
-  {
-    id: "T1",
-    name: "Гномы",
-    participants: [
-      "Кислицин Денис",
-      "Ведешкин Никита",
-      "Дон Дарья",
-      "Третьяков Максим",
-      "Казаков Салават",
-    ],
-  },
-  {
-    id: "T2",
-    name: "Дворфы",
-    participants: [
-      "Кислицин Денис",
-      "Ведешкин Никита",
-      "Дон Дарья",
-      "Третьяков Максим",
-      "Казаков Салават",
-    ],
-  },
-  {
-    id: "T3",
-    name: "Полурослики",
-    participants: [
-      "Кислицин Денис",
-      "Ведешкин Никита",
-      "Дон Дарья",
-      "Третьяков Максим",
-      "Казаков Салават",
-    ],
-  },
-  {
-    id: "T4",
-    name: "Хоббиты",
-    participants: [
-      "Кислицин Денис",
-      "Ведешкин Никита",
-      "Дон Дарья",
-      "Третьяков Максим",
-      "Казаков Салават",
-    ],
-  },
-  {
-    id: "T5",
-    name: "Лилипуты",
-    participants: [
-      "Кислицин Денис",
-      "Ведешкин Никита",
-      "Дон Дарья",
-      "Третьяков Максим",
-      "Казаков Салават",
-    ],
-  },
-  {
-    id: "T6",
-    name: "Стуканцы",
-    participants: [
-      "Кислицин Денис",
-      "Ведешкин Никита",
-      "Дон Дарья",
-      "Третьяков Максим",
-      "Казаков Салават",
-    ],
-  },
-  {
-    id: "T7",
-    name: "Гремлины",
-    participants: [
-      "Кислицин Денис",
-      "Ведешкин Никита",
-      "Дон Дарья",
-      "Третьяков Максим",
-      "Казаков Салават",
-    ],
-  },
-  {
-    id: "T8",
-    name: "Коротышки",
-    participants: [
-      "Кислицин Денис",
-      "Ведешкин Никита",
-      "Дон Дарья",
-      "Третьяков Максим",
-      "Казаков Салават",
-    ],
-  },
-];
-
-const mockTourney: TourneyFullInfo = {
-  id: 1,
-  name: "RuCode",
-  startDate: new Date(),
-  type: TourneyType.Offline,
-  location: "г. Екатеринбург, улица Универсиады, 7",
-  organizer: "УрФУ",
-  matches: [
-    {
-      id: "1",
-      nextMatchId: "5",
-      startTime: "2021-05-30",
-      state: MatchState.Init,
-      participants: [
-        {
-          id: "T1",
-          name: "Гномы",
-          resultText: "4",
-          isWinner: true,
-        },
-        {
-          id: "T2",
-          name: "Дворфы",
-          resultText: "3",
-        },
-      ],
-    },
-    {
-      id: "2",
-      nextMatchId: "5",
-      startTime: "2021-05-30",
-      state: MatchState.Done,
-      participants: [
-        {
-          id: "T3",
-          name: "Полурослики",
-          resultText: "4",
-        },
-        {
-          id: "T4",
-          name: "Хоббиты",
-          resultText: "3",
-          isWinner: true,
-        },
-      ],
-    },
-    {
-      id: "3",
-      nextMatchId: "6",
-      startTime: "2021-05-30",
-      state: MatchState.Play,
-      participants: [
-        { id: "T5", name: "Лилипуты" },
-        { id: "T6", name: "Стуканцы" },
-      ],
-    },
-    {
-      id: "4",
-      nextMatchId: "6",
-      startTime: "2021-05-30",
-      state: MatchState.Prepare,
-      participants: [
-        { id: "T7", name: "Гремлины" },
-        { id: "T8", name: "Коротышки" },
-      ],
-    },
-    {
-      id: "5",
-      nextMatchId: "7",
-      startTime: "2021-05-31",
-      state: MatchState.Prepare,
-      participants: [
-        { id: "T4", name: "Хоббиты" },
-        { id: "T1", name: "Гномы" },
-      ],
-    },
-    {
-      id: "6",
-      nextMatchId: "7",
-      startTime: "2021-05-30",
-      state: MatchState.Prepare,
-      participants: [
-        // { id: "T5", name: "Лилипуты" },
-        // { id: "T7", name: "Гремлины" },
-      ],
-    },
-    {
-      id: "7",
-      nextMatchId: null,
-      startTime: "2021-05-30",
-      state: MatchState.Prepare,
-      participants: [],
-    },
-  ],
-  artifacts: [
-    { name: "Ссылка на гугл, чтоб не забывали", link: "https://google.com" },
-  ],
 };
 
 export default TourneyPage;

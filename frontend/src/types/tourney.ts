@@ -1,22 +1,59 @@
 import { MatchState } from "~/types/match";
 
 export type Tourney = {
-  id: number;
-  name: string;
+  id: string;
+  title: string;
+  state: TourneyState;
+  form: TourneyType;
   startDate: Date;
-  type: TourneyType;
+  description?: string;
+  settings: TourneySettings;
+  specifications: TourneySpecification[];
+  teams: TourneyTeam[];
 };
+
+export type CreateTourney = {
+  title: string;
+  form: TourneyType;
+  startDate: Date;
+  description?: string;
+  settings?: TourneySettings;
+  specifications?: TourneySpecification[];
+};
+
+export enum TourneyState {
+  Prepare = "prepare",
+  InProgress = "inProgress",
+  Complete = "complete",
+}
 
 export enum TourneyType {
   Offline = "offline",
   Online = "online",
 }
 
-export type TourneyFullInfo = Tourney & {
-  organizer: string;
-  location: string;
-  matches: TourneyMatch[];
-  artifacts: TourneyArtifact[];
+export type TourneySettings = {
+  timeoutsCount: number;
+  timeoutSeconds: number;
+  prepareSeconds: number;
+  presentationSeconds: number;
+  defenseSeconds: number;
+};
+
+export type TourneySpecification = {
+  title: string;
+  businessDescription?: string;
+  techDescription?: string;
+  order: number
+};
+
+export type TourneySpecificationWithId = TourneySpecification & { id: string };
+
+export type TourneyTeam = {
+  id: string;
+  title: string;
+  mates: string[];
+  order: number;
 };
 
 export type TourneyMatch = {
@@ -24,21 +61,16 @@ export type TourneyMatch = {
   nextMatchId: string | null;
   startTime: string;
   state: MatchState;
-  participants: TourneyTeam[];
+  participants: TourneyMatchTeam[];
+  specificationTitle?: string | null;
+  badgeValue?: number;
 };
 
-export type TourneyTeam = {
+export type TourneyMatchTeam = {
   id: string;
   name: string;
   resultText?: string;
   isWinner?: boolean;
-};
-
-export type TourneyScenario = {
-  id: string;
-  name: string;
-  description?: string | undefined;
-  requirements?: string | undefined;
 };
 
 export type TourneyArtifact = {

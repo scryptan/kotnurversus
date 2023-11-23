@@ -1,4 +1,5 @@
 import { Match, MatchTask } from "~/types/match";
+import { TourneyMatch, TourneySpecification } from "~/types/tourney";
 
 export const calcMatchName = (match: Match) => {
   const [firstName, secondName] = match.teams.map((t) => t.name);
@@ -23,3 +24,10 @@ export const createArrayFromMatchTask = (task: MatchTask) => {
 
   return array;
 };
+
+export const addSpecificationToRound =
+  (specifications: TourneySpecification[]) =>
+  (match: TourneyMatch, index: number): TourneyMatch => {
+    const specificationTitle = specifications[index]?.title || null;
+    return { ...match, badgeValue: index + 1, specificationTitle };
+  };

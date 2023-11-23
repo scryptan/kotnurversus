@@ -1,4 +1,4 @@
-import { OrderedList, Portal } from "@chakra-ui/react";
+import { ListProps, OrderedList, Portal } from "@chakra-ui/react";
 import {
   DndContext,
   DragOverlay,
@@ -20,17 +20,19 @@ import {
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 import { useState } from "react";
-import { TourneyScenario } from "~/types/tourney";
-import ScenariosListBaseItem from "./ScenariosListItem";
+import { TourneySpecificationWithId } from "~/types/tourney";
+import SpecificationsListBaseItem from "./SpecificationsListItem";
 
 type Props = {
-  scenarios: TourneyScenario[];
+  specifications: TourneySpecificationWithId[];
   onUpdate?: (
-    callback: (oldScenarios: TourneyScenario[]) => TourneyScenario[]
+    callback: (
+      oldSpecifications: TourneySpecificationWithId[]
+    ) => TourneySpecificationWithId[]
   ) => void;
-};
+} & ListProps;
 
-const ScenariosList = ({ scenarios, onUpdate }: Props) => {
+const SpecificationsList = ({ specifications, onUpdate, ...props }: Props) => {
   const [activeId, setActiveId] = useState<UniqueIdentifier | null>(null);
   const sensors = useSensors(
     useSensor(MouseSensor),
@@ -39,12 +41,12 @@ const ScenariosList = ({ scenarios, onUpdate }: Props) => {
   );
 
   const getIndex = (id: UniqueIdentifier) => {
-    return scenarios.findIndex((s) => s.id === id);
+    return specifications.findIndex((s) => s.id === id);
   };
 
-  const handleUpdate = (scenario: TourneyScenario) => {
+  const handleUpdate = (specification: TourneySpecificationWithId) => {
     onUpdate?.((items) =>
-      items.map((item) => (item.id === scenario.id ? scenario : item))
+      items.map((item) => (item.id === specification.id ? specification : item))
     );
   };
 
@@ -73,12 +75,15 @@ const ScenariosList = ({ scenarios, onUpdate }: Props) => {
       }}
       onDragCancel={() => setActiveId(null)}
     >
-      <SortableContext items={scenarios} strategy={verticalListSortingStrategy}>
-        <OrderedList spacing={2}>
-          {scenarios.map((scenario) => (
-            <ScenariosListItem
-              key={scenario.id}
-              scenario={scenario}
+      <SortableContext
+        items={specifications}
+        strategy={verticalListSortingStrategy}
+      >
+        <OrderedList spacing={2} {...props}>
+          {specifications.map((specification) => (
+            <SpecificationsListItem
+              key={specification.id}
+              specification={specification}
               onUpdate={handleUpdate}
               onRemove={handleRemove}
             />
@@ -88,9 +93,9 @@ const ScenariosList = ({ scenarios, onUpdate }: Props) => {
       <Portal>
         <DragOverlay dropAnimation={dropAnimationConfig}>
           {activeId ? (
-            <ScenariosListBaseItem
+            <SpecificationsListBaseItem
               isOverlay
-              scenario={scenarios[activeIndex]}
+              specification={specifications[activeIndex]}
             />
           ) : null}
         </DragOverlay>
@@ -105,17 +110,17 @@ const dropAnimationConfig: DropAnimation = {
   }),
 };
 
-type ScenariosListItemProps = {
-  scenario: TourneyScenario;
-  onUpdate: (scenario: TourneyScenario) => void;
+type SpecificationsListItemProps = {
+  specification: TourneySpecificationWithId;
+  onUpdate: (specifications: TourneySpecificationWithId) => void;
   onRemove: (id: UniqueIdentifier) => void;
 };
 
-const ScenariosListItem = ({
-  scenario,
+const SpecificationsListItem = ({
+  specification,
   onUpdate,
   onRemove,
-}: ScenariosListItemProps) => {
+}: SpecificationsListItemProps) => {
   const {
     isDragging,
     attributes,
@@ -124,16 +129,16 @@ const ScenariosListItem = ({
     setActivatorNodeRef,
     transform,
     transition,
-  } = useSortable({ id: scenario.id });
+  } = useSortable({ id: specification.id });
 
   return (
-    <ScenariosListBaseItem
+    <SpecificationsListBaseItem
       ref={setNodeRef}
       handleRef={setActivatorNodeRef}
       isDragging={isDragging}
-      scenario={scenario}
+      specification={specification}
       onUpdate={onUpdate}
-      onRemove={() => onRemove(scenario.id)}
+      onRemove={() => onRemove(specification.id)}
       transform={transform}
       transition={transition}
       listeners={listeners}
@@ -142,4 +147,4 @@ const ScenariosListItem = ({
   );
 };
 
-export default ScenariosList;
+export default SpecificationsList;

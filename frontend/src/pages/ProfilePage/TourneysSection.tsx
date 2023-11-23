@@ -6,15 +6,25 @@ import {
   Heading,
   Stack,
 } from "@chakra-ui/react";
-import { useRef } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
+import api from "~/api";
+import Loading from "~/components/Loading";
 import TourneysTable from "~/components/TourneysTable";
 import PlusIcon from "~/icons/PlusIcon";
 import paths from "~/pages/paths";
-import { Tourney, TourneyType } from "~/types/tourney";
+import queryKeys from "~/utils/query-keys";
 
 const TourneysSection = (props: BoxProps) => {
-  const tourneys = useRef(mockTourneys);
+  const tourneysQuery = useQuery({
+    queryKey: queryKeys.tourneys,
+    queryFn: api.tourneys.find,
+    staleTime: 1000 * 60 * 5,
+  });
+
+  const tourneys = (tourneysQuery.data?.items || []).sort(
+    (a, b) => a.startDate.getTime() - b.startDate.getTime()
+  );
 
   return (
     <Stack {...props} spacing={8}>
@@ -22,8 +32,10 @@ const TourneysSection = (props: BoxProps) => {
         <Heading fontSize="3xl" children="Организованные турниры" />
         <CreateTourneyButton />
       </HStack>
-      {tourneys.current.length > 0 ? (
-        <TourneysTable tourneys={tourneys.current} />
+      {tourneysQuery.isLoading ? (
+        <Loading py={20} />
+      ) : tourneys.length > 0 ? (
+        <TourneysTable tourneys={tourneys} />
       ) : (
         <Center py={20}>
           <Heading fontSize="xl">Вы ещё не организовывали турниры</Heading>
@@ -43,12 +55,5 @@ const CreateTourneyButton = () => (
     children="Создать турнир"
   />
 );
-
-const mockTourneys: Tourney[] = [...Array(5)].map((_, i) => ({
-  id: i + 1,
-  name: `Турнир ${i + 1}`,
-  startDate: new Date(),
-  type: TourneyType.Offline,
-}));
 
 export default TourneysSection;

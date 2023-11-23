@@ -1,22 +1,21 @@
 import { v4 as uuid } from "uuid";
 import { MatchState } from "~/types/match";
-import { Team } from "~/types/team";
-import { TourneyMatch, TourneyType } from "~/types/tourney";
+import { TourneyMatch, TourneyTeam, TourneyType } from "~/types/tourney";
 
 export const TOURNEY_TYPE_NAMES: Record<TourneyType, string> = {
   [TourneyType.Offline]: "Оффлайн",
   [TourneyType.Online]: "Онлайн",
 };
 
-export const createMatchesFromTeams = (teams: Team[]) => {
+export const createMatchesFromTeams = (teams: TourneyTeam[]) => {
   const baseMatches = teams.reduce<TourneyMatch[]>((result, team, i) => {
     if (i % 2 === 0) {
       result.push({
         ...createEmptyMatch(uuid()),
-        participants: [{ id: team.id, name: team.name }],
+        participants: [{ id: team.id, name: team.title }],
       });
     } else {
-      result.at(-1)?.participants.push({ id: team.id, name: team.name });
+      result.at(-1)?.participants.push({ id: team.id, name: team.title });
     }
     return result;
   }, []);

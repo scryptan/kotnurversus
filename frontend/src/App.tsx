@@ -1,4 +1,6 @@
 import { ChakraProvider } from "@chakra-ui/react";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { setDefaultOptions } from "date-fns";
 import { ru } from "date-fns/locale";
 import Routers from "~/pages/Routers";
@@ -8,12 +10,17 @@ import "~/utils/extensions";
 
 setDefaultOptions({ locale: ru });
 
+const queryClient = new QueryClient();
+
 const App = () => (
-  <AuthProvider>
-    <ChakraProvider theme={theme}>
-      <Routers />
-    </ChakraProvider>
-  </AuthProvider>
+  <ChakraProvider theme={theme}>
+    <QueryClientProvider client={queryClient}>
+      <AuthProvider>
+        <Routers />
+        <ReactQueryDevtools />
+      </AuthProvider>
+    </QueryClientProvider>
+  </ChakraProvider>
 );
 
 export default App;

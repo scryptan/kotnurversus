@@ -24,12 +24,12 @@ import React, {
   useEffect,
   useState,
 } from "react";
-import { Team } from "~/types/team";
+import { TourneyTeam } from "~/types/tourney";
 import { isDefined } from "~/utils";
 
 type Props = {
-  teams: Team[];
-  onChange?: (sortedTeams: Team[]) => void;
+  teams: TourneyTeam[];
+  onChange?: (sortedTeams: TourneyTeam[]) => void;
 };
 
 const TeamsManualSorting = ({ teams, onChange }: Props) => {
@@ -100,7 +100,7 @@ const Droppable = ({ id, children }: DroppableProps) => {
 };
 
 type DraggableItemProps = {
-  team?: Team;
+  team?: TourneyTeam;
 };
 
 const DraggableItem = ({ team }: DraggableItemProps) => {
@@ -146,7 +146,7 @@ const dropAnimationConfig: DropAnimation = {
 };
 
 type DraggableProps = {
-  team: Team;
+  team: TourneyTeam;
   isOverlay?: boolean;
   listeners?: DraggableSyntheticListeners;
   transform?: Transform | null;
@@ -175,7 +175,7 @@ export const Draggable = forwardRef<HTMLButtonElement, DraggableProps>(
         style={styles}
         {...(isOverlay ? overlayStyles : {})}
       >
-        <Text noOfLines={1} wordBreak="break-all" children={team.name} />
+        <Text noOfLines={1} wordBreak="break-all" children={team.title} />
       </Button>
     );
   }
