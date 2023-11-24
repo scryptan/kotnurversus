@@ -118,6 +118,20 @@ app.MapControllers();
 
 app.MapFallbackToFile("index.html");
 
-app.Services.GetService<IDbContextFactory>()!.CreateDbContext().Database.Migrate();
+for (var i = 0; i < 5; i++)
+{
+    try
+    {
+        await app.Services.GetService<IDbContextFactory>()!.CreateDbContext().Database.MigrateAsync();
+        break;
+    }
+    catch (Exception e)
+    {
+        Console.WriteLine(e);
+        await Task.Delay(TimeSpan.FromSeconds(1));
+        if (i == 4)
+            throw;
+    }
+}
 
 app.Run();
