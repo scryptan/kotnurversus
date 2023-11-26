@@ -4,5 +4,6 @@ public enum AccessMultipleEntitiesError
 {
     Forbidden,
     InvalidSort,
-    InvalidOffset
+    InvalidOffset,
+    NotFound
 }

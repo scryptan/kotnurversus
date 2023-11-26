@@ -1,6 +1,7 @@
 using Db.Dbo.Games;
 using Domain.Context;
 using Domain.Services.Base;
+using Microsoft.EntityFrameworkCore;
 using Models.Games;
 
 namespace Domain.Services.Games;
@@ -40,5 +41,11 @@ public class GamesService : EntityServiceBase<Game, GameDbo, GameSearchRequest>,
         entity.State = dbo.State;
 
         return Task.CompletedTask;
+    }
+
+    public async Task DeleteAllRounds(Guid gameId)
+    {
+        var rounds = await Context.DbContext.Rounds.Where(x => x.GameId == gameId).ToArrayAsync();
+        Context.DbContext.Rounds.RemoveRange(rounds);
     }
 }

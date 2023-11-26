@@ -5,7 +5,7 @@ using Models.Challenges;
 
 namespace Domain.Commands.Challenges;
 
-public class GetChallengeCommand : GetCommandBase<Challenge, InvalidChallengeDataReason>
+public class GetChallengeCommand : GetCommandBase<Challenge>
 {
     public GetChallengeCommand(IDataContextAccessor dataContextAccessor, IEntityService<Challenge> repository)
         : base(dataContextAccessor, repository)

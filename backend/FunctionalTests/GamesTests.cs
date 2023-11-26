@@ -1,3 +1,4 @@
+using Core.Helpers;
 using FluentAssertions;
 using FunctionalTests.Base;
 using Microsoft.AspNetCore.JsonPatch;
@@ -5,6 +6,7 @@ using Microsoft.AspNetCore.JsonPatch.Operations;
 using Models.Games;
 using Models.Settings;
 using Newtonsoft.Json.Serialization;
+using Vostok.Logging.Abstractions;
 
 namespace FunctionalTests;
 
@@ -86,17 +88,27 @@ public class GamesTests : ApiTestBase
             new JsonPatchDocument<Game>(
                 new List<Operation<Game>>
                 {
-                    new ()
+                    new()
                     {
                         op = "replace",
                         path = "description",
                         value = newDescription
+                    },
+                    new()
+                    {
+                        op = "replace",
+                        path = "settings/timeoutsCount",
+                        value = 3
                     }
                 },
                 new DefaultContractResolver()));
         result.EnsureSuccess();
+        creationArgs.Settings.TimeoutsCount = 3;
 
-        entity = result.Result;
+        var res = await Client.Games.GetAsync(entity.Id);
+        entity = res.Result;
+
+        Log.Info(Serializer.Serialize(entity));
         entity.Id.Should().NotBe(Guid.Empty);
         entity.Description.Should().Be(newDescription);
         entity.Title.Should().Be(creationArgs.Title);

@@ -59,6 +59,8 @@ public abstract class EntityServiceBase<T, TDbo, TSearchRequest> : IEntityServic
 
         patchDocument.ApplyTo(entity);
         await FillDboAsync(dbo, entity);
+
+        getMainDbSet(Context.DbContext).Update(dbo);
     }
 
     public async Task DeleteAsync(T entity)

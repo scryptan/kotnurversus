@@ -29,7 +29,7 @@
         <Link>docker-compose.yml</Link>
       </Content>
       <Content Include="..\..\Dockerfile">
-        <Link>Dockerfiile</Link>
+        <Link>Dockerfile</Link>
       </Content>
     </ItemGroup>
 

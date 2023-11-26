@@ -1,7 +1,11 @@
 using System.Reflection;
+using Db;
 using KotnurVersus.Web.Configuration;
 using KotnurVersus.Web.Helpers;
 using KotnurVersus.Web.Helpers.DI;
+using Microsoft.AspNetCore.StaticFiles;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Net.Http.Headers;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
@@ -86,14 +90,48 @@ if (app.Environment.IsDevelopment())
 
 app.UseVostokRequestLogging();
 // app.UseHttpsRedirection();
-app.UseCors(x => x
-    .AllowAnyMethod()
-    .AllowAnyHeader()
-    .AllowCredentials()
-    .SetIsOriginAllowed(_ => true));// Allow any origin
+app.UseCors(
+    x => x
+        .AllowAnyMethod()
+        .AllowAnyHeader()
+        .AllowCredentials()
+        .SetIsOriginAllowed(_ => true)); // Allow any origin
 
 app.UseAuthorization();
 
+var staticFileOptions = new StaticFileOptions
+{
+    ContentTypeProvider = new FileExtensionContentTypeProvider {Mappings = {[".webmanifest"] = "application/manifest+json"}},
+    OnPrepareResponse = ctx =>
+    {
+        const int durationInSeconds = 60 * 60 * 24;
+        ctx.Context.Response.Headers[HeaderNames.CacheControl] =
+            "public,max-age=" + durationInSeconds;
+
+        if (ctx.File.Name == "remoteEntry.js")
+            ctx.Context.Response.Headers[HeaderNames.CacheControl] = "no-cache";
+    },
+};
+app.UseStaticFiles(staticFileOptions);
+
 app.MapControllers();
+
+app.MapFallbackToFile("index.html");
+
+for (var i = 0; i < 5; i++)
+{
+    try
+    {
+        await app.Services.GetService<IDbContextFactory>()!.CreateDbContext().Database.MigrateAsync();
+        break;
+    }
+    catch (Exception e)
+    {
+        Console.WriteLine(e);
+        await Task.Delay(TimeSpan.FromSeconds(1));
+        if (i == 4)
+            throw;
+    }
+}
 
 app.Run();

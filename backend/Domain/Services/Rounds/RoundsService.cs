@@ -23,7 +23,7 @@ public class RoundsService : EntityServiceBase<Round, RoundDbo, RoundSearchReque
         dbo.Order = entity.Order;
         dbo.GameId = entity.GameId;
         dbo.Settings = entity.Settings;
-        
+
         return Task.CompletedTask;
     }
 
@@ -38,10 +38,21 @@ public class RoundsService : EntityServiceBase<Round, RoundDbo, RoundSearchReque
         entity.Order = dbo.Order;
         entity.GameId = dbo.GameId;
         entity.Settings = dbo.Settings;
-        
+
         entity.CurrentState = dbo.History.MaxBy(x => x.Order);
         entity.WinnerId = dbo.Participants.FirstOrDefault(x => x.IsWinner)?.TeamId;
-        
+
         return Task.CompletedTask;
+    }
+
+    protected override async Task<IQueryable<RoundDbo>> ApplyFilterAsync(IQueryable<RoundDbo> queryable, RoundSearchRequest searchRequest)
+    {
+        var res = queryable;
+
+        if (searchRequest.GameId != null)
+            res = res.Where(x => x.GameId == searchRequest.GameId);
+
+        res = await base.ApplyFilterAsync(res, searchRequest);
+        return res;
     }
 }
