@@ -1,7 +1,8 @@
 FROM node:20-alpine as build_frontend
+ARG API_URL
 WORKDIR /app
 COPY ./frontend/ .
-RUN echo VITE_API_URL=http://localhost:4000 > .env
+RUN echo VITE_API_URL=$API_URL > .env
 RUN npm i
 RUN npm run build
 
