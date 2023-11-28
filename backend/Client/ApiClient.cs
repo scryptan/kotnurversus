@@ -1,4 +1,5 @@
-﻿using Client.Challenges;
+﻿using Client.Categories;
+using Client.Challenges;
 using Client.Games;
 using Client.Rounds;
 using Vostok.Clusterclient.Core;
@@ -27,9 +28,11 @@ public class ApiClient : IApiClient
         Challenges = new ChallengeClient(clusterClient, log, "challenges");
         Games = new GameClient(clusterClient, log, "games");
         Rounds = new RoundClient(clusterClient, log, "rounds");
+        Categories = new CategoryClient(clusterClient, log, "categories");
     }
 
     public IChallengeClient Challenges { get; }
     public IGameClient Games { get; }
     public IRoundClient Rounds { get; }
+    public ICategoryClient Categories { get; }
 }

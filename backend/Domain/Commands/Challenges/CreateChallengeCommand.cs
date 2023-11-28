@@ -16,7 +16,7 @@ public class CreateChallengeCommand : CreateCommandBase<Challenge, ChallengeCrea
     protected override Challenge ConvertToEntity(ChallengeCreationArgs args) => new()
     {
         Description = args.Description,
-        Theme = args.Theme,
+        CategoryId = args.Category,
         Title = args.Title
     };
 
@@ -29,7 +29,7 @@ public class CreateChallengeCommand : CreateCommandBase<Challenge, ChallengeCrea
                 {
                     InvalidData.Create(
                         "challenge.Title challenge.Theme",
-                        $"{entity.Title} {entity.Theme}",
+                        $"{entity.Title} {entity.CategoryId}",
                         InvalidChallengeDataReason.DuplicatesThemeAndTitle)
                 }
             };

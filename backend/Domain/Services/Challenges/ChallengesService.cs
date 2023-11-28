@@ -1,22 +1,26 @@
 using Db.Dbo.Challenges;
 using Domain.Context;
 using Domain.Services.Base;
+using Domain.Services.Categories;
 using Models.Challenges;
 
 namespace Domain.Services.Challenges;
 
 public class ChallengesService : EntityServiceBase<Challenge, ChallengeDbo, ChallengeSearchRequest>, IChallengesService
 {
-    public ChallengesService(IDataContext context)
+    private readonly ICategoriesService categoriesService;
+
+    public ChallengesService(IDataContext context, ICategoriesService categoriesService)
         : base(context, x => x.Challenge)
     {
+        this.categoriesService = categoriesService;
     }
 
     protected override Task FillDboAsync(ChallengeDbo dbo, Challenge entity)
     {
         dbo.Description = entity.Description;
         dbo.Id = entity.Id;
-        dbo.Theme = entity.Theme;
+        dbo.CategoryId = entity.CategoryId;
         dbo.Title = entity.Title;
         dbo.IsCatInBag = entity.IsCatInBag;
 
@@ -27,10 +31,31 @@ public class ChallengesService : EntityServiceBase<Challenge, ChallengeDbo, Chal
     {
         entity.Description = dbo.Description;
         entity.Id = dbo.Id;
-        entity.Theme = dbo.Theme;
+        entity.CategoryId = dbo.CategoryId;
         entity.Title = dbo.Title;
         entity.IsCatInBag = dbo.IsCatInBag;
 
         return Task.CompletedTask;
+    }
+
+    protected override async Task<IQueryable<ChallengeDbo>> ApplyFilterAsync(IQueryable<ChallengeDbo> queryable, ChallengeSearchRequest searchRequest)
+    {
+        var res = queryable;
+
+        if (searchRequest.CategoryId != null)
+            res = res.Where(x => x.CategoryId == searchRequest.CategoryId.Value);
+
+        res = await base.ApplyFilterAsync(res, searchRequest);
+        return res;
+    }
+
+    protected override async Task PreprocessAsync(Challenge? entity)
+    {
+        if (entity == null)
+            return;
+
+        var category = await categoriesService.FindAsync(entity.CategoryId);
+        if (category == null)
+            throw new EntityNotFoundException($"Category with id: {entity.CategoryId} not found");
     }
 }
