@@ -2,6 +2,7 @@ using Db.Dbo.Challenges;
 using Domain.Context;
 using Domain.Services.Base;
 using Domain.Services.Categories;
+using Models;
 using Models.Challenges;
 
 namespace Domain.Services.Challenges;
