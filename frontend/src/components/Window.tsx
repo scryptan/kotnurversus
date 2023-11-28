@@ -37,7 +37,7 @@ type Props = {
   headerProps?: ModalHeaderProps;
   bodyProps?: ModalBodyProps;
   footerProps?: ModalFooterProps;
-  ExtraButton?: () => ReactNode;
+  extraButton?: ReactNode;
 } & ModalProps;
 
 const Window = ({
@@ -55,7 +55,7 @@ const Window = ({
   headerProps,
   bodyProps,
   footerProps,
-  ExtraButton,
+  extraButton,
   children,
   ...props
 }: WindowProps<Props>) => {
@@ -129,7 +129,7 @@ const Window = ({
 
           {(!isHideSubmit || !isHideCancel) && (
             <ModalFooter px={6} py={4} gap={4} {...footerProps}>
-              {ExtraButton && <ExtraButton />}
+              {extraButton}
               <Spacer />
               {!isHideCancel && (
                 <Button

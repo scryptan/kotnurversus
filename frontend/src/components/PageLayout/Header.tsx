@@ -11,9 +11,11 @@ import ColorModeButton from "~/components/ColorModeButton";
 import BaseLink from "~/components/Link";
 import paths from "~/pages/paths";
 import AuthButton from "./AuthButton";
+import { useAuthContext } from "~/utils/auth-context";
 
 const Header = (props: BoxProps) => {
   const { colorMode } = useColorMode();
+  const { isAuthenticated } = useAuthContext();
 
   return (
     <Box
@@ -27,6 +29,9 @@ const Header = (props: BoxProps) => {
         <Logo />
         <ColorModeButton />
         <Spacer />
+        {isAuthenticated && (
+          <Link href={paths.challenges.path}>Доп. требования</Link>
+        )}
         <Link href={paths.tourneys.path}>Турниры</Link>
         <AuthButton />
       </HStack>

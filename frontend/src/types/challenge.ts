@@ -6,9 +6,4 @@ export type Challenge = {
   isCatInBag: boolean;
 };
 
-export type CreateChallenge = {
-  title: string;
-  description?: string;
-  category: string;
-  isCatInBad: boolean;
-};
+export type CreateChallenge = Omit<Challenge, "id">;

@@ -1,4 +1,8 @@
 export default {
+  challenges: {
+    pathTemplate: "/challenges",
+    path: "/challenges",
+  },
   tourneys: {
     pathTemplate: "/tourneys",
     path: "/tourneys",

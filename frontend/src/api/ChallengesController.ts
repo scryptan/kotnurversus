@@ -26,4 +26,8 @@ export class ChallengesController {
       operations
     );
   }
+
+  async delete(id: string): Promise<void> {
+    await axiosClient.delete(`/api/v1/Challenges/${id}`);
+  }
 }
