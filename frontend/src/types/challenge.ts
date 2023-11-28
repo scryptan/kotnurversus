@@ -1,8 +1,8 @@
 export type Challenge = {
   id: string;
+  categoryId: string;
   title: string;
   description?: string;
-  categoryId: string;
   isCatInBag: boolean;
 };
 

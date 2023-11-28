@@ -1,4 +1,4 @@
-import { HStack, Spinner } from "@chakra-ui/react";
+import { Spinner } from "@chakra-ui/react";
 import { forwardRef } from "react";
 import IconButtonWithTooltip from "~/components/IconButtonWithTooltip";
 import Input, { InputProps } from "~/components/Input";
@@ -22,7 +22,6 @@ const SingleSelectInput = forwardRef<HTMLInputElement, Props>(
       isShowClear,
       placeholder,
       onClear,
-      rightElement,
       ...inputProps
     },
     ref
@@ -30,28 +29,23 @@ const SingleSelectInput = forwardRef<HTMLInputElement, Props>(
     <Input
       {...inputProps}
       ref={ref}
-      pr={rightElement ? "76px" : 10}
       isDisabled={isDisabled}
       placeholder={isLoading ? "Загрузка..." : placeholder}
       rightElementProps={{
-        w: rightElement ? "76px" : 10,
         pointerEvents: isShowClear ? undefined : "none",
       }}
       rightElement={
         isLoading ? (
           <Spinner size="sm" />
         ) : isShowClear ? (
-          <HStack>
-            {rightElement}
-            <IconButtonWithTooltip
-              size="xs"
-              variant="ghost"
-              icon={<CrossIcon boxSize={5} />}
-              isDisabled={isDisabled}
-              onClick={onClear}
-              label="Очистить"
-            />
-          </HStack>
+          <IconButtonWithTooltip
+            size="xs"
+            variant="ghost"
+            icon={<CrossIcon boxSize={5} />}
+            isDisabled={isDisabled}
+            onClick={onClear}
+            label="Очистить"
+          />
         ) : (
           <ArrowDownIcon
             boxSize={6}

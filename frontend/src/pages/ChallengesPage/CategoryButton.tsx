@@ -1,4 +1,4 @@
-import { Button, ButtonProps, useDisclosure } from "@chakra-ui/react";
+import { Button, ButtonProps, Text, useDisclosure } from "@chakra-ui/react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import chroma from "chroma-js";
 import api from "~/api";
@@ -9,12 +9,9 @@ import queryKeys from "~/utils/query-keys";
 
 type Props = {
   category: Category;
-};
+} & ButtonProps;
 
-const CategoryButton = ({
-  category,
-  ...props
-}: Pick<Props, "category"> & ButtonProps) => {
+const CategoryButton = ({ category, ...props }: Props) => {
   const handleError = useHandleError();
   const queryClient = useQueryClient();
   const window = useDisclosure();
@@ -51,22 +48,26 @@ const CategoryButton = ({
       <Button
         {...window.getButtonProps()}
         px={2}
+        minW="100px"
+        maxW="300px"
         variant="link"
-        borderRadius={6}
         color={fontColor}
         bg={category.color}
         border="1px solid"
         borderColor={borderColor}
-        fontSize="xl"
-        lineHeight="150%"
-        fontWeight="normal"
         whiteSpace="normal"
-        justifyContent="flex-start"
         onClick={window.onOpen}
-        children={category.title}
         _active={{ textDecoration: "underline" }}
         {...props}
-      />
+      >
+        <Text
+          fontSize="xl"
+          lineHeight="150%"
+          fontWeight="normal"
+          noOfLines={1}
+          children={category.title}
+        />
+      </Button>
       <CategoryWindow.Edit
         {...window.getDisclosureProps()}
         isOpen={window.isOpen}

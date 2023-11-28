@@ -47,7 +47,10 @@ const CategoryForm = ({ id, defaultValue, onSubmit }: Props) => {
 };
 
 const categoryFormSchema = z.object({
-  title: z.string().min(1, "Заполните поле"),
+  title: z
+    .string()
+    .min(1, "Заполните поле")
+    .max(50, "Максимальная длина 50 символов"),
   color: z.string({ required_error: "Выберите цвет" }).min(1, "Выберите цвет"),
 });
 

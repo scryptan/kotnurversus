@@ -1,22 +1,14 @@
-import {
-  Button,
-  ButtonProps,
-  Center,
-  Heading,
-  Stack,
-  useDisclosure,
-} from "@chakra-ui/react";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { Center, Heading, Stack } from "@chakra-ui/react";
+import { useQuery } from "@tanstack/react-query";
 import api from "~/api";
-import CategoryCard from "~/components/CategoryCard";
-import CategoryWindow from "~/components/CategoryWindow";
 import Loading from "~/components/Loading";
 import useAutoRedirect from "~/hooks/useAutoRedirect";
-import useHandleError from "~/hooks/useHandleError";
 import paths from "~/pages/paths";
-import { CreateCategory } from "~/types/category";
+import { Challenge } from "~/types/challenge";
 import { useAuthContext } from "~/utils/auth-context";
 import queryKeys from "~/utils/query-keys";
+import CategoryCard from "./CategoryCard";
+import CreateCategoryButton from "./CreateCategoryButton";
 
 const ChallengesPage = () => {
   const { isAuthenticated } = useAuthContext();
@@ -47,18 +39,20 @@ const ChallengeSection = () => {
   const categoriesQuery = useQuery({
     queryKey: queryKeys.categories,
     queryFn: api.categories.find,
+    staleTime: 1000 * 60 * 50,
   });
 
   const challengesQuery = useQuery({
     queryKey: queryKeys.challenges,
     queryFn: api.challenges.find,
+    staleTime: 1000 * 60 * 50,
   });
 
   if (categoriesQuery.isLoading || challengesQuery.isLoading) {
     return <Loading />;
   }
 
-  if (!categoriesQuery.data && !challengesQuery.data) {
+  if (!categoriesQuery.data || !challengesQuery.data) {
     return (
       <Center py={10}>
         <Heading fontSize="xl">Не удалось загрузить доп. требования</Heading>
@@ -66,57 +60,36 @@ const ChallengeSection = () => {
     );
   }
 
-  const categories = categoriesQuery.data?.items || [];
+  const categories = categoriesQuery.data.items || [];
 
   if (categories.length === 0) {
     return null;
   }
 
+  const challengesByCategoryId = challengesQuery.data.items.reduce(
+    (result, challenge) => {
+      if (!result[challenge.categoryId]) {
+        result[challenge.categoryId] = [];
+      }
+      result[challenge.categoryId]?.push(challenge);
+      return result;
+    },
+    {} as Record<string, Challenge[]>
+  );
+
   return (
     <Stack spacing={12}>
-      {categories.map((category) => (
-        <CategoryCard key={category.id} category={category} challenges={[]} />
-      ))}
+      {categories
+        .sort((a, b) => a.title.localeCompare(b.title))
+        .map((category) => (
+          <CategoryCard
+            key={category.id}
+            category={category}
+            challenges={challengesByCategoryId[category.id] || []}
+          />
+        ))}
       <CreateCategoryButton />
     </Stack>
-  );
-};
-
-const CreateCategoryButton = (props: ButtonProps) => {
-  const window = useDisclosure();
-  const queryClient = useQueryClient();
-  const handleError = useHandleError();
-
-  const createCategory = useMutation({
-    mutationFn: async (data: CreateCategory) => {
-      return await api.categories.create(data);
-    },
-    onSuccess: async () => {
-      window.onClose();
-      await queryClient.refetchQueries({ queryKey: queryKeys.categories });
-    },
-    onError: handleError,
-  });
-
-  return (
-    <>
-      <Button
-        {...props}
-        {...window.getButtonProps()}
-        w="fit-content"
-        variant="link"
-        colorScheme="blue"
-        fontWeight="normal"
-        children="Создать категорию"
-      />
-      <CategoryWindow.Create
-        {...window.getDisclosureProps()}
-        isOpen={window.isOpen}
-        onClose={window.onClose}
-        isLoading={createCategory.isPending}
-        onSubmit={createCategory.mutateAsync}
-      />
-    </>
   );
 };
 
