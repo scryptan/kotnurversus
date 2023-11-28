@@ -29,7 +29,7 @@ public class ChallengesTests : ApiTestBase
         var creationArgs = new ChallengeCreationArgs
         {
             Description = "Some me",
-            Category = categoryId,
+            CategoryId = categoryId,
             Title = $"Im Bob Cat {Guid.NewGuid()}"
         };
 
@@ -39,7 +39,7 @@ public class ChallengesTests : ApiTestBase
         var entity = result.Result;
         entity.Id.Should().NotBe(Guid.Empty);
         entity.Description.Should().Be(creationArgs.Description);
-        entity.CategoryId.Should().Be(creationArgs.Category);
+        entity.CategoryId.Should().Be(creationArgs.CategoryId);
         entity.Title.Should().Be(creationArgs.Title);
     }
 
@@ -49,7 +49,7 @@ public class ChallengesTests : ApiTestBase
         var creationArgs = new ChallengeCreationArgs
         {
             Description = "Some me",
-            Category = categoryId,
+            CategoryId = categoryId,
             Title = $"Im Bob Cat {Guid.NewGuid()}"
         };
 
@@ -64,7 +64,7 @@ public class ChallengesTests : ApiTestBase
         entity = result.Result;
         entity.Id.Should().NotBe(Guid.Empty);
         entity.Description.Should().Be(creationArgs.Description);
-        entity.CategoryId.Should().Be(creationArgs.Category);
+        entity.CategoryId.Should().Be(creationArgs.CategoryId);
         entity.Title.Should().Be(creationArgs.Title);
     }
 
@@ -74,7 +74,7 @@ public class ChallengesTests : ApiTestBase
         var creationArgs = new ChallengeCreationArgs
         {
             Description = "Some me",
-            Category = categoryId,
+            CategoryId = categoryId,
             Title = $"Im Bob Cat {Guid.NewGuid()}"
         };
 
@@ -102,7 +102,7 @@ public class ChallengesTests : ApiTestBase
         entity = result.Result;
         entity.Id.Should().NotBe(Guid.Empty);
         entity.Description.Should().Be(newDescription);
-        entity.CategoryId.Should().Be(creationArgs.Category);
+        entity.CategoryId.Should().Be(creationArgs.CategoryId);
         entity.Title.Should().Be(creationArgs.Title);
     }
 
@@ -112,7 +112,7 @@ public class ChallengesTests : ApiTestBase
         var creationArgs = new ChallengeCreationArgs
         {
             Description = "Some me",
-            Category = categoryId,
+            CategoryId = categoryId,
             Title = $"Im Bob Cat {Guid.NewGuid()}"
         };
 
@@ -134,7 +134,7 @@ public class ChallengesTests : ApiTestBase
         var creationArgs = new ChallengeCreationArgs
         {
             Description = "Some me",
-            Category = categoryId,
+            CategoryId = categoryId,
             Title = $"Im Bob Cat {Guid.NewGuid()}"
         };
 
