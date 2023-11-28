@@ -2,5 +2,13 @@ namespace Models.Rounds;
 
 public enum RoundState
 {
-    None
+    None,
+    Created,
+    Initiated,
+    Prepare,
+    Presentation,
+    Defense,
+    Mark,
+    Complete,
+    Pause
 }
