@@ -43,14 +43,14 @@ const EditSpecificationWindow = ({
       heading="Редактирование сценария"
       contentProps={{ w: "800px" }}
       submitProps={{ type: "submit", form: formId }}
-      ExtraButton={() => (
+      extraButton={
         <ButtonWithAlert
           colorScheme="red"
           onSubmit={onRemove}
           buttonText="Удалить сценарий"
           alertText="Вы уверены, что хотите удалить данный сценарий?"
         />
-      )}
+      }
     >
       <SpecificationForm
         id={formId}

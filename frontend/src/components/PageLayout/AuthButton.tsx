@@ -91,14 +91,14 @@ const AuthWindow = (props: WindowProps) => {
         form: formId,
         children: isRegistration ? "Зарегистрироваться" : "Войти",
       }}
-      ExtraButton={() => (
+      extraButton={
         <Button
           variant="link"
           colorScheme="blue"
           onClick={setIsRegistration.toggle}
           children={isRegistration ? "Вход" : "Регистрация"}
         />
-      )}
+      }
       children={<Form id={formId} onSubmit={handleSubmit} />}
       {...props}
     />

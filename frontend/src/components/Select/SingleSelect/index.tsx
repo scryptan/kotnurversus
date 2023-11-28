@@ -1,14 +1,7 @@
-import {
-  Box,
-  BoxProps,
-  Collapse,
-  useBoolean,
-  useMergeRefs,
-} from "@chakra-ui/react";
+import { Box, BoxProps, useBoolean, useMergeRefs } from "@chakra-ui/react";
 import React, {
   ChangeEvent,
   ReactElement,
-  ReactNode,
   Ref,
   forwardRef,
   useEffect,
@@ -33,12 +26,7 @@ export type SingleSelectProps<T extends SelectValue> = {
   optionsHeightInDropdown?: number;
   optionsNumberInDropdown?: number;
   containerProps?: BoxProps;
-  NotFoundComponent?: (props: NotFoundProps) => ReactNode;
 } & Omit<InputProps, "defaultValue" | "value" | "onChange">;
-
-type NotFoundProps = {
-  text: string;
-};
 
 const MAX_OPTIONS = 25;
 
@@ -51,7 +39,6 @@ const SingleSelect = <T extends SelectValue>(
     optionsHeightInDropdown = 40,
     optionsNumberInDropdown = 5,
     containerProps,
-    NotFoundComponent,
     ...props
   }: SingleSelectProps<T>,
   ref: Ref<HTMLInputElement>
@@ -183,12 +170,6 @@ const SingleSelect = <T extends SelectValue>(
           Item={SingleSelectItem}
         />
       </Popper>
-
-      <Collapse in={filteredOptions.length === 0}>
-        {NotFoundComponent && (
-          <NotFoundComponent text={inputRef.current?.value || ""} />
-        )}
-      </Collapse>
     </Box>
   );
 };

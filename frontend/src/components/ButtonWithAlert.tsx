@@ -11,6 +11,7 @@ type Props = {
 const ButtonWithAlert = ({
   buttonText,
   alertText,
+  isLoading,
   onSubmit,
   ...props
 }: Props) => {
@@ -22,9 +23,15 @@ const ButtonWithAlert = ({
 
   return (
     <>
-      <Button onClick={alert.onOpen} children={buttonText} {...props} />
+      <Button
+        isDisabled={isLoading}
+        onClick={alert.onOpen}
+        children={buttonText}
+        {...props}
+      />
       <Alert
         isOpen={alert.isOpen}
+        isLoading={isLoading}
         onClose={alert.onClose}
         onSubmit={onSubmit}
         children={alertText}
