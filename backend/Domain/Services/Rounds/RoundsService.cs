@@ -1,6 +1,7 @@
 using Db.Dbo.Rounds;
 using Domain.Context;
 using Domain.Services.Base;
+using Models;
 using Models.Rounds;
 
 namespace Domain.Services.Rounds;
@@ -54,5 +55,18 @@ public class RoundsService : EntityServiceBase<Round, RoundDbo, RoundSearchReque
 
         res = await base.ApplyFilterAsync(res, searchRequest);
         return res;
+    }
+
+    protected override async Task PreprocessAsync(Round? entity)
+    {
+        if (entity == null)
+            return;
+
+        if (entity.NextRoundId != null)
+        {
+            var nextRound = await FindAsync(entity.NextRoundId.Value);
+            if (nextRound == null)
+                throw new EntityNotFoundException($"Next round with id: {entity.NextRoundId} not found");
+        }
     }
 }
