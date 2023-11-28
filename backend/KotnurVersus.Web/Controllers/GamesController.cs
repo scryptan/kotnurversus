@@ -1,3 +1,4 @@
+using Domain;
 using Domain.Commands.Games;
 using KotnurVersus.Web.Controllers.Base;
 using KotnurVersus.Web.Helpers;
@@ -14,5 +15,11 @@ public class GamesController : CreatableEntityControllerBase<Game, GameCreationA
     {
         var result = await command.RunAsync(id);
         return result.ToActionResult();
+    }
+
+    [HttpPost("{id:guid}/start")]
+    public async Task<ActionResult<Game, ErrorInfo<InvalidGameDataReason>>> StartTournament([FromServices] IStartGameCommand command, [FromRoute] Guid id, [FromBody] StartGameRequest request)
+    {
+        return (await command.RunAsync(id, request.RoundsToCreate)).ToActionResult();
     }
 }
