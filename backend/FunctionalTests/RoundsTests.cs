@@ -4,7 +4,9 @@ using FunctionalTests.Base;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.JsonPatch.Operations;
 using Models.Rounds;
+using Models.Rounds.History;
 using Models.Settings;
+using Models.Specifications;
 using Newtonsoft.Json.Serialization;
 using Vostok.Logging.Abstractions;
 
@@ -73,7 +75,13 @@ public class RoundsTests : ApiTestBase
         var creationArgs = new RoundCreationArgs
         {
             GameId = Guid.NewGuid(),
-            Order = 1
+            Order = 1,
+            Specification = new Specification
+            {
+                Title = "Title",
+                BusinessDescription = "asda",
+                TechDescription = "RoundHistoryItemBase"
+            }
         };
         var defaultSettings = new Settings();
         var entityRes = await Client.Rounds.CreateAsync(creationArgs);
@@ -87,7 +95,11 @@ public class RoundsTests : ApiTestBase
             {
                 Order = 0,
                 State = RoundState.None,
-                Value = "my data"
+                Value = new PrepareRoundHistoryItem()
+                {
+                    Start = DateTimeOffset.Now,
+                    End = DateTimeOffset.Now,
+                }
             }
         };
         var result = await Client.Rounds.PatchAsync(
@@ -98,7 +110,7 @@ public class RoundsTests : ApiTestBase
                     new()
                     {
                         op = "replace",
-                        path = "history",
+                        path = "/history",
                         value = newHistory
                     }
                 },
@@ -114,7 +126,7 @@ public class RoundsTests : ApiTestBase
         entity.Order.Should().Be(creationArgs.Order);
         entity.Artifacts.Should().BeEmpty();
         entity.History.Should().BeEquivalentTo(newHistory);
-        entity.Specification.Should().BeNull();
+        entity.Specification.Should().BeEquivalentTo(creationArgs.Specification);
         entity.CurrentState.Should().BeEquivalentTo(newHistory.Single());
         entity.WinnerId.Should().BeNull();
         entity.NextRoundId.Should().BeNull();

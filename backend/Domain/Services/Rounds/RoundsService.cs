@@ -40,9 +40,6 @@ public class RoundsService : EntityServiceBase<Round, RoundDbo, RoundSearchReque
         entity.GameId = dbo.GameId;
         entity.Settings = dbo.Settings;
 
-        entity.CurrentState = dbo.History.MaxBy(x => x.Order);
-        entity.WinnerId = dbo.Participants.FirstOrDefault(x => x.IsWinner)?.TeamId;
-
         return Task.CompletedTask;
     }
 

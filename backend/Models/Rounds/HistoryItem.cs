@@ -1,8 +1,10 @@
+using Models.Rounds.History;
+
 namespace Models.Rounds;
 
 public class HistoryItem
 {
     public int Order { get; set; }
     public RoundState State { get; set; }
-    public object Value { get; set; } = null!;
+    public RoundHistoryItemBase Value { get; set; } = null!;
 }
