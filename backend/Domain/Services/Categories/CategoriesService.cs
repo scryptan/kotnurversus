@@ -1,15 +1,20 @@
 using Db.Dbo.Categories;
 using Domain.Context;
 using Domain.Services.Base;
+using Domain.Services.Challenges;
 using Models.Categories;
+using Models.Challenges;
 
 namespace Domain.Services.Categories;
 
 public class CategoriesService : EntityServiceBase<Category, CategoryDbo, CategorySearchRequest>, ICategoriesService
 {
-    public CategoriesService(IDataContext context)
+    private readonly IChallengesService challengesService;
+
+    public CategoriesService(IDataContext context, IChallengesService challengesService)
         : base(context, x => x.Categories)
     {
+        this.challengesService = challengesService;
     }
 
     protected override Task FillDboAsync(CategoryDbo dbo, Category entity)
@@ -28,5 +33,21 @@ public class CategoriesService : EntityServiceBase<Category, CategoryDbo, Catego
         entity.Color = dbo.Color;
 
         return Task.CompletedTask;
+    }
+
+    protected override async Task AfterDeleteAsync(Category entity)
+    {
+        await base.AfterDeleteAsync(entity);
+        var linkedChallenges = await challengesService.SearchAsync(
+            new ChallengeSearchRequest
+            {
+                CategoryId = entity.Id
+            },
+            new CancellationToken());
+
+        foreach (var challenge in linkedChallenges.Items)
+        {
+            await challengesService.DeleteAsync(challenge);
+        }
     }
 }

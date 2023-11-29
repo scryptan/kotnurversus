@@ -3,6 +3,6 @@ using Models.Rounds;
 
 namespace Domain.Services.Rounds;
 
-public interface IRoundsService : IEntityService<Round>
+public interface IRoundsService : IEntityService<Round, RoundSearchRequest>
 {
 }

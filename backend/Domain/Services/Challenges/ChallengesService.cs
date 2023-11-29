@@ -9,9 +9,9 @@ namespace Domain.Services.Challenges;
 
 public class ChallengesService : EntityServiceBase<Challenge, ChallengeDbo, ChallengeSearchRequest>, IChallengesService
 {
-    private readonly ICategoriesService categoriesService;
+    private readonly Lazy<ICategoriesService> categoriesService;
 
-    public ChallengesService(IDataContext context, ICategoriesService categoriesService)
+    public ChallengesService(IDataContext context, Lazy<ICategoriesService> categoriesService)
         : base(context, x => x.Challenge)
     {
         this.categoriesService = categoriesService;
@@ -55,7 +55,7 @@ public class ChallengesService : EntityServiceBase<Challenge, ChallengeDbo, Chal
         if (entity == null)
             return;
 
-        var category = await categoriesService.FindAsync(entity.CategoryId);
+        var category = await categoriesService.Value.FindAsync(entity.CategoryId);
         if (category == null)
             throw new EntityNotFoundException($"Category with id: {entity.CategoryId} not found");
     }
