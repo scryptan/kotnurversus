@@ -26,9 +26,13 @@ public abstract class EntityServiceBase<T, TDbo, TSearchRequest> : IEntityServic
     }
 
     protected IDataContext Context { get; }
+    private string EntityCacheKey(Guid id) => $"{typeof(T)}_{id}";
 
     public async Task<T?> FindAsync(Guid id)
     {
+        if (Context.Cache.TryGetValue(EntityCacheKey(id), out var res))
+            return ((Data)res!).Entity;
+
         var dbos = await ReadDboAsync(id);
         if (dbos == null)
         {
@@ -49,6 +53,16 @@ public abstract class EntityServiceBase<T, TDbo, TSearchRequest> : IEntityServic
         await FillDboAsync(dbo, entity);
 
         await getMainDbSet(Context.DbContext).AddAsync(dbo);
+        Context.Cache.AddOrUpdate(
+            EntityCacheKey(entity.Id),
+            new Data {Dbo = dbo, Entity = entity},
+            (_, value) =>
+            {
+                var data = (Data)value!;
+                data.Dbo = dbo;
+                data.Entity = entity;
+                return data;
+            });
     }
 
     public async Task PatchAsync(T entity, JsonPatchDocument<T> patchDocument)
@@ -61,6 +75,16 @@ public abstract class EntityServiceBase<T, TDbo, TSearchRequest> : IEntityServic
         await FillDboAsync(dbo, entity);
 
         getMainDbSet(Context.DbContext).Update(dbo);
+        Context.Cache.AddOrUpdate(
+            EntityCacheKey(entity.Id),
+            new Data {Dbo = dbo, Entity = entity},
+            (_, value) =>
+            {
+                var data = (Data)value!;
+                data.Dbo = dbo;
+                data.Entity = entity;
+                return data;
+            });
     }
 
     public async Task DeleteAsync(T entity)
@@ -71,6 +95,7 @@ public abstract class EntityServiceBase<T, TDbo, TSearchRequest> : IEntityServic
 
         getMainDbSet(Context.DbContext).Remove(dbo);
         await AfterDeleteAsync(entity);
+        Context.Cache.Remove(EntityCacheKey(entity.Id));
     }
 
     public async Task<SearchResult<T>> SearchAsync(TSearchRequest searchRequest, CancellationToken cancellationToken)
@@ -114,4 +139,10 @@ public abstract class EntityServiceBase<T, TDbo, TSearchRequest> : IEntityServic
 
     private IQueryable<TDbo> ReadDbosAsync() =>
         getMainDbSet(Context.DbContext).AsQueryable();
+
+    private class Data
+    {
+        public TDbo Dbo { get; set; } = null!;
+        public T Entity { get; set; } = null!;
+    }
 }
