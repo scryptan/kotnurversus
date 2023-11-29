@@ -1,16 +1,18 @@
-import { HStack } from "@chakra-ui/react";
+import { BoxProps, HStack, Stack, Text } from "@chakra-ui/react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { compare } from "fast-json-patch";
-import { FormEvent, forwardRef, memo, useRef } from "react";
-import { useForm } from "react-hook-form";
+import { ReactNode, memo, useId, useRef } from "react";
+import { Controller, useForm } from "react-hook-form";
 import { z } from "zod";
 import api from "~/api";
-import Input, { InputProps } from "~/components/Input";
+import NumberInput from "~/components/NumberInput";
+import TimeInput from "~/components/TimeInput";
 import useDebounce from "~/hooks/useDebounce";
 import { TourneySettings } from "~/types/tourney";
 import { useAuthContext } from "~/utils/auth-context";
 import queryKeys from "~/utils/query-keys";
+import time from "~/utils/time";
 import TourneySectionLayout from "./TourneySectionLayout";
 
 type Props = {
@@ -24,14 +26,24 @@ const TourneyTimersSettings = ({ id, settings: defaultSettings }: Props) => {
   const { isAuthenticated } = useAuthContext();
   const settings = useRef(defaultSettings);
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<SettingsSchema>({
+  const { control, handleSubmit } = useForm<SettingsSchema>({
     shouldFocusError: false,
     resolver: zodResolver(settingsSchema),
-    defaultValues: settings.current,
+    defaultValues: {
+      prepareTime: time["mm:ss"].castSecondsToTime(
+        defaultSettings.prepareSeconds
+      ),
+      presentationTime: time["mm:ss"].castSecondsToTime(
+        defaultSettings.presentationSeconds
+      ),
+      defenseTime: time["mm:ss"].castSecondsToTime(
+        defaultSettings.defenseSeconds
+      ),
+      timeoutTime: time["mm:ss"].castSecondsToTime(
+        defaultSettings.timeoutSeconds
+      ),
+      timeoutCount: defaultSettings.timeoutsCount,
+    },
   });
 
   const editSettings = useMutation({
@@ -54,7 +66,16 @@ const TourneyTimersSettings = ({ id, settings: defaultSettings }: Props) => {
 
   const onSubmit = handleSubmit((data) => {
     debounce.set(() =>
-      editSettings.mutateAsync({ ...settings.current, ...data })
+      editSettings.mutateAsync({
+        ...settings.current,
+        prepareSeconds: time["mm:ss"].castTimeToSeconds(data.prepareTime),
+        presentationSeconds: time["mm:ss"].castTimeToSeconds(
+          data.presentationTime
+        ),
+        defenseSeconds: time["mm:ss"].castTimeToSeconds(data.defenseTime),
+        timeoutSeconds: time["mm:ss"].castTimeToSeconds(data.timeoutTime),
+        timeoutsCount: data.timeoutCount,
+      })
     );
   });
 
@@ -67,51 +88,137 @@ const TourneyTimersSettings = ({ id, settings: defaultSettings }: Props) => {
       <HStack
         mt={6}
         as="form"
-        spacing="124px"
+        spacing="100px"
         align="flex-start"
         onChange={onSubmit}
       >
-        <SecondsInput
-          label="Подготовка"
-          {...register("prepareSeconds")}
-          errorMessage={errors.prepareSeconds?.message}
-        />
-        <SecondsInput
-          label="Презентация"
-          {...register("presentationSeconds")}
-          errorMessage={errors.presentationSeconds?.message}
-        />
-        <SecondsInput
-          label="Защита"
-          {...register("defenseSeconds")}
-          errorMessage={errors.defenseSeconds?.message}
-        />
+        <FormLabel label="Подготовка">
+          {(id) => (
+            <Controller
+              name="prepareTime"
+              control={control}
+              render={({ field, fieldState }) => (
+                <TimeInput
+                  {...field}
+                  id={id}
+                  placeholder="мм:сс"
+                  errorMessage={fieldState.error?.message}
+                  containerProps={{ w: "140px" }}
+                />
+              )}
+            />
+          )}
+        </FormLabel>
+        <FormLabel label="Презентация">
+          {(id) => (
+            <Controller
+              name="presentationTime"
+              control={control}
+              render={({ field, fieldState }) => (
+                <TimeInput
+                  {...field}
+                  id={id}
+                  placeholder="мм:сс"
+                  errorMessage={fieldState.error?.message}
+                  containerProps={{ w: "140px" }}
+                />
+              )}
+            />
+          )}
+        </FormLabel>
+        <FormLabel label="Защита">
+          {(id) => (
+            <Controller
+              name="defenseTime"
+              control={control}
+              render={({ field, fieldState }) => (
+                <TimeInput
+                  {...field}
+                  id={id}
+                  placeholder="мм:сс"
+                  errorMessage={fieldState.error?.message}
+                  containerProps={{ w: "140px" }}
+                />
+              )}
+            />
+          )}
+        </FormLabel>
+        <FormLabel label="Количество таймаутов">
+          {(id) => (
+            <Controller
+              name="timeoutCount"
+              control={control}
+              render={({ field, fieldState }) => (
+                <NumberInput
+                  {...field}
+                  id={id}
+                  max={10}
+                  maxLength={2}
+                  onBlur={onSubmit}
+                  errorMessage={fieldState.error?.message}
+                  containerProps={{ w: "85px" }}
+                />
+              )}
+            />
+          )}
+        </FormLabel>
+        <FormLabel label="Длительность таймаута">
+          {(id) => (
+            <Controller
+              name="timeoutTime"
+              control={control}
+              render={({ field, fieldState }) => (
+                <TimeInput
+                  {...field}
+                  id={id}
+                  placeholder="мм:сс"
+                  errorMessage={fieldState.error?.message}
+                  containerProps={{ w: "140px" }}
+                />
+              )}
+            />
+          )}
+        </FormLabel>
       </HStack>
     </TourneySectionLayout>
   );
 };
 
-const SecondsInput = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
-  const handleInput = (e: FormEvent<HTMLInputElement>) => {
-    e.currentTarget.value = e.currentTarget.value.replace(/\D/g, "");
-  };
+type FormLabelProps = {
+  label: string;
+  isRequired?: boolean;
+  children: ReactNode | ((id: string) => ReactNode);
+} & Omit<BoxProps, "children">;
+
+const FormLabel = ({ label, children, ...props }: FormLabelProps) => {
+  const id = useId();
+  const needId = typeof children === "function";
 
   return (
-    <Input
-      ref={ref}
-      {...props}
-      maxLength={5}
-      rightAddon="сек"
-      onInput={handleInput}
-      containerProps={{ w: "150px" }}
-    />
+    <Stack w="fit-content" align="center" spacing={4} {...props}>
+      <Text
+        w="fit-content"
+        fontSize="md"
+        fontWeight="medium"
+        {...(needId ? { as: "label", htmlFor: id } : {})}
+        children={label}
+      />
+      {needId ? children(id) : children}
+    </Stack>
   );
-});
+};
+
+const timeSchema = z
+  .string()
+  .min(1, "Заполните поле")
+  .regex(time["mm:ss"].regexp, "Некорректное время");
 
 const settingsSchema = z.object({
-  prepareSeconds: z.coerce.number().min(1, "Заполните поле"),
-  presentationSeconds: z.coerce.number().min(1, "Заполните поле"),
-  defenseSeconds: z.coerce.number().min(1, "Заполните поле"),
+  prepareTime: timeSchema,
+  presentationTime: timeSchema,
+  defenseTime: timeSchema,
+  timeoutTime: timeSchema,
+  timeoutCount: z.number().nonnegative("Число должно быть положительным"),
 });
 
 type SettingsSchema = z.infer<typeof settingsSchema>;

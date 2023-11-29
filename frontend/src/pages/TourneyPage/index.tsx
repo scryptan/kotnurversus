@@ -51,17 +51,17 @@ const TourneyPage = () => {
     >
       <TourneyHeader tourney={tourney} />
       <TourneyActionButtons tourneyId={tourney.id} />
+      <TourneyTimersSettings id={tourney.id} settings={tourney.settings} />
+      <TourneySpecificationsSettings
+        id={tourney.id}
+        specifications={tourney.specifications}
+      />
       <TourneyBracket
         id={tourney.id}
         teams={tourney.teams}
         specifications={tourney.specifications}
       />
       <TourneyTeams id={tourney.id} teams={tourney.teams} />
-      <TourneySpecificationsSettings
-        id={tourney.id}
-        specifications={tourney.specifications}
-      />
-      <TourneyTimersSettings id={tourney.id} settings={tourney.settings} />
 
       {/* TODO move this to match */}
       <TourneyArtifacts artifacts={[]} />

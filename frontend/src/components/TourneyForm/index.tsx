@@ -81,6 +81,7 @@ const TourneyForm = ({ id, defaultValue, onSubmit }: Props) => {
               <TimeInput
                 {...field}
                 id={id}
+                placeholder="чч:мм"
                 containerProps={{ w: "140px" }}
                 errorMessage={error?.message}
               />

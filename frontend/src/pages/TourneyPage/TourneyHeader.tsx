@@ -20,7 +20,7 @@ type Props = {
 const TourneyHeader = ({ tourney, ...props }: Props) => (
   <Stack spacing={8} {...props}>
     <Breadcrumb items={breadcrumbItems} />
-    <TourneyInfo px={3} tourney={tourney} />
+    <TourneyInfo tourney={tourney} />
   </Stack>
 );
 

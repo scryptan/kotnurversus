@@ -17,7 +17,7 @@ const TourneyActionButtons = ({ tourneyId }: Props) => {
   }
 
   return (
-    <HStack px={3} spacing={4}>
+    <HStack spacing={4}>
       <Button
         as={Link}
         to={paths.editTourney.path(tourneyId)}
