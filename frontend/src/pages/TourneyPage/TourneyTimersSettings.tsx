@@ -9,8 +9,8 @@ import api from "~/api";
 import NumberInput from "~/components/NumberInput";
 import TimeInput from "~/components/TimeInput";
 import useDebounce from "~/hooks/useDebounce";
+import { useTourneyContext } from "./tourney-context";
 import { TourneySettings } from "~/types/tourney";
-import { useAuthContext } from "~/utils/auth-context";
 import queryKeys from "~/utils/query-keys";
 import time from "~/utils/time";
 import TourneySectionLayout from "./TourneySectionLayout";
@@ -23,8 +23,8 @@ type Props = {
 const TourneyTimersSettings = ({ id, settings: defaultSettings }: Props) => {
   const debounce = useDebounce(500);
   const queryClient = useQueryClient();
-  const { isAuthenticated } = useAuthContext();
   const settings = useRef(defaultSettings);
+  const { isEditable } = useTourneyContext();
 
   const { control, handleSubmit } = useForm<SettingsSchema>({
     shouldFocusError: false,
@@ -60,7 +60,7 @@ const TourneyTimersSettings = ({ id, settings: defaultSettings }: Props) => {
     },
   });
 
-  if (!isAuthenticated) {
+  if (!isEditable) {
     return null;
   }
 

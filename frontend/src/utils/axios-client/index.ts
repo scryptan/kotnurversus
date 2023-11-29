@@ -27,8 +27,8 @@ export default {
       return res.data;
     } catch (err) {
       const error = err as AxiosError;
-      isDev && console.log(`GET ${url}`, error.response); // LOG
-      throw error.response;
+      isDev && console.log(`GET ${url}`, error); // LOG
+      throw error;
     }
   },
   post: async <T, K>(url: string, data?: K, params?: object): Promise<T> => {
@@ -38,8 +38,8 @@ export default {
       return res.data;
     } catch (err) {
       const error = err as AxiosError;
-      isDev && console.log(`POST ${url}`, error.response); // LOG
-      throw error.response;
+      isDev && console.log(`POST ${url}`, error); // LOG
+      throw error;
     }
   },
   patch: async <T, K>(url: string, data?: K): Promise<T> => {
@@ -49,8 +49,8 @@ export default {
       return res.data;
     } catch (err) {
       const error = err as AxiosError;
-      isDev && console.log(`PATCH ${url}`, error.response); // LOG
-      throw error.response;
+      isDev && console.log(`PATCH ${url}`, error); // LOG
+      throw error;
     }
   },
   delete: async <T>(url: string, params?: object): Promise<T> => {
@@ -60,8 +60,8 @@ export default {
       return res.data;
     } catch (err) {
       const error = err as AxiosError;
-      isDev && console.log(`DELETE ${url}`, error.response); // LOG
-      throw error.response;
+      isDev && console.log(`DELETE ${url}`, error); // LOG
+      throw error;
     }
   },
 };

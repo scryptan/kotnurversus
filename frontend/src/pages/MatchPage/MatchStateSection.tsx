@@ -7,7 +7,7 @@ import TeamCard from "~/components/TeamCard";
 import useTimer from "~/hooks/useTimer";
 import NextIcon from "~/icons/NextIcon";
 import PauseIcon from "~/icons/PauseIcon";
-import { Match, MatchState } from "~/types/match";
+import { Match, TourneyRoundState } from "~/types/match";
 
 type Props = {
   match: Match;
@@ -111,13 +111,13 @@ const TimerButton = (props: IconButtonWithTooltipProps) => (
   />
 );
 
-const matchStateMap: Record<MatchState, string> = {
-  [MatchState.Init]: "Инициализация",
-  [MatchState.WalkOver]: "Завершено",
-  [MatchState.Prepare]: "Подготовка",
-  [MatchState.Play]: "Презентация",
-  [MatchState.Defense]: "Защита",
-  [MatchState.Done]: "Завершено",
+const matchStateMap: Record<TourneyRoundState, string> = {
+  [TourneyRoundState.Init]: "Инициализация",
+  [TourneyRoundState.WalkOver]: "Завершено",
+  [TourneyRoundState.Prepare]: "Подготовка",
+  [TourneyRoundState.Play]: "Презентация",
+  [TourneyRoundState.Defense]: "Защита",
+  [TourneyRoundState.Done]: "Завершено",
 };
 
 export default MatchStateSection;

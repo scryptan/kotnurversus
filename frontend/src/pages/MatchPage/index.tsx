@@ -1,5 +1,5 @@
 import { Stack, Text } from "@chakra-ui/react";
-import { Match, MatchState } from "~/types/match";
+import { Match, TourneyRoundState } from "~/types/match";
 import MatchHeader from "./MatchHeader";
 import MatchStateSection from "./MatchStateSection";
 import MatchTaskSection from "./MatchTaskSection";
@@ -18,7 +18,7 @@ const MatchPage = () => (
 
 const mockMatch: Match = {
   id: 1,
-  state: MatchState.Prepare,
+  state: TourneyRoundState.Prepare,
   tourney: {
     id: "1",
     title: "RuCode",

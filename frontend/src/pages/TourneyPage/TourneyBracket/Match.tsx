@@ -3,13 +3,14 @@ import {
   Center,
   Flex,
   FlexProps,
+  Skeleton,
   Text,
   useColorMode,
 } from "@chakra-ui/react";
 import { MatchComponentProps } from "@g-loot/react-tournament-brackets/dist/src/types";
 import { Link } from "react-router-dom";
 import paths from "~/pages/paths";
-import { MatchState } from "~/types/match";
+import { TourneyRoundState } from "~/types/tourney";
 
 const Match = ({
   match,
@@ -20,12 +21,14 @@ const Match = ({
 }: MatchComponentProps) => {
   const { colorMode } = useColorMode();
 
-  const isPrepare = match.state === MatchState.Prepare;
-  const isDone = match.state === MatchState.Done;
+  const isLoading = "isLoading" in match ? Boolean(match.isLoading) : false;
+
+  const isInit = match.state === TourneyRoundState.Init;
+  const isDone = match.state === TourneyRoundState.Complete;
   const borderColor =
     colorMode === "light" ? "blackAlpha.300" : "whiteAlpha.300";
 
-  const linkProps = isPrepare
+  const linkProps = !isInit
     ? {
         as: Link,
         to: paths.match.path(match.id),
@@ -36,36 +39,44 @@ const Match = ({
     : {};
 
   return (
-    <Flex
+    <Skeleton
       ml={3}
       my={5}
-      border="1px solid"
-      borderColor={borderColor}
       h="calc(100% - 40px)"
-      bg={`bg.${colorMode}.2`}
-      flexDir="column"
-      justify="space-between"
       borderRadius={4}
-      {...linkProps}
+      isLoaded={!isLoading}
+      startColor={colorMode === "light" ? "blackAlpha.100" : "whiteAlpha.100"}
+      endColor={colorMode === "light" ? "blackAlpha.300" : "whiteAlpha.300"}
     >
-      <Side
-        isDone={isDone}
-        isWon={topWon}
-        name={topParty.name}
-        resultText={topParty.resultText}
-      />
-      <Box border="1px solid" borderColor="inherit" />
-      <Side
-        isDone={isDone}
-        isWon={bottomWon}
-        name={bottomParty.name}
-        resultText={bottomParty.resultText}
-      />
-      {"specificationTitle" in match && (
-        <SpecificationLabel value={match.specificationTitle} />
-      )}
-      {"badgeValue" in match && <Badge value={match.badgeValue} />}
-    </Flex>
+      <Flex
+        h="full"
+        border="1px solid"
+        borderColor={borderColor}
+        bg={`bg.${colorMode}.2`}
+        flexDir="column"
+        justify="space-between"
+        borderRadius={4}
+        {...linkProps}
+      >
+        <Side
+          isDone={isDone}
+          isWon={topWon}
+          name={topParty.name}
+          resultText={topParty.resultText}
+        />
+        <Box border="1px solid" borderColor="inherit" />
+        <Side
+          isDone={isDone}
+          isWon={bottomWon}
+          name={bottomParty.name}
+          resultText={bottomParty.resultText}
+        />
+        {"specification" in match && (
+          <SpecificationLabel value={match.specification?.title} />
+        )}
+        {"badgeValue" in match && <Badge value={match.badgeValue} />}
+      </Flex>
+    </Skeleton>
   );
 };
 

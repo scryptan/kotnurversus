@@ -2,14 +2,14 @@ import { Tourney } from "~/types/tourney";
 
 export type Match = {
   id: number;
-  state: MatchState;
+  state: TourneyRoundState;
   startDate?: Date;
   tourney: Tourney;
   teams: MatchTeam[];
   task: MatchTask;
 };
 
-export enum MatchState {
+export enum TourneyRoundState {
   WalkOver = "WALK_OVER",
   Init = "INIT",
   Prepare = "PREPARE",

@@ -5,6 +5,7 @@ import Alert from "~/components/Alert";
 type Props = {
   buttonText: string;
   alertText: string;
+  closeBeforeSubmit?: boolean;
   onSubmit?: () => void;
 } & Omit<ButtonProps, "onSubmit">;
 
@@ -12,6 +13,7 @@ const ButtonWithAlert = ({
   buttonText,
   alertText,
   isLoading,
+  closeBeforeSubmit,
   onSubmit,
   ...props
 }: Props) => {
@@ -20,6 +22,11 @@ const ButtonWithAlert = ({
   if (!onSubmit) {
     return null;
   }
+
+  const handleSubmit = async () => {
+    if (closeBeforeSubmit) alert.onClose();
+    onSubmit?.();
+  };
 
   return (
     <>
@@ -33,7 +40,7 @@ const ButtonWithAlert = ({
         isOpen={alert.isOpen}
         isLoading={isLoading}
         onClose={alert.onClose}
-        onSubmit={onSubmit}
+        onSubmit={handleSubmit}
         children={alertText}
       />
     </>
