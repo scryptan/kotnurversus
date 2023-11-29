@@ -94,8 +94,7 @@ public class RoundsTests : ApiTestBase
             new()
             {
                 Order = 0,
-                State = RoundState.None,
-                Value = new PrepareRoundHistoryItem()
+                Value = new PrepareRoundHistoryItem
                 {
                     Start = DateTimeOffset.Now,
                     End = DateTimeOffset.Now,
