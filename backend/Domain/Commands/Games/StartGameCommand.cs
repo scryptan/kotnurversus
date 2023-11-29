@@ -53,6 +53,7 @@ public class StartGameCommand : IStartGameCommand
                             }
                         },
                         new DefaultContractResolver()));
+
                 await dbContext.SaveChangesAsync();
                 return game;
             });
@@ -64,11 +65,13 @@ public class StartGameCommand : IStartGameCommand
     {
         var reversedRounds = rounds.OrderByDescending(x => x.Order).ToArray();
         var finalRound = reversedRounds[0].ToApiModel();
+        finalRound.Id = Guid.NewGuid();
         await roundsService.AddAsync(finalRound);
-        var parentRounds = new Queue<Round>(new[] {finalRound});
 
+        var parentRounds = new Queue<Round>(new[] {finalRound});
         var createdRounds = 1;
         var i = 1;
+
         while (createdRounds < rounds.Count)
         {
             var parentRound = parentRounds.Dequeue();
@@ -77,6 +80,7 @@ public class StartGameCommand : IStartGameCommand
             {
                 roundsToCreate[0].NextRoundId = parentRound.Id;
                 var apiRound = roundsToCreate[0].ToApiModel();
+                apiRound.Id = Guid.NewGuid();
                 await roundsService.AddAsync(apiRound);
                 parentRounds.Enqueue(apiRound);
 
