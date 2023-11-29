@@ -78,8 +78,8 @@ public class StartGameCommand : IStartGameCommand
             var roundsToCreate = reversedRounds.Skip(i).Take(2).ToArray();
             for (int j = 0; j < 2; j++)
             {
-                roundsToCreate[0].NextRoundId = parentRound.Id;
-                var apiRound = roundsToCreate[0].ToApiModel();
+                roundsToCreate[j].NextRoundId = parentRound.Id;
+                var apiRound = roundsToCreate[j].ToApiModel();
                 apiRound.Id = Guid.NewGuid();
                 await roundsService.AddAsync(apiRound);
                 parentRounds.Enqueue(apiRound);
