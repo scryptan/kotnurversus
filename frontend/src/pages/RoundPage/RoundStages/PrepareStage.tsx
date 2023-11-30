@@ -2,26 +2,25 @@ import { Button, Center, Stack, Text } from "@chakra-ui/react";
 import { useState } from "react";
 import TeamCard from "~/components/TeamCard";
 import { TourneyTeam } from "~/types/tourney";
+import { useRoundContext } from "../round-context";
+import ChallengeSelectionWindow from "./ChallengeSelectionWindow";
 
-type CardProps = {
-  roundId: string;
-  teamA?: TourneyTeam;
-  teamB?: TourneyTeam;
-};
+const PrepareStage = () => {
+  const { getTeams } = useRoundContext();
+  const [teamA, teamB] = getTeams();
+  const [currentTeam, setCurrentTeam] = useState<TourneyTeam>();
 
-const PrepareStage = ({ roundId: _, teamA, teamB }: CardProps) => {
-  const [chosenTeamId, setChosenTeamId] = useState<string>();
+  const handleChoose = (team: TourneyTeam) => () => setCurrentTeam(team);
 
   return (
     <>
       {teamA && (
         <TeamCard.Button
           gridArea="teamA"
+          justifySelf="flex-end"
           activeColor="#D83161"
           team={teamA}
-          isChosen={teamA.id === chosenTeamId}
-          onChoose={setChosenTeamId}
-          justifySelf="flex-end"
+          onClick={handleChoose(teamA)}
         />
       )}
       <Center gridArea="main">
@@ -41,8 +40,7 @@ const PrepareStage = ({ roundId: _, teamA, teamB }: CardProps) => {
           gridArea="teamB"
           activeColor="#D83161"
           team={teamB}
-          isChosen={teamB.id === chosenTeamId}
-          onChoose={setChosenTeamId}
+          onClick={handleChoose(teamB)}
         />
       )}
       <Stack align="center" gridArea="control">
@@ -51,12 +49,13 @@ const PrepareStage = ({ roundId: _, teamA, teamB }: CardProps) => {
           <br />
           Когда будете готовы - нажмите кнопку ниже
         </Text>
-        <Button
-          isDisabled={!chosenTeamId}
-          colorScheme="teal"
-          children="Запустить таймер"
-        />
+        <Button colorScheme="teal" children="Запустить таймер" />
       </Stack>
+      <ChallengeSelectionWindow
+        isOpen={currentTeam !== undefined}
+        onClose={() => setCurrentTeam(undefined)}
+        team={currentTeam}
+      />
     </>
   );
 };

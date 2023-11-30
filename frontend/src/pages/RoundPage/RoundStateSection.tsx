@@ -1,23 +1,24 @@
 import { Box, BoxProps, HStack, Text } from "@chakra-ui/react";
 import { RoundState } from "~/types/round";
+import { useRoundContext } from "./round-context";
 
-type Props = {
-  state?: RoundState;
+const RoundStateSection = (props: BoxProps) => {
+  const { state } = useRoundContext();
+
+  return (
+    <HStack spacing={9} justify="center" {...props}>
+      {stateItems.map((item) => (
+        <StateCard
+          key={item.name}
+          name={item.name}
+          activeColor={item.activeColor}
+          isActive={state && item.state.active.includes(state)}
+          isDisabled={!state || item.state.disabled.includes(state)}
+        />
+      ))}
+    </HStack>
+  );
 };
-
-const RoundStateSection = ({ state }: Props) => (
-  <HStack spacing={9} justify="center">
-    {stateItems.map((item) => (
-      <StateCard
-        key={item.name}
-        name={item.name}
-        activeColor={item.activeColor}
-        isActive={state && item.state.active.includes(state)}
-        isDisabled={!state || item.state.disabled.includes(state)}
-      />
-    ))}
-  </HStack>
-);
 
 type StateCardProps = {
   name: string;
@@ -68,7 +69,6 @@ const stateItems = [
     state: {
       active: [RoundState.Prepare],
       disabled: [
-        RoundState.None,
         RoundState.Presentation,
         RoundState.Defense,
         RoundState.Mark,
@@ -81,7 +81,7 @@ const stateItems = [
     activeColor: "#F03B36",
     state: {
       active: [RoundState.Presentation, RoundState.Defense],
-      disabled: [RoundState.None, RoundState.Mark, RoundState.Complete],
+      disabled: [RoundState.Mark, RoundState.Complete],
     },
   },
   {
@@ -89,7 +89,7 @@ const stateItems = [
     activeColor: "#F0A236",
     state: {
       active: [RoundState.Mark],
-      disabled: [RoundState.None, RoundState.Complete],
+      disabled: [RoundState.Complete],
     },
   },
 ];

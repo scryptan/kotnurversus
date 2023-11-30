@@ -25,7 +25,6 @@ export type CreateRound = {
 };
 
 export enum RoundState {
-  None = "none",
   Prepare = "prepare",
   Presentation = "presentation",
   Defense = "defense",

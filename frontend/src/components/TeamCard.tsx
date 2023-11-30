@@ -137,22 +137,33 @@ const ButtonTeamCard = ({
   team,
   ...props
 }: ButtonTeamCardProps) => {
+  const hoverProps = {
+    borderColor: activeColor,
+    _dark: { borderColor: activeColor },
+  };
+  const activeProps = {
+    ...hoverProps,
+    boxShadow: `0px 0px 20px 0px ${activeColor}`,
+  };
+
   return (
     <Box
       as="button"
       w="fit-content"
+      outline="none"
+      textAlign="start"
+      _hover={{ "#card": hoverProps }}
+      _focusVisible={{ "#card": hoverProps }}
       onClick={() => team.id && onChoose?.(team.id)}
       {...props}
     >
       <BaseTeamCard
+        id="card"
         team={team}
-        {...(isChosen
-          ? {
-              borderColor: activeColor,
-              _dark: { borderColor: activeColor },
-              boxShadow: `0px 0px 20px 0px ${activeColor}`,
-            }
-          : {})}
+        transition={["border", "box-shadow"]
+          .map((x) => `${x} 200ms ease-out`)
+          .join(", ")}
+        {...(isChosen ? activeProps : {})}
       />
     </Box>
   );

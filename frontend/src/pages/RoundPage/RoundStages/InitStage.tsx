@@ -4,22 +4,18 @@ import api from "~/api";
 import TeamCard from "~/components/TeamCard";
 import useHandleError from "~/hooks/useHandleError";
 import ArrowRightIcon from "~/icons/ArrowRightIcon";
-import { TourneyTeam } from "~/types/tourney";
 import queryKeys from "~/utils/query-keys";
+import { useRoundContext } from "../round-context";
 
-type Props = {
-  roundId: string;
-  teamA?: TourneyTeam;
-  teamB?: TourneyTeam;
-};
-
-const InitStage = ({ roundId, teamA, teamB }: Props) => {
+const InitStage = () => {
   const handleError = useHandleError();
   const queryClient = useQueryClient();
+  const { round, getTeams } = useRoundContext();
+  const [teamA, teamB] = getTeams();
 
   const initRoundMutation = useMutation({
     mutationFn: async () => {
-      return await api.rounds.init(roundId);
+      return await api.rounds.init(round.id);
     },
     onSuccess: async (round) => {
       queryClient.setQueryData(queryKeys.round(round.id), round);

@@ -1,3 +1,4 @@
+import { Operation } from "fast-json-patch";
 import { PaginationResponse } from "~/types/pagination";
 import { Round } from "~/types/round";
 import axiosClient from "~/utils/axios-client";
@@ -23,6 +24,10 @@ export class RoundsController {
           participants: round.participants.sort((a, b) => a.order - b.order),
         })),
     };
+  }
+
+  async patch(id: string, operations: Operation[]): Promise<Round> {
+    return await axiosClient.patch(`/api/v1/Rounds/${id}`, operations);
   }
 
   async init(id: string): Promise<Round> {

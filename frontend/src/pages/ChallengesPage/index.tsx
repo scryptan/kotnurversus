@@ -1,12 +1,9 @@
 import { Center, Heading, Stack } from "@chakra-ui/react";
-import { useQuery } from "@tanstack/react-query";
-import api from "~/api";
 import Loading from "~/components/Loading";
 import useAutoRedirect from "~/hooks/useAutoRedirect";
+import useChallengesQuery from "~/hooks/useChallengesQuery";
 import paths from "~/pages/paths";
-import { Challenge } from "~/types/challenge";
 import { useAuthContext } from "~/utils/auth-context";
-import queryKeys from "~/utils/query-keys";
 import CategoryCard from "./CategoryCard";
 import CreateCategoryButton from "./CreateCategoryButton";
 
@@ -36,23 +33,13 @@ const ChallengesPage = () => {
 };
 
 const ChallengeSection = () => {
-  const categoriesQuery = useQuery({
-    queryKey: queryKeys.categories,
-    queryFn: api.categories.find,
-    staleTime: 1000 * 60 * 50,
-  });
+  const query = useChallengesQuery();
 
-  const challengesQuery = useQuery({
-    queryKey: queryKeys.challenges,
-    queryFn: api.challenges.find,
-    staleTime: 1000 * 60 * 50,
-  });
-
-  if (categoriesQuery.isLoading || challengesQuery.isLoading) {
+  if (query.isLoading) {
     return <Loading />;
   }
 
-  if (!categoriesQuery.data || !challengesQuery.data) {
+  if (query.isError) {
     return (
       <Center py={10}>
         <Heading fontSize="xl">Не удалось загрузить доп. требования</Heading>
@@ -60,26 +47,15 @@ const ChallengeSection = () => {
     );
   }
 
-  const categories = categoriesQuery.data.items || [];
-
-  if (categories.length === 0) {
+  if (query.categories.length === 0) {
     return null;
   }
 
-  const challengesByCategoryId = challengesQuery.data.items.reduce(
-    (result, challenge) => {
-      if (!result[challenge.categoryId]) {
-        result[challenge.categoryId] = [];
-      }
-      result[challenge.categoryId]?.push(challenge);
-      return result;
-    },
-    {} as Record<string, Challenge[]>
-  );
+  const challengesByCategoryId = query.getChallengesByCategoryId();
 
   return (
     <Stack spacing={12}>
-      {categories
+      {query.categories
         .sort((a, b) => a.title.localeCompare(b.title))
         .map((category) => (
           <CategoryCard

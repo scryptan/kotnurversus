@@ -1,37 +1,35 @@
 import { Grid } from "@chakra-ui/react";
-import { Round } from "~/types/round";
-import { Tourney } from "~/types/tourney";
+import { RoundState } from "~/types/round";
+import { useRoundContext } from "../round-context";
+import ChallengesSection from "./ChallengesSection";
 import InitStage from "./InitStage";
+import PrepareStage from "./PrepareStage";
 
-type Props = {
-  tourney: Tourney;
-  round: Round;
-};
-
-const RoundStages = ({ tourney, round }: Props) => {
-  const [teamA, teamB] = round.participants.map((p) =>
-    tourney.teams.find((team) => p.teamId === team.id)
-  );
+const RoundStages = () => {
+  const { round, state } = useRoundContext();
 
   return (
     <Grid
+      gridGap={8}
+      gridTemplateColumns="160px 250px 1fr 250px 160px"
       gridTemplateAreas={[
-        '"teamA main teamB"',
-        '"timeoutsA . timeoutsB"',
-        '"control control control"',
+        '"c1 teamA main teamB c2"',
+        '"c1 timeoutsA . timeoutsB c2"',
+        '"c1 control control control c2"',
+        '"c1 . . . c2"',
       ].join("")}
-      gridTemplateColumns="1fr 1fr 1fr"
-      gridGap={6}
     >
-      {/* {(!round.currentState?.state ||
-        round.currentState.state === RoundState.None) && (
-        <InitStage roundId={round.id} teamA={teamA} teamB={teamB} />
-      )}
-      {round.currentState?.state === RoundState.Prepare && (
-        <PrepareStage roundId={round.id} teamA={teamA} teamB={teamB} />
-      )} */}
-      <InitStage roundId={round.id} teamA={teamA} teamB={teamB} />
-      {/* <PrepareStage roundId={round.id} teamA={teamA} teamB={teamB} /> */}
+      {!state && <InitStage />}
+      {state === RoundState.Prepare && <PrepareStage />}
+      {/* <InitStage /> */}
+      {/* <PrepareStage /> */}
+      {round.participants.slice(0, 2).map((p, i) => (
+        <ChallengesSection
+          key={p.teamId}
+          gridArea={`c${i + 1}`}
+          teamId={p.teamId}
+        />
+      ))}
     </Grid>
   );
 };

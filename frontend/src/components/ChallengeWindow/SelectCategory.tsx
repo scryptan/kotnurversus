@@ -9,7 +9,7 @@ const SelectCategory = (props: Omit<SingleSelectProps<string>, "options">) => {
   const categoriesQuery = useQuery({
     queryKey: queryKeys.categories,
     queryFn: api.categories.find,
-    staleTime: 1000 * 60 * 50,
+    staleTime: 1000 * 60 * 5,
   });
 
   const options = (categoriesQuery.data?.items || []).map((c) => ({

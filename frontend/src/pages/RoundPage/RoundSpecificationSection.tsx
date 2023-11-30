@@ -8,19 +8,14 @@ import {
   Heading,
   Text,
 } from "@chakra-ui/react";
-import { TourneySpecification } from "~/types/tourney";
 import { createArrayFromSpecification } from "~/utils/round";
+import { useRoundContext } from "./round-context";
 
-type Props = {
-  specification: TourneySpecification;
-};
+const RoundSpecificationSection = () => {
+  const { round } = useRoundContext();
+  const items = createArrayFromSpecification(round.specification);
 
-const RoundSpecificationSection = ({ specification }: Props) => {
-  const items = createArrayFromSpecification(specification);
-
-  if (items.length === 0) {
-    return null;
-  }
+  if (items.length < 1) return null;
 
   return (
     <Box>
