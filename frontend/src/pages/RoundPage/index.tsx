@@ -1,9 +1,8 @@
-import { Stack } from "@chakra-ui/react";
+import { Flex } from "@chakra-ui/react";
 import { useParams } from "react-router-dom";
 import RoundHeader from "./RoundHeader";
 import RoundSpecificationSection from "./RoundSpecificationSection";
 import RoundStages from "./RoundStages";
-import RoundStateSection from "./RoundStateSection";
 import { RoundProvider } from "./round-context";
 
 type PageParams = {
@@ -15,20 +14,19 @@ const RoundPage = () => {
 
   return (
     <RoundProvider roundId={roundId}>
-      <Stack
+      <Flex
         px={2}
         pb={20}
         mx="auto"
         w="full"
         maxW="wrapper"
         flex={1}
-        spacing={8}
+        flexDir="column"
       >
         <RoundHeader />
-        <RoundStateSection />
-        <RoundStages />
-        <RoundSpecificationSection />
-      </Stack>
+        <RoundStages mt={12} />
+        <RoundSpecificationSection mt={20} />
+      </Flex>
     </RoundProvider>
   );
 };

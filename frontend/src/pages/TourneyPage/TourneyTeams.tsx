@@ -79,17 +79,17 @@ const TourneyTeams = ({ id, teams: defaultTeams }: Props) => {
           const isDefault = team.id === defaultTeam.current.id;
 
           if (isEditable) {
-            return <TeamCard.Base key={team.id} team={team} />;
+            return (
+              <TeamCard.Editable
+                key={team.id}
+                team={team}
+                onChange={isDefault ? handleAdd : handleChange}
+                onRemove={isDefault ? undefined : handleRemove}
+              />
+            );
           }
-
-          return (
-            <TeamCard.Editable
-              key={team.id}
-              team={team}
-              onChange={isDefault ? handleAdd : handleChange}
-              onRemove={isDefault ? undefined : handleRemove}
-            />
-          );
+          
+          return <TeamCard.Base key={team.id} team={team} />;
         })}
       </Wrap>
     </TourneySectionLayout>

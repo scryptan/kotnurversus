@@ -1,6 +1,6 @@
 import { Operation } from "fast-json-patch";
 import { PaginationResponse } from "~/types/pagination";
-import { Round } from "~/types/round";
+import { Round, RoundState } from "~/types/round";
 import axiosClient from "~/utils/axios-client";
 
 export class RoundsController {
@@ -32,5 +32,19 @@ export class RoundsController {
 
   async init(id: string): Promise<Round> {
     return await axiosClient.post(`/api/v1/Rounds/${id}/init`);
+  }
+
+  async start(id: string, state: RoundState, teamId?: string): Promise<Round> {
+    return await axiosClient.post(
+      `/api/v1/Rounds/${id}/start/${state}`,
+      teamId ? { teamId } : {}
+    );
+  }
+
+  async end(id: string, state: RoundState, teamId?: string): Promise<Round> {
+    return await axiosClient.post(
+      `/api/v1/Rounds/${id}/end/${state}`,
+      teamId ? { teamId } : {}
+    );
   }
 }

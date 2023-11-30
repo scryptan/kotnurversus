@@ -11,7 +11,6 @@ const InitStage = () => {
   const handleError = useHandleError();
   const queryClient = useQueryClient();
   const { round, getTeams } = useRoundContext();
-  const [teamA, teamB] = getTeams();
 
   const initRoundMutation = useMutation({
     mutationFn: async () => {
@@ -25,9 +24,12 @@ const InitStage = () => {
 
   return (
     <>
-      {teamA && (
-        <TeamCard.Base gridArea="teamA" team={teamA} justifySelf="flex-end" />
-      )}
+      {getTeams().map((team, i) => {
+        if (!team) return null;
+        return (
+          <TeamCard.Base key={team.id} gridArea={`t${i + 1}`} team={team} />
+        );
+      })}
       <Center gridArea="main">
         <Button
           size="lg"
@@ -41,7 +43,6 @@ const InitStage = () => {
           onClick={() => initRoundMutation.mutateAsync()}
         />
       </Center>
-      {teamB && <TeamCard.Base gridArea="teamB" team={teamB} />}
     </>
   );
 };

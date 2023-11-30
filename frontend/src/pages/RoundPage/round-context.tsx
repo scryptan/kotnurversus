@@ -1,9 +1,10 @@
 import { Center, Heading } from "@chakra-ui/react";
 import { useQuery } from "@tanstack/react-query";
+import { addSeconds } from "date-fns";
 import { ReactNode, createContext, useContext } from "react";
 import api from "~/api";
 import Loading from "~/components/Loading";
-import { Round } from "~/types/round";
+import { Round, RoundState } from "~/types/round";
 import { Tourney } from "~/types/tourney";
 import queryKeys from "~/utils/query-keys";
 
@@ -57,16 +58,31 @@ export const useRoundContext = () => {
   const { tourney, round } = useContext(Context);
 
   const state = round.currentState?.state;
+  const isPublic = state !== undefined;
 
   const getTeams = () =>
-    round.participants.map((p) =>
-      tourney.teams.find((team) => p.teamId === team.id)
-    );
+    round.participants
+      .map((p) => tourney.teams.find((team) => p.teamId === team.id))
+      .slice(0, 2);
+
+  const getTimerEnd = () => {
+    const startTime = round.currentState?.value?.start;
+    if (!startTime) return undefined;
+
+    switch (state) {
+      case RoundState.Prepare:
+        return addSeconds(startTime, round.settings.prepareSeconds - 1);
+      default:
+        return undefined;
+    }
+  };
 
   return {
+    isPublic,
     tourney,
     round,
     state,
     getTeams,
+    getTimerEnd,
   };
 };

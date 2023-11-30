@@ -1,23 +1,25 @@
-import { Grid } from "@chakra-ui/react";
+import { BoxProps, Grid } from "@chakra-ui/react";
 import { RoundState } from "~/types/round";
 import { useRoundContext } from "../round-context";
 import ChallengesSection from "./ChallengesSection";
 import InitStage from "./InitStage";
 import PrepareStage from "./PrepareStage";
 
-const RoundStages = () => {
+const RoundStages = (props: BoxProps) => {
   const { round, state } = useRoundContext();
 
   return (
     <Grid
       gridGap={8}
       gridTemplateColumns="160px 250px 1fr 250px 160px"
+      gridTemplateRows="repeat(3, min-content) 1fr"
       gridTemplateAreas={[
-        '"c1 teamA main teamB c2"',
-        '"c1 timeoutsA . timeoutsB c2"',
-        '"c1 control control control c2"',
+        '"c1 t1 main t2 c2"',
+        '"c1 to1 . to2 c2"',
+        '"c1 b b b c2"',
         '"c1 . . . c2"',
       ].join("")}
+      {...props}
     >
       {!state && <InitStage />}
       {state === RoundState.Prepare && <PrepareStage />}

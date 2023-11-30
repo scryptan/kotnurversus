@@ -5,20 +5,22 @@ import {
   AccordionItem,
   AccordionPanel,
   Box,
+  BoxProps,
   Heading,
   Text,
 } from "@chakra-ui/react";
 import { createArrayFromSpecification } from "~/utils/round";
 import { useRoundContext } from "./round-context";
 
-const RoundSpecificationSection = () => {
-  const { round } = useRoundContext();
-  const items = createArrayFromSpecification(round.specification);
+const RoundSpecificationSection = (props: BoxProps) => {
+  const { isPublic, round } = useRoundContext();
 
+  if (!isPublic) return null;
+  const items = createArrayFromSpecification(round.specification);
   if (items.length < 1) return null;
 
   return (
-    <Box>
+    <Box {...props}>
       <Heading mb={4} fontSize="3xl">
         Описание задачи
       </Heading>

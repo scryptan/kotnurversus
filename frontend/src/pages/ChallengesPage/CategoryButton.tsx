@@ -64,6 +64,7 @@ const CategoryButton = ({ category, ...props }: Props) => {
           fontSize="xl"
           lineHeight="150%"
           fontWeight="normal"
+          wordBreak="break-all"
           noOfLines={1}
           children={category.title}
         />

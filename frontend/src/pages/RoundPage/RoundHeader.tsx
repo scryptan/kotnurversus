@@ -1,27 +1,31 @@
-import { BoxProps, Heading, Stack, Text } from "@chakra-ui/react";
+import { Heading, Text } from "@chakra-ui/react";
 import Breadcrumb from "~/components/Breadcrumb";
 import paths from "~/pages/paths";
 import { Tourney } from "~/types/tourney";
 import { calcRoundName } from "~/utils/round";
 import { useRoundContext } from "./round-context";
+import RoundStateSection from "./RoundStateSection";
 
-const RoundHeader = (props: BoxProps) => {
-  const { tourney, round } = useRoundContext();
+const RoundHeader = () => {
+  const { isPublic, tourney, round } = useRoundContext();
 
   return (
-    <Stack spacing={8} {...props}>
+    <>
       <Breadcrumb items={createBreadcrumbItems(tourney)} />
-      <Heading fontSize="4xl">
+      <Heading mt={8} fontSize="4xl">
         Игра "{calcRoundName(round, tourney.teams)}"
       </Heading>
-      <Text
-        pt={4}
-        fontSize="3xl"
-        fontWeight="bold"
-        textAlign="center"
-        children={round.specification.title}
-      />
-    </Stack>
+      {isPublic && (
+        <Text
+          mt={12}
+          fontSize="3xl"
+          fontWeight="bold"
+          textAlign="center"
+          children={round.specification.title}
+        />
+      )}
+      <RoundStateSection mt={isPublic ? 4 : 16} />
+    </>
   );
 };
 

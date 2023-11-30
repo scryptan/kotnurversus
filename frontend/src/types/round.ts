@@ -12,6 +12,10 @@ export type Round = {
   winnerId?: string;
   currentState?: {
     state?: RoundState;
+    value?: {
+      currentState?: RoundState;
+      start?: Date;
+    };
   };
   order: number;
 };

@@ -126,12 +126,14 @@ const EditableTeamCard = ({
 
 type ButtonTeamCardProps = {
   isChosen?: boolean;
+  isDisabled?: boolean;
   activeColor: string;
   onChoose?: (teamId: string) => void;
 } & BaseTeamCardProps;
 
 const ButtonTeamCard = ({
   isChosen,
+  isDisabled,
   activeColor,
   onChoose,
   team,
@@ -152,6 +154,7 @@ const ButtonTeamCard = ({
       w="fit-content"
       outline="none"
       textAlign="start"
+      disabled={isDisabled}
       _hover={{ "#card": hoverProps }}
       _focusVisible={{ "#card": hoverProps }}
       onClick={() => team.id && onChoose?.(team.id)}

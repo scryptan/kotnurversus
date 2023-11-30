@@ -51,6 +51,7 @@ export const castToTourneyRound =
           resultText: `${p.points}`,
         };
       }),
+      ...(state ? { specification: round.specification } : {}),
     };
   };
 
