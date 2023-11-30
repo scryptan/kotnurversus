@@ -8,15 +8,15 @@ import {
   Heading,
   Text,
 } from "@chakra-ui/react";
-import { MatchTask } from "~/types/match";
-import { createArrayFromMatchTask } from "~/utils/match";
+import { TourneySpecification } from "~/types/tourney";
+import { createArrayFromSpecification } from "~/utils/round";
 
 type Props = {
-  task: MatchTask;
+  specification: TourneySpecification;
 };
 
-const MatchTaskSection = ({ task }: Props) => {
-  const items = createArrayFromMatchTask(task);
+const RoundSpecificationSection = ({ specification }: Props) => {
+  const items = createArrayFromSpecification(specification);
 
   if (items.length === 0) {
     return null;
@@ -49,4 +49,4 @@ const MatchTaskSection = ({ task }: Props) => {
   );
 };
 
-export default MatchTaskSection;
+export default RoundSpecificationSection;

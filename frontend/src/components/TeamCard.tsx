@@ -22,38 +22,11 @@ import IconButtonWithTooltip from "~/components/IconButtonWithTooltip";
 import CrossIcon from "~/icons/CrossIcon";
 import { TourneyTeam } from "~/types/tourney";
 
-type Props = {
-  isEditMode?: boolean;
-  team?: Partial<TourneyTeam>;
-  onChange?: (team: TourneyTeam) => void;
-  onRemove?: (teamId: string) => void;
-} & Omit<BoxProps, "onChange">;
+type BaseTeamCardProps = {
+  team: Partial<TourneyTeam>;
+} & BoxProps;
 
-const TeamCard = ({
-  isEditMode,
-  team,
-  onChange,
-  onRemove,
-  ...props
-}: Props) => {
-  if (isEditMode) {
-    return (
-      <EditableTeamCard
-        team={team}
-        onChange={onChange}
-        onRemove={onRemove}
-        {...props}
-      />
-    );
-  }
-
-  return <BaseTeamCard team={team} {...props} />;
-};
-
-const BaseTeamCard = ({
-  team,
-  ...props
-}: Omit<Props, "isEditMode" | "onChange" | "onRemove">) => (
+const BaseTeamCard = ({ team, ...props }: BaseTeamCardProps) => (
   <TeamCardLayout {...props}>
     <TeamCardTitle>
       <Text
@@ -81,7 +54,17 @@ const BaseTeamCard = ({
   </TeamCardLayout>
 );
 
-const EditableTeamCard = ({ team, onChange, onRemove, ...props }: Props) => {
+type EditableTeamCardProps = {
+  onChange?: (team: TourneyTeam) => void;
+  onRemove?: (teamId: string) => void;
+} & Omit<BaseTeamCardProps, "onChange">;
+
+const EditableTeamCard = ({
+  team,
+  onChange,
+  onRemove,
+  ...props
+}: EditableTeamCardProps) => {
   const { register, getValues, control, handleSubmit } = useForm<TeamSchema>({
     shouldFocusError: false,
     resolver: zodResolver(teamSchema),
@@ -118,6 +101,7 @@ const EditableTeamCard = ({ team, onChange, onRemove, ...props }: Props) => {
         <Input
           h="42px"
           size="lg"
+          maxLength={20}
           placeholder="Название команды"
           {...register("title")}
         />
@@ -140,23 +124,60 @@ const EditableTeamCard = ({ team, onChange, onRemove, ...props }: Props) => {
   );
 };
 
-const TeamCardLayout = forwardRef<BoxProps, "div">((props, ref) => (
-  <Box
-    ref={ref}
-    w="250px"
-    h="fit-content"
-    bg="blackAlpha.100"
-    boxShadow="base"
-    borderRadius={4}
-    border="1px solid"
-    borderColor="blackAlpha.400"
-    _dark={{
-      bg: "whiteAlpha.100",
-      borderColor: "whiteAlpha.400",
-    }}
-    {...props}
-  />
-));
+type ButtonTeamCardProps = {
+  isChosen?: boolean;
+  activeColor: string;
+  onChoose?: (teamId: string) => void;
+} & BaseTeamCardProps;
+
+const ButtonTeamCard = ({
+  isChosen,
+  activeColor,
+  onChoose,
+  team,
+  ...props
+}: ButtonTeamCardProps) => {
+  return (
+    <Box
+      as="button"
+      w="fit-content"
+      onClick={() => team.id && onChoose?.(team.id)}
+      {...props}
+    >
+      <BaseTeamCard
+        team={team}
+        {...(isChosen
+          ? {
+              borderColor: activeColor,
+              _dark: { borderColor: activeColor },
+              boxShadow: `0px 0px 20px 0px ${activeColor}`,
+            }
+          : {})}
+      />
+    </Box>
+  );
+};
+
+const TeamCardLayout = forwardRef<BoxProps, "div">(
+  ({ _dark, ...props }, ref) => (
+    <Box
+      ref={ref}
+      w="250px"
+      h="fit-content"
+      bg="blackAlpha.100"
+      boxShadow="base"
+      borderRadius={4}
+      border="1px solid"
+      borderColor="blackAlpha.400"
+      _dark={{
+        bg: "whiteAlpha.100",
+        borderColor: "whiteAlpha.400",
+        ..._dark,
+      }}
+      {...props}
+    />
+  )
+);
 
 const TeamCardTitle = (props: BoxProps) => (
   <Flex px={4} h="42px" align="center" {...props} />
@@ -169,7 +190,10 @@ const TeamCardMates = (props: ListProps) => (
     py={2}
     spacing={1}
     borderTop="1px solid"
-    borderColor="inherit"
+    borderColor="blackAlpha.400"
+    _dark={{
+      borderColor: "whiteAlpha.400",
+    }}
     {...props}
   />
 );
@@ -243,11 +267,18 @@ const castToTeamSchema = (
     : [{ name: "" }],
 });
 
-const castToTeam = (data: TeamSchema, team?: Partial<TourneyTeam>): TourneyTeam => ({
+const castToTeam = (
+  data: TeamSchema,
+  team?: Partial<TourneyTeam>
+): TourneyTeam => ({
   id: team?.id || uuid(),
   title: data.title,
   mates: data.mates.flatMap((p) => (p.name.trim() ? [p.name.trim()] : [])),
   order: team?.order || 0,
 });
 
-export default TeamCard;
+export default {
+  Base: BaseTeamCard,
+  Editable: EditableTeamCard,
+  Button: ButtonTeamCard,
+};

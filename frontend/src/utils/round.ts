@@ -1,5 +1,10 @@
 import { CreateRound, Round } from "~/types/round";
-import { TourneyRound, TourneyRoundState, TourneyTeam } from "~/types/tourney";
+import {
+  TourneyRound,
+  TourneyRoundState,
+  TourneySpecification,
+  TourneyTeam,
+} from "~/types/tourney";
 
 export const castToCreateRound =
   (tourneyId: string) =>
@@ -25,22 +30,52 @@ export const castToCreateRound =
 
 export const castToTourneyRound =
   (teams: TourneyTeam[], isOrganizer: boolean) =>
-  (round: Round): TourneyRound => ({
-    startTime: "",
-    id: round.id,
-    nextMatchId: round.nextRoundId || null,
-    // TODO: прокинуть стейт из раунда
-    state:
+  (round: Round): TourneyRound => {
+    const state = round.currentState?.state as TourneyRoundState | undefined;
+    const initState =
       isOrganizer && round.participants.length > 1
         ? TourneyRoundState.InitReady
-        : TourneyRoundState.Init,
-    participants: round.participants.map((p) => {
-      const team = teams.find((t) => t.id === p.teamId);
-      return {
-        id: p.teamId,
-        name: team?.title || `Команда ${p.teamId}`,
-        isWinner: p.isWinner,
-        resultText: `${p.points}`,
-      };
-    }),
+        : TourneyRoundState.Init;
+
+    return {
+      startTime: "",
+      id: round.id,
+      nextMatchId: round.nextRoundId || null,
+      state: state || initState,
+      participants: round.participants.map((p) => {
+        const team = teams.find((t) => t.id === p.teamId);
+        return {
+          id: p.teamId,
+          name: team?.title || `Команда ${p.teamId}`,
+          isWinner: p.isWinner,
+          resultText: `${p.points}`,
+        };
+      }),
+    };
+  };
+
+export const calcRoundName = (match: Round, teams: TourneyTeam[]) => {
+  const [firstName, secondName] = match.participants.map(
+    (p) => teams.find((team) => team.id === p.teamId)?.title
+  );
+
+  return `${firstName || "???"} vs ${secondName || "???"}`;
+};
+
+export const createArrayFromSpecification = (
+  specification: TourneySpecification
+) => {
+  const array: Array<{ name: string; text: string }> = [];
+
+  array.push({ name: "Бизнес сценарий", text: specification.title });
+  array.push({
+    name: "Описание",
+    text: specification.businessDescription || "Информация не указана",
   });
+  array.push({
+    name: "Общие требования к архитектуре",
+    text: specification.techDescription || "Информация не указана",
+  });
+
+  return array;
+};

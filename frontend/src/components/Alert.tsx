@@ -83,6 +83,7 @@ const Alert = ({
           py={2}
           fontSize="normal"
           fontWeight="normal"
+          whiteSpace="pre-line"
           children={children}
         />
         <AlertDialogFooter px={6} py={4} gap={4}>

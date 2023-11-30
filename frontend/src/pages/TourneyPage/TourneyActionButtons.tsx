@@ -8,11 +8,13 @@ import PenIcon from "~/icons/PenIcon";
 import UnlockIcon from "~/icons/UnlockIcon";
 import paths from "~/pages/paths";
 import { Tourney } from "~/types/tourney";
-import { addSpecificationToRound } from "~/utils/match";
 import queryKeys from "~/utils/query-keys";
 import { castToCreateRound } from "~/utils/round";
 import { warningToast } from "~/utils/template-toasts";
-import { createMatchesFromTeams } from "~/utils/tourney";
+import {
+  addSpecificationToRound,
+  createMatchesFromTeams,
+} from "~/utils/tourney";
 import { useTourneyContext } from "./tourney-context";
 
 type Props = {
@@ -69,8 +71,11 @@ const TourneyActionButtons = ({ tourney }: Props) => {
         isLoading={startTourney.isPending}
         rightIcon={<UnlockIcon boxSize={6} />}
         onSubmit={startTourney.mutate}
-        alertText="Вы уверены, что хотите начать турнир? Редактирование настроек будет недоступно"
         buttonText="Начать турнир"
+        alertText={[
+          "Вы уверены, что хотите начать турнир?",
+          "Редактирование турнира будет недоступно",
+        ].join("\n")}
       />
     </HStack>
   );

@@ -5,10 +5,14 @@ export type Round = {
   nextRoundId?: string;
   gameId: string;
   settings: TourneySettings;
+  specification: TourneySpecification;
   participants: RoundParticipant[];
   artifacts: unknown[];
   history: unknown[];
   winnerId?: string;
+  currentState?: {
+    state?: RoundState;
+  };
   order: number;
 };
 
@@ -21,6 +25,7 @@ export type CreateRound = {
 };
 
 export enum RoundState {
+  None = "none",
   Prepare = "prepare",
   Presentation = "presentation",
   Defense = "defense",

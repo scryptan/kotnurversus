@@ -2,6 +2,7 @@ import { v4 as uuid } from "uuid";
 import {
   TourneyRound,
   TourneyRoundState,
+  TourneySpecification,
   TourneyTeam,
   TourneyType,
 } from "~/types/tourney";
@@ -30,6 +31,14 @@ export const createMatchesFromTeams = (teams: TourneyTeam[]) => {
 
   return createMatches(baseMatches);
 };
+
+export const addSpecificationToRound =
+  (specifications: TourneySpecification[]) =>
+  (match: TourneyRound, index: number): TourneyRound => ({
+    ...match,
+    badgeValue: index + 1,
+    specification: specifications[index],
+  });
 
 const calcMissingMatchesCount = (teamsCount: number) => {
   let minTeams = 2;

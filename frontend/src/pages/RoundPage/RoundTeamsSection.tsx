@@ -1,31 +1,49 @@
-import { Box, BoxProps, Grid, Spacer, Stack, Text } from "@chakra-ui/react";
+import { Box, BoxProps, Grid, Stack, Text } from "@chakra-ui/react";
 import { addSeconds } from "date-fns";
 import IconButtonWithTooltip, {
   IconButtonWithTooltipProps,
 } from "~/components/IconButtonWithTooltip";
-import TeamCard from "~/components/TeamCard";
 import useTimer from "~/hooks/useTimer";
 import NextIcon from "~/icons/NextIcon";
 import PauseIcon from "~/icons/PauseIcon";
-import { Match, TourneyRoundState } from "~/types/match";
+import { Round } from "~/types/round";
+import { Tourney } from "~/types/tourney";
 
 type Props = {
-  match: Match;
+  tourney: Tourney;
+  round: Round;
 };
 
-const MatchStateSection = ({ match }: Props) => {
-  const [teamA, teamB] = match.teams;
+const RoundTeamsSection = ({ tourney, round }: Props) => {
+  // const [teamA, teamB] = round.participants.map((p) =>
+  //   tourney.teams.find((team) => p.teamId === team.id)
+  // );
 
   return (
-    <Grid gridTemplateColumns="1fr 1.5fr 1fr" gridGap={6}>
-      {teamA ? <TeamCard team={teamA} justifySelf="flex-end" /> : <Spacer />}
-      <StateCard match={match} justifySelf="center" />
-      {teamB ? <TeamCard team={teamB} /> : <Spacer />}
+    <Grid
+      gridTemplateAreas={[
+        '"teamA main teamB"',
+        '"timeoutsA . timeoutsB"',
+        '"control control control"',
+      ].join("")}
+      gridTemplateColumns="1fr 1fr 1fr"
+      gridGap={6}
+    >
+      {/* {(!round.currentState?.state ||
+        round.currentState.state === RoundState.None) && (
+        <StartRoundCard roundId={round.id} />
+      )}
+      {round.currentState?.state === RoundState.Prepare && (
+        <PrepareCard roundId={round.id} />
+      )} */}
+      {/* <StartRoundCard roundId={round.id} teamA={teamA} teamB={teamB} /> */}
+      {/* <PrepareCard roundId={round.id} teamA={teamA} teamB={teamB} /> */}
+      <StateCard tourney={tourney} round={round} justifySelf="center" />
     </Grid>
   );
 };
 
-const StateCard = ({ match, ...props }: Props & BoxProps) => (
+const StateCard = ({ round: _, ...props }: Props & BoxProps) => (
   <Stack spacing={3} align="center" textAlign="center" {...props}>
     <Text
       color="blackAlpha.600"
@@ -36,7 +54,7 @@ const StateCard = ({ match, ...props }: Props & BoxProps) => (
     <Text
       fontSize="4xl"
       textTransform="uppercase"
-      children={matchStateMap[match.state] || match.state}
+      // children={matchStateMap[match.state] || match.state}
     />
     <Timer endDate={addSeconds(new Date(), 75)} />
   </Stack>
@@ -111,13 +129,13 @@ const TimerButton = (props: IconButtonWithTooltipProps) => (
   />
 );
 
-const matchStateMap: Record<TourneyRoundState, string> = {
-  [TourneyRoundState.Init]: "Инициализация",
-  [TourneyRoundState.WalkOver]: "Завершено",
-  [TourneyRoundState.Prepare]: "Подготовка",
-  [TourneyRoundState.Play]: "Презентация",
-  [TourneyRoundState.Defense]: "Защита",
-  [TourneyRoundState.Done]: "Завершено",
-};
+// const matchStateMap: Record<TourneyRoundState, string> = {
+//   [TourneyRoundState.Init]: "Инициализация",
+//   [TourneyRoundState.WalkOver]: "Завершено",
+//   [TourneyRoundState.Prepare]: "Подготовка",
+//   [TourneyRoundState.Play]: "Презентация",
+//   [TourneyRoundState.Defense]: "Защита",
+//   [TourneyRoundState.Done]: "Завершено",
+// };
 
-export default MatchStateSection;
+export default RoundTeamsSection;

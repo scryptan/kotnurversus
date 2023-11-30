@@ -10,10 +10,9 @@ import {
   TourneyState,
   TourneyTeam,
 } from "~/types/tourney";
-import { addSpecificationToRound } from "~/utils/match";
 import queryKeys from "~/utils/query-keys";
 import { castToTourneyRound } from "~/utils/round";
-import { createMatchesFromTeams } from "~/utils/tourney";
+import { addSpecificationToRound, createMatchesFromTeams } from "~/utils/tourney";
 import { useTourneyContext } from "../tourney-context";
 import Match from "./Match";
 import SvgViewer from "./SvgViewer";

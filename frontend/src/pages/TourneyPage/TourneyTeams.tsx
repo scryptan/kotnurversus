@@ -77,11 +77,15 @@ const TourneyTeams = ({ id, teams: defaultTeams }: Props) => {
       <Wrap mt={6} spacing={10}>
         {allTeams.map((team) => {
           const isDefault = team.id === defaultTeam.current.id;
+
+          if (isEditable) {
+            return <TeamCard.Base key={team.id} team={team} />;
+          }
+
           return (
-            <TeamCard
+            <TeamCard.Editable
               key={team.id}
               team={team}
-              isEditMode={isEditable}
               onChange={isDefault ? handleAdd : handleChange}
               onRemove={isDefault ? undefined : handleRemove}
             />

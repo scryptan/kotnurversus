@@ -31,7 +31,7 @@ const Match = ({
   const linkProps = !isInit
     ? {
         as: Link,
-        to: paths.match.path(match.id),
+        to: paths.round.path(match.id),
         cursor: "pointer",
         transition: "opacity 200ms ease-out",
         _hover: { opacity: 0.75 },
