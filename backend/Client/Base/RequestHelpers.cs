@@ -37,7 +37,7 @@ internal static class RequestHelpers
         {
             new StringEnumConverter(new CamelCaseNamingStrategy()),
         },
-        FloatParseHandling = FloatParseHandling.Decimal,
+        FloatParseHandling = FloatParseHandling.Decimal
     };
 
     public static Request WithFieldFilter<T>(this Request request, T? filter)
