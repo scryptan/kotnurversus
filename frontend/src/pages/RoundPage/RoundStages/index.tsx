@@ -2,6 +2,7 @@ import { BoxProps, Grid } from "@chakra-ui/react";
 import { RoundState } from "~/types/round";
 import { useRoundContext } from "../round-context";
 import ChallengesSection from "./ChallengesSection";
+import CompleteStage from "./CompleteStage";
 import DefenseStage from "./DefenseStage";
 import InitStage from "./InitStage";
 import MarkStage from "./MarkStage";
@@ -43,7 +44,7 @@ const STAGES: Record<RoundState, () => JSX.Element> = {
   [RoundState.Presentation]: PresentationStage,
   [RoundState.Defense]: DefenseStage,
   [RoundState.Mark]: MarkStage,
-  [RoundState.Complete]: () => <></>,
+  [RoundState.Complete]: CompleteStage,
   [RoundState.Pause]: () => <></>,
 };
 
