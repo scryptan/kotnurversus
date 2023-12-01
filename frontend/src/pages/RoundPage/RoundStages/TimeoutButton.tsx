@@ -1,4 +1,4 @@
-import { BoxProps, Button, Stack, Text } from "@chakra-ui/react";
+import { BoxProps, Button, Heading, Stack, Text } from "@chakra-ui/react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import api from "~/api";
 import useHandleError from "~/hooks/useHandleError";
@@ -13,7 +13,7 @@ type Props = {
 const TimeoutButton = ({ teamId, ...props }: Props) => {
   const handleError = useHandleError();
   const queryClient = useQueryClient();
-  const { round } = useRoundContext();
+  const { isOrganizer, round } = useRoundContext();
 
   const timeoutsSpent = round.history.filter(
     (s) => s.state === RoundState.Pause && s.value?.teamId === teamId
@@ -34,13 +34,17 @@ const TimeoutButton = ({ teamId, ...props }: Props) => {
 
   return (
     <Stack px={10} spacing={2} {...props}>
-      <Button
-        colorScheme="gray"
-        children="Взять таймаут"
-        isDisabled={leftTimeouts < 1}
-        isLoading={startTimeoutMutation.isPending}
-        onClick={() => startTimeoutMutation.mutateAsync()}
-      />
+      {isOrganizer ? (
+        <Button
+          colorScheme="gray"
+          children="Взять таймаут"
+          isDisabled={leftTimeouts < 1}
+          isLoading={startTimeoutMutation.isPending}
+          onClick={() => startTimeoutMutation.mutateAsync()}
+        />
+      ) : (
+        <Heading textAlign="center" fontSize="md" children="Таумауты" />
+      )}
       <Text textAlign="center" fontSize="sm">
         Осталось {leftTimeouts} из {maxTimeouts}
       </Text>

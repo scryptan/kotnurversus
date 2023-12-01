@@ -27,7 +27,7 @@ const DefenseStage = () => {
 const DefenseStartStage = () => {
   const handleError = useHandleError();
   const queryClient = useQueryClient();
-  const { round, currentTeamId, getTeams } = useRoundContext();
+  const { isOrganizer, round, currentTeamId, getTeams } = useRoundContext();
 
   const startMutation = useMutation({
     mutationFn: async () => {
@@ -64,14 +64,16 @@ const DefenseStartStage = () => {
           Подготовка команды для защиты
         </Text>
       </Center>
-      <Stack align="center" gridArea="b">
+      {isOrganizer && (
         <Button
+          gridArea="b"
+          justifySelf="center"
           colorScheme="teal"
           isLoading={startMutation.isPending}
           onClick={() => startMutation.mutateAsync()}
           children="Запустить таймер"
         />
-      </Stack>
+      )}
     </>
   );
 };
@@ -83,7 +85,8 @@ type DefenseEndStageProps = {
 const DefenseEndStage = ({ timerEnd }: DefenseEndStageProps) => {
   const handleError = useHandleError();
   const queryClient = useQueryClient();
-  const { tourney, round, getTeams, isStateFirstTime } = useRoundContext();
+  const { isOrganizer, tourney, round, getTeams, isStateFirstTime } =
+    useRoundContext();
 
   const isFirstTime = isStateFirstTime(STAGE_STATE);
 
@@ -134,20 +137,22 @@ const DefenseEndStage = ({ timerEnd }: DefenseEndStageProps) => {
         <Text textAlign="center" fontSize="3xl" lineHeight="150%">
           Защита команды "{currentTeam?.title || "???"}"
         </Text>
-        <ButtonWithAlert
-          colorScheme="teal"
-          isLoading={endMutation.isPending}
-          onSubmit={() => endMutation.mutateAsync()}
-          buttonText={
-            isFirstTime
-              ? "Перейти к презентации другой команды"
-              : "Перейти к следующему этапу"
-          }
-          alertText={[
-            "Вы уверены, что хотите перейти к следующему этапу?",
-            "Вернуться будет невозможно",
-          ].join("\n")}
-        />
+        {isOrganizer && (
+          <ButtonWithAlert
+            colorScheme="teal"
+            isLoading={endMutation.isPending}
+            onSubmit={() => endMutation.mutateAsync()}
+            buttonText={
+              isFirstTime
+                ? "Перейти к презентации другой команды"
+                : "Перейти к следующему этапу"
+            }
+            alertText={[
+              "Вы уверены, что хотите перейти к следующему этапу?",
+              "Вернуться будет невозможно",
+            ].join("\n")}
+          />
+        )}
       </Stack>
     </>
   );

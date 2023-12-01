@@ -30,7 +30,7 @@ const PrepareStage = () => {
 const PrepareStartStage = () => {
   const handleError = useHandleError();
   const queryClient = useQueryClient();
-  const { round, getTeams } = useRoundContext();
+  const { isOrganizer, round, getTeams } = useRoundContext();
   const [currentTeam, setCurrentTeam] = useState<TourneyTeam>();
 
   const handleChoose = (team: TourneyTeam) => () => setCurrentTeam(team);
@@ -55,7 +55,7 @@ const PrepareStartStage = () => {
             gridArea={`t${i + 1}`}
             activeColor={STAGE_COLOR}
             team={team}
-            isDisabled={startMutation.isPending}
+            isDisabled={!isOrganizer || startMutation.isPending}
             onClick={handleChoose(team)}
           />
         );
@@ -72,24 +72,28 @@ const PrepareStartStage = () => {
           требований
         </Text>
       </Center>
-      <Stack align="center" gridArea="b">
-        <Text textAlign="center" fontSize="md" lineHeight="150%">
-          Нажмите на команду, которая будет выбирать
-          <br />
-          Когда будете готовы - нажмите кнопку ниже
-        </Text>
-        <Button
-          colorScheme="teal"
-          isLoading={startMutation.isPending}
-          onClick={() => startMutation.mutateAsync()}
-          children="Запустить таймер"
+      {isOrganizer && (
+        <Stack align="center" gridArea="b">
+          <Text textAlign="center" fontSize="md" lineHeight="150%">
+            Нажмите на команду, которая будет выбирать
+            <br />
+            Когда будете готовы - нажмите кнопку ниже
+          </Text>
+          <Button
+            colorScheme="teal"
+            isLoading={startMutation.isPending}
+            onClick={() => startMutation.mutateAsync()}
+            children="Запустить таймер"
+          />
+        </Stack>
+      )}
+      {isOrganizer && (
+        <ChallengeSelectionWindow
+          isOpen={currentTeam !== undefined}
+          onClose={() => setCurrentTeam(undefined)}
+          team={currentTeam}
         />
-      </Stack>
-      <ChallengeSelectionWindow
-        isOpen={currentTeam !== undefined}
-        onClose={() => setCurrentTeam(undefined)}
-        team={currentTeam}
-      />
+      )}
     </>
   );
 };
@@ -101,7 +105,7 @@ type PrepareEndStageProps = {
 const PrepareEndStage = ({ timerEnd }: PrepareEndStageProps) => {
   const handleError = useHandleError();
   const queryClient = useQueryClient();
-  const { round, getTeams } = useRoundContext();
+  const { isOrganizer, round, getTeams } = useRoundContext();
 
   const endMutation = useMutation({
     mutationFn: async () => {
@@ -139,16 +143,18 @@ const PrepareEndStage = ({ timerEnd }: PrepareEndStageProps) => {
         <Text textAlign="center" fontSize="3xl" lineHeight="150%">
           Команды формируют архитектуры
         </Text>
-        <ButtonWithAlert
-          colorScheme="teal"
-          isLoading={endMutation.isPending}
-          onSubmit={() => endMutation.mutateAsync()}
-          buttonText="Перейти к следующему этапу"
-          alertText={[
-            "Вы уверены, что хотите перейти к следующему этапу?",
-            "Вернуться будет невозможно",
-          ].join("\n")}
-        />
+        {isOrganizer && (
+          <ButtonWithAlert
+            colorScheme="teal"
+            isLoading={endMutation.isPending}
+            onSubmit={() => endMutation.mutateAsync()}
+            buttonText="Перейти к следующему этапу"
+            alertText={[
+              "Вы уверены, что хотите перейти к следующему этапу?",
+              "Вернуться будет невозможно",
+            ].join("\n")}
+          />
+        )}
       </Stack>
     </>
   );

@@ -12,7 +12,10 @@ import {
 } from "~/types/tourney";
 import queryKeys from "~/utils/query-keys";
 import { castToTourneyRound } from "~/utils/round";
-import { addSpecificationToRound, createMatchesFromTeams } from "~/utils/tourney";
+import {
+  addSpecificationToRound,
+  createMatchesFromTeams,
+} from "~/utils/tourney";
 import { useTourneyContext } from "../tourney-context";
 import Match from "./Match";
 import SvgViewer from "./SvgViewer";
@@ -28,7 +31,7 @@ type Props = {
 
 const TourneyBracket = ({ id, state, teams, specifications }: Props) => {
   const queryClient = useQueryClient();
-  const { isAuthenticated, isEditable } = useTourneyContext();
+  const { isEditable } = useTourneyContext();
   const isPrepare = state === TourneyState.Prepare;
 
   const roundsQuery = useQuery({
@@ -63,9 +66,7 @@ const TourneyBracket = ({ id, state, teams, specifications }: Props) => {
   const rounds =
     isPrepare || roundsQuery.isLoading
       ? previewRounds
-      : (roundsQuery.data?.items || []).map(
-          castToTourneyRound(teams, isAuthenticated)
-        );
+      : (roundsQuery.data?.items || []).map(castToTourneyRound(teams));
 
   if (teams.length < 4 || rounds.length < 2 || roundsQuery.isError) {
     const message = roundsQuery.isError

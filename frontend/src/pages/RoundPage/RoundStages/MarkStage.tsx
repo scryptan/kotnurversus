@@ -26,7 +26,7 @@ const MarkStage = () => {
   const toast = useToast();
   const handleError = useHandleError();
   const queryClient = useQueryClient();
-  const { round, getTeams } = useRoundContext();
+  const { isOrganizer, round, getTeams } = useRoundContext();
   const marks = useRef<Record<string, number>>({});
 
   const finishRoundMutation = useMutation({
@@ -72,32 +72,37 @@ const MarkStage = () => {
           Оценка команд
         </Text>
       </Center>
-      {round.participants.slice(0, 2).map((p, i) => (
-        <MarkInput
-          key={p.teamId}
-          gridArea={`e${i + 1}`}
-          justifySelf="center"
-          onChange={handleMark(p.teamId)}
-        />
-      ))}
-      <Stack align="center" gridArea="b">
-        <Text textAlign="center" fontSize="md" lineHeight="150%">
-          Выставите командам баллы
-          <br />
-          Когда будете готовы - завершите раунд
-        </Text>
-        <ButtonWithAlert
-          closeBeforeSubmit
-          colorScheme="teal"
-          isLoading={finishRoundMutation.isPending}
-          onSubmit={() => finishRoundMutation.mutateAsync()}
-          buttonText="Завершить игру"
-          alertText={[
-            "Вы уверены, что хотите закончить раунд?",
-            "Изменить результаты будет невозможно",
-          ].join("\n")}
-        />
-      </Stack>
+      {isOrganizer &&
+        round.participants
+          .slice(0, 2)
+          .map((p, i) => (
+            <MarkInput
+              key={p.teamId}
+              gridArea={`e${i + 1}`}
+              justifySelf="center"
+              onChange={handleMark(p.teamId)}
+            />
+          ))}
+      {isOrganizer && (
+        <Stack align="center" gridArea="b">
+          <Text textAlign="center" fontSize="md" lineHeight="150%">
+            Выставите командам баллы
+            <br />
+            Когда будете готовы - завершите раунд
+          </Text>
+          <ButtonWithAlert
+            closeBeforeSubmit
+            colorScheme="teal"
+            isLoading={finishRoundMutation.isPending}
+            onSubmit={() => finishRoundMutation.mutateAsync()}
+            buttonText="Завершить игру"
+            alertText={[
+              "Вы уверены, что хотите закончить раунд?",
+              "Изменить результаты будет невозможно",
+            ].join("\n")}
+          />
+        </Stack>
+      )}
     </>
   );
 };

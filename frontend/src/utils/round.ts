@@ -31,11 +31,11 @@ export const castToCreateRound =
   };
 
 export const castToTourneyRound =
-  (teams: TourneyTeam[], isOrganizer: boolean) =>
+  (teams: TourneyTeam[]) =>
   (round: Round): TourneyRound => {
     const state = round.currentState?.state as TourneyRoundState | undefined;
     const initState =
-      isOrganizer && round.participants.length > 1
+      round.participants.length > 1
         ? TourneyRoundState.InitReady
         : TourneyRoundState.Init;
 

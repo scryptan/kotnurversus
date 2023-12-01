@@ -14,7 +14,8 @@ const STAGE_STATE = RoundState.Pause;
 const PauseStage = () => {
   const handleError = useHandleError();
   const queryClient = useQueryClient();
-  const { round, getTeams, getCurrentTeam, getTimerEnd } = useRoundContext();
+  const { isOrganizer, round, getTeams, getCurrentTeam, getTimerEnd } =
+    useRoundContext();
 
   const currentTeam = getCurrentTeam();
   const timerEnd = getTimerEnd();
@@ -50,12 +51,14 @@ const PauseStage = () => {
         <Heading textAlign="center" fontSize="4xl" lineHeight="150%">
           Таумаут команды "{currentTeam?.title || "???"}"
         </Heading>
-        <Button
-          colorScheme="teal"
-          isLoading={endTimeoutMutation.isPending}
-          onClick={() => endTimeoutMutation.mutateAsync()}
-          children="Закончить таймаут"
-        />
+        {isOrganizer && (
+          <Button
+            colorScheme="teal"
+            isLoading={endTimeoutMutation.isPending}
+            onClick={() => endTimeoutMutation.mutateAsync()}
+            children="Закончить таймаут"
+          />
+        )}
       </Stack>
     </>
   );

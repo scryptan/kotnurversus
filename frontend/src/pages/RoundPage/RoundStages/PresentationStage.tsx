@@ -28,7 +28,7 @@ const PresentationStage = () => {
 const PresentationStartStage = () => {
   const handleError = useHandleError();
   const queryClient = useQueryClient();
-  const { round, currentTeamId, getTeams, isStateFirstTime } =
+  const { isOrganizer, round, currentTeamId, getTeams, isStateFirstTime } =
     useRoundContext();
   const [chosenTeamId, setChosenTeamId] = useState(currentTeamId);
 
@@ -54,7 +54,7 @@ const PresentationStartStage = () => {
             gridArea={`t${i + 1}`}
             activeColor={STAGE_COLOR}
             team={team}
-            isDisabled={!isFirstTime || startMutation.isPending}
+            isDisabled={!isFirstTime || !isOrganizer || startMutation.isPending}
             isChosen={chosenTeamId === team.id}
             onChoose={setChosenTeamId}
           />
@@ -70,20 +70,22 @@ const PresentationStartStage = () => {
           Подготовка команды к выступлению
         </Text>
       </Center>
-      <Stack align="center" gridArea="b">
-        {isFirstTime && (
-          <Text textAlign="center" fontSize="md" lineHeight="150%">
-            Нажмите на команду, которая будет выступать
-          </Text>
-        )}
-        <Button
-          colorScheme="teal"
-          isLoading={startMutation.isPending}
-          isDisabled={chosenTeamId === undefined}
-          onClick={() => startMutation.mutateAsync()}
-          children="Запустить таймер"
-        />
-      </Stack>
+      {isOrganizer && (
+        <Stack align="center" gridArea="b">
+          {isFirstTime && (
+            <Text textAlign="center" fontSize="md" lineHeight="150%">
+              Нажмите на команду, которая будет выступать
+            </Text>
+          )}
+          <Button
+            colorScheme="teal"
+            isLoading={startMutation.isPending}
+            isDisabled={chosenTeamId === undefined}
+            onClick={() => startMutation.mutateAsync()}
+            children="Запустить таймер"
+          />
+        </Stack>
+      )}
     </>
   );
 };
@@ -95,7 +97,7 @@ type PresentationEndStageProps = {
 const PresentationEndStage = ({ timerEnd }: PresentationEndStageProps) => {
   const handleError = useHandleError();
   const queryClient = useQueryClient();
-  const { round, getTeams, getCurrentTeam } = useRoundContext();
+  const { isOrganizer, round, getTeams, getCurrentTeam } = useRoundContext();
 
   const currentTeam = getCurrentTeam();
 
@@ -142,16 +144,18 @@ const PresentationEndStage = ({ timerEnd }: PresentationEndStageProps) => {
         <Text textAlign="center" fontSize="3xl" lineHeight="150%">
           Презентация команды "{currentTeam?.title || "???"}"
         </Text>
-        <ButtonWithAlert
-          colorScheme="teal"
-          isLoading={endMutation.isPending}
-          onSubmit={() => endMutation.mutateAsync()}
-          buttonText="Перейти к защите команды"
-          alertText={[
-            "Вы уверены, что хотите перейти к следующему этапу?",
-            "Вернуться будет невозможно",
-          ].join("\n")}
-        />
+        {isOrganizer && (
+          <ButtonWithAlert
+            colorScheme="teal"
+            isLoading={endMutation.isPending}
+            onSubmit={() => endMutation.mutateAsync()}
+            buttonText="Перейти к защите команды"
+            alertText={[
+              "Вы уверены, что хотите перейти к следующему этапу?",
+              "Вернуться будет невозможно",
+            ].join("\n")}
+          />
+        )}
       </Stack>
     </>
   );

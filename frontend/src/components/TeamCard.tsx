@@ -14,6 +14,7 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { MouseEvent } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
 import { v4 as uuid } from "uuid";
 import { z } from "zod";
@@ -136,6 +137,7 @@ const ButtonTeamCard = ({
   isDisabled,
   activeColor,
   onChoose,
+  onClick,
   team,
   ...props
 }: ButtonTeamCardProps) => {
@@ -148,17 +150,26 @@ const ButtonTeamCard = ({
     boxShadow: `0px 0px 20px 0px ${activeColor}`,
   };
 
+  if (isDisabled) {
+    return (
+      <BaseTeamCard team={team} {...(isChosen ? activeProps : {})} {...props} />
+    );
+  }
+
+  const handleClick = (e: MouseEvent<HTMLDivElement>) => {
+    if (onClick) return onClick(e);
+    if (team.id) return onChoose?.(team.id);
+  };
+
   return (
     <Box
       as="button"
       w="fit-content"
       outline="none"
       textAlign="start"
-      disabled={isDisabled}
-      cursor={isDisabled ? "default" : "pointer"}
-      _hover={isDisabled ? {} : { "#card": hoverProps }}
+      _hover={{ "#card": hoverProps }}
       _focusVisible={{ "#card": hoverProps }}
-      onClick={() => team.id && onChoose?.(team.id)}
+      onClick={handleClick}
       {...props}
     >
       <BaseTeamCard

@@ -6,6 +6,7 @@ import api from "~/api";
 import Loading from "~/components/Loading";
 import { Round, RoundState } from "~/types/round";
 import { Tourney } from "~/types/tourney";
+import { useAuthContext } from "~/utils/auth-context";
 import queryKeys from "~/utils/query-keys";
 
 type RoundContext = {
@@ -28,6 +29,7 @@ export const RoundProvider = ({ roundId, children }: RoundProviderProps) => {
     queryKey: queryKeys.round(roundId),
     queryFn: () => api.rounds.getById(roundId),
     enabled: Boolean(roundId),
+    refetchInterval: 1000 * 5,
   });
 
   const tourneyQuery = useQuery({
@@ -55,6 +57,7 @@ export const RoundProvider = ({ roundId, children }: RoundProviderProps) => {
 };
 
 export const useRoundContext = () => {
+  const { isAuthenticated } = useAuthContext();
   const { tourney, round } = useContext(Context);
 
   const state = round.currentState?.state;
@@ -91,6 +94,7 @@ export const useRoundContext = () => {
 
   return {
     isPublic,
+    isOrganizer: isAuthenticated,
     tourney,
     round,
     state,
