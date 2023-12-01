@@ -36,6 +36,9 @@ public class ProcessRoundCommand : IProcessRoundCommand
                 if (round.CurrentState == null)
                     return new ErrorInfo<InvalidRoundDataReason>(InvalidRoundDataReason.InvalidData, "Round not started");
 
+                if (round.Participants.Count != 2)
+                    return new ErrorInfo<InvalidRoundDataReason>(InvalidRoundDataReason.InvalidData, "Round must have exactly 2 participants");
+
                 var game = (await gamesService.FindAsync(round.GameId))!;
                 switch (state)
                 {
@@ -75,7 +78,7 @@ public class ProcessRoundCommand : IProcessRoundCommand
     {
         var pausesCount = round.History.Count(
             x => x.State == RoundState.Pause
-                 && ((PauseRoundHistoryItem)x.Value).TeamId == teamId);
+                 && x.Value.TeamId == teamId);
         if (pausesCount > settings.TimeoutsCount || pausesCount == settings.TimeoutsCount && isStartAction)
             return false;
 
@@ -101,7 +104,7 @@ public class ProcessRoundCommand : IProcessRoundCommand
             if (lastPause == null)
                 throw new EntityNotFoundException("No one pauses used");
 
-            ((PauseRoundHistoryItem)lastPause.Value).End = DateTimeOffset.Now;
+            lastPause.Value.End = DateTimeOffset.Now;
             round = await roundsService.UpdateCurrentHistory(round);
             var lastNotPauseItem = round.History
                 .Where(x => x.State != RoundState.Pause)
@@ -109,7 +112,7 @@ public class ProcessRoundCommand : IProcessRoundCommand
 
             if (lastNotPauseItem?.Value.Start != null)
             {
-                var timeToAdd = ((PauseRoundHistoryItem)lastPause.Value).End - ((PauseRoundHistoryItem)lastPause.Value).Start;
+                var timeToAdd = lastPause.Value.End - lastPause.Value.Start;
                 lastNotPauseItem.Value.Start += timeToAdd;
             }
 
@@ -121,13 +124,16 @@ public class ProcessRoundCommand : IProcessRoundCommand
 
     private async Task<bool> TryProcessPrepareState(Round round, bool isStartAction)
     {
-        var prepare = round.History.LastOrDefault(x => x.State == RoundState.Prepare);
+        var prepare = round.History
+            .OrderBy(x => x.Order)
+            .LastOrDefault(x => x.State == RoundState.Prepare);
         if (prepare == null)
             return false;
 
         if (isStartAction)
         {
             prepare.Value.Start = DateTimeOffset.Now;
+            await roundsService.UpdateCurrentHistory(round);
         }
         else
         {
@@ -146,19 +152,21 @@ public class ProcessRoundCommand : IProcessRoundCommand
 
     private async Task<bool> TryProcessPresentationState(Round round, Guid teamId, bool isStartAction)
     {
-        var prepare = round.History.SingleOrDefault(x => x.State == RoundState.Prepare);
-        if (prepare == null)
+        var presentation = round.History
+            .OrderBy(x => x.Order)
+            .LastOrDefault(x => x.State == RoundState.Presentation);
+        if (presentation == null)
             return false;
 
         if (isStartAction)
         {
-            prepare.Value.Start = DateTimeOffset.Now;
-            ((PresentationRoundHistoryItem)prepare.Value).TeamId = teamId;
+            presentation.Value.Start = DateTimeOffset.Now;
+            presentation.Value.TeamId = teamId;
             await roundsService.UpdateCurrentHistory(round);
         }
         else
         {
-            prepare.Value.End = DateTimeOffset.Now;
+            presentation.Value.End = DateTimeOffset.Now;
             round = await roundsService.UpdateCurrentHistory(round);
             await roundsService.AddHistoryItem(
                 round.Id,
@@ -176,20 +184,20 @@ public class ProcessRoundCommand : IProcessRoundCommand
 
     private async Task<bool> TryProcessDefenceState(Round round, Guid teamId, bool isStartAction)
     {
-        var prepare = round.History.LastOrDefault(
-            x => x.State == RoundState.Presentation
-                 && ((PauseRoundHistoryItem)x.Value).TeamId == teamId);
-        if (prepare == null)
+        var defense = round.History
+            .OrderBy(x => x.Order)
+            .LastOrDefault(x => x.State == RoundState.Defense && x.Value.TeamId == teamId);
+        if (defense == null)
             return false;
 
         if (isStartAction)
         {
-            prepare.Value.Start = DateTimeOffset.Now;
+            defense.Value.Start = DateTimeOffset.Now;
             await roundsService.UpdateCurrentHistory(round);
         }
         else
         {
-            prepare.Value.End = DateTimeOffset.Now;
+            defense.Value.End = DateTimeOffset.Now;
             round = await roundsService.UpdateCurrentHistory(round);
 
             if (round.History.Count(x => x is {State: RoundState.Defense, Value.End: not null}) == 2)
@@ -209,7 +217,7 @@ public class ProcessRoundCommand : IProcessRoundCommand
                     {
                         Value = new PresentationRoundHistoryItem()
                         {
-                            TeamId = teamId
+                            TeamId = round.Participants.Single(x => x.TeamId != teamId).TeamId
                         }
                     });
             }

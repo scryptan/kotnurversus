@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.JsonPatch.Operations;
 using Models;
 using Models.Games;
 using Models.Rounds;
+using Models.Rounds.History;
 using Newtonsoft.Json.Serialization;
 
 namespace Domain.Commands.Rounds;
@@ -38,8 +39,16 @@ public class FinishRoundCommand : IFinishRoundCommand
                 if (round.CurrentState!.State != RoundState.Mark)
                     return new ErrorInfo<InvalidRoundDataReason>(InvalidRoundDataReason.InvalidData, "Can't finish round not in mark state");
 
+                var winnerId = marks.MaxBy(x => x.Mark)!.TeamId;
                 foreach (var mark in marks)
-                    round = await roundsService.SetMark(round.Id, (mark.TeamId, mark.Mark));
+                    round = await roundsService.SetMark(round.Id, (mark.TeamId, mark.Mark, mark.TeamId == winnerId));
+
+                await roundsService.AddHistoryItem(
+                    round.Id,
+                    new()
+                    {
+                        Value = new CompleteRoundHistoryItem()
+                    });
 
                 if (round.NextRoundId == null)
                 {
@@ -57,6 +66,33 @@ public class FinishRoundCommand : IFinishRoundCommand
                                     op = "replace",
                                     path = "state",
                                     value = GameState.Complete
+                                }
+                            },
+                            new DefaultContractResolver()));
+                }
+                else
+                {
+                    var nextRound = await roundsService.FindAsync(round.NextRoundId!.Value);
+                    if (nextRound == null)
+                        return new ErrorInfo<InvalidRoundDataReason>(InvalidRoundDataReason.InvalidData, $"Can't add participant in not existing round: {round.NextRoundId!.Value}");
+
+                    await roundsService.PatchAsync(
+                        nextRound,
+                        new JsonPatchDocument<Round>(
+                            new List<Operation<Round>>
+                            {
+                                new()
+                                {
+                                    op = "add",
+                                    path = "participants/-",
+                                    value = new Participant
+                                    {
+                                        TeamId = winnerId,
+                                        Order = nextRound.Participants.Count,
+                                        Points = 0,
+                                        IsWinner = false,
+                                        Challenges = new List<Guid>()
+                                    }
                                 }
                             },
                             new DefaultContractResolver()));

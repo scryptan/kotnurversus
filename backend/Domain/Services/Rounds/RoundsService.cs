@@ -118,13 +118,15 @@ public class RoundsService : EntityServiceBase<Round, RoundDbo, RoundSearchReque
         return existing;
     }
 
-    public async Task<Round> SetMark(Guid roundId, (Guid teamId, int amout) mark)
+    public async Task<Round> SetMark(Guid roundId, (Guid teamId, int amout, bool isWinner) mark)
     {
         var existing = await FindAsync(roundId);
         if (existing == null)
             throw new EntityNotFoundException($"Round with id: {roundId} doesn't exists");
 
-        existing.Participants.Single(x => x.TeamId == mark.teamId).Points = mark.amout;
+        var participant = existing.Participants.Single(x => x.TeamId == mark.teamId);
+        participant.Points = mark.amout;
+        participant.IsWinner = mark.isWinner;
         await PatchAsync(
             existing,
             new JsonPatchDocument<Round>(
