@@ -72,7 +72,6 @@ export const useRoundContext = () => {
   const getTimerEnd = () => {
     const startTime = round.currentState?.value?.start;
     if (!startTime) return undefined;
-
     switch (state) {
       case RoundState.Prepare:
         return addSeconds(startTime, round.settings.prepareSeconds);
@@ -80,6 +79,8 @@ export const useRoundContext = () => {
         return addSeconds(startTime, round.settings.presentationSeconds);
       case RoundState.Defense:
         return addSeconds(startTime, round.settings.defenseSeconds);
+      case RoundState.Pause:
+        return addSeconds(startTime, round.settings.timeoutSeconds);
       default:
         return undefined;
     }

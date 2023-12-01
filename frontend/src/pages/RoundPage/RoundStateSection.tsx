@@ -3,7 +3,14 @@ import { RoundState } from "~/types/round";
 import { useRoundContext } from "./round-context";
 
 const RoundStateSection = (props: BoxProps) => {
-  const { state } = useRoundContext();
+  const context = useRoundContext();
+
+  const state =
+    context.state !== RoundState.Pause
+      ? context.state
+      : context.round.history.findLast(
+          (item) => item.state !== RoundState.Pause
+        )?.state;
 
   return (
     <HStack spacing={9} justify="center" {...props}>

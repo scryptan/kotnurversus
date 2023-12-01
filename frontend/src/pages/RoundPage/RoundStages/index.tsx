@@ -6,6 +6,7 @@ import CompleteStage from "./CompleteStage";
 import DefenseStage from "./DefenseStage";
 import InitStage from "./InitStage";
 import MarkStage from "./MarkStage";
+import PauseStage from "./PauseStage";
 import PrepareStage from "./PrepareStage";
 import PresentationStage from "./PresentationStage";
 
@@ -45,7 +46,7 @@ const STAGES: Record<RoundState, () => JSX.Element> = {
   [RoundState.Defense]: DefenseStage,
   [RoundState.Mark]: MarkStage,
   [RoundState.Complete]: CompleteStage,
-  [RoundState.Pause]: () => <></>,
+  [RoundState.Pause]: PauseStage,
 };
 
 export default RoundStages;
