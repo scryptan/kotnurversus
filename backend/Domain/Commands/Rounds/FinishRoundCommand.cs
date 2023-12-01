@@ -39,6 +39,12 @@ public class FinishRoundCommand : IFinishRoundCommand
                 if (round.CurrentState!.State != RoundState.Mark)
                     return new ErrorInfo<InvalidRoundDataReason>(InvalidRoundDataReason.InvalidData, "Can't finish round not in mark state");
 
+                if (marks.Count != 2)
+                    return new ErrorInfo<InvalidRoundDataReason>(InvalidRoundDataReason.InvalidData, "Can't finish round with not 2 marks");
+
+                if (marks[0].Mark == marks[1].Mark)
+                    return new ErrorInfo<InvalidRoundDataReason>(InvalidRoundDataReason.SameMarks, "Can't finish round with equal marks");
+
                 var winnerId = marks.MaxBy(x => x.Mark)!.TeamId;
                 foreach (var mark in marks)
                     round = await roundsService.SetMark(round.Id, (mark.TeamId, mark.Mark, mark.TeamId == winnerId));
