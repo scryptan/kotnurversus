@@ -4,11 +4,14 @@ import { useRoundContext } from "../round-context";
 import ChallengesSection from "./ChallengesSection";
 import DefenseStage from "./DefenseStage";
 import InitStage from "./InitStage";
+import MarkStage from "./MarkStage";
 import PrepareStage from "./PrepareStage";
 import PresentationStage from "./PresentationStage";
 
 const RoundStages = (props: BoxProps) => {
   const { round, state } = useRoundContext();
+
+  const Stage = (state && STAGES[state]) || InitStage;
 
   return (
     <Grid
@@ -17,16 +20,13 @@ const RoundStages = (props: BoxProps) => {
       gridTemplateRows="repeat(3, min-content) 1fr"
       gridTemplateAreas={[
         '"c1 t1 main t2 c2"',
-        '"c1 to1 . to2 c2"',
+        '"c1 e1 . e2 c2"',
         '"c1 b b b c2"',
         '"c1 . . . c2"',
       ].join("")}
       {...props}
     >
-      {state === undefined && <InitStage />}
-      {state === RoundState.Prepare && <PrepareStage />}
-      {state === RoundState.Presentation && <PresentationStage />}
-      {state === RoundState.Defense && <DefenseStage />}
+      <Stage />
       {round.participants.slice(0, 2).map((p, i) => (
         <ChallengesSection
           key={p.teamId}
@@ -36,6 +36,15 @@ const RoundStages = (props: BoxProps) => {
       ))}
     </Grid>
   );
+};
+
+const STAGES: Record<RoundState, () => JSX.Element> = {
+  [RoundState.Prepare]: PrepareStage,
+  [RoundState.Presentation]: PresentationStage,
+  [RoundState.Defense]: DefenseStage,
+  [RoundState.Mark]: MarkStage,
+  [RoundState.Complete]: () => <></>,
+  [RoundState.Pause]: () => <></>,
 };
 
 export default RoundStages;

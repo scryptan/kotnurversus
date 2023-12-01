@@ -126,7 +126,7 @@ const DefenseEndStage = ({ timerEnd }: DefenseEndStageProps) => {
       {round.participants.slice(0, 2).map((p, i) => (
         <TimeoutButton
           key={p.teamId}
-          gridArea={`to${i + 1}`}
+          gridArea={`e${i + 1}`}
           teamId={p.teamId}
         />
       ))}

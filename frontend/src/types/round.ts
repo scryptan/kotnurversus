@@ -23,6 +23,10 @@ export type CreateRound = {
   order: number;
 };
 
+export type FinishRound = {
+  marks: RoundMark[];
+};
+
 export type RoundStateData = {
   state?: RoundState;
   value?: {
@@ -48,4 +52,9 @@ export type RoundParticipant = {
   isWinner: boolean;
   points: number;
   order: number;
+};
+
+export type RoundMark = {
+  teamId: string;
+  mark: number;
 };

@@ -1,6 +1,6 @@
 import { Operation } from "fast-json-patch";
 import { PaginationResponse } from "~/types/pagination";
-import { Round, RoundState } from "~/types/round";
+import { FinishRound, Round, RoundState } from "~/types/round";
 import axiosClient from "~/utils/axios-client";
 
 export class RoundsController {
@@ -48,5 +48,9 @@ export class RoundsController {
       undefined,
       teamId ? { teamId } : {}
     );
+  }
+
+  async finish(id: string, data: FinishRound): Promise<Round> {
+    return await axiosClient.post(`/api/v1/Rounds/${id}/finish`, data);
   }
 }
