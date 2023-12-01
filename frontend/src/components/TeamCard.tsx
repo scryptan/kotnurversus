@@ -155,7 +155,8 @@ const ButtonTeamCard = ({
       outline="none"
       textAlign="start"
       disabled={isDisabled}
-      _hover={{ "#card": hoverProps }}
+      cursor={isDisabled ? "default" : "pointer"}
+      _hover={isDisabled ? {} : { "#card": hoverProps }}
       _focusVisible={{ "#card": hoverProps }}
       onClick={() => team.id && onChoose?.(team.id)}
       {...props}

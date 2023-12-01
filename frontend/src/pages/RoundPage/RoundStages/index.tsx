@@ -2,8 +2,10 @@ import { BoxProps, Grid } from "@chakra-ui/react";
 import { RoundState } from "~/types/round";
 import { useRoundContext } from "../round-context";
 import ChallengesSection from "./ChallengesSection";
+import DefenseStage from "./DefenseStage";
 import InitStage from "./InitStage";
 import PrepareStage from "./PrepareStage";
+import PresentationStage from "./PresentationStage";
 
 const RoundStages = (props: BoxProps) => {
   const { round, state } = useRoundContext();
@@ -21,10 +23,10 @@ const RoundStages = (props: BoxProps) => {
       ].join("")}
       {...props}
     >
-      {!state && <InitStage />}
+      {state === undefined && <InitStage />}
       {state === RoundState.Prepare && <PrepareStage />}
-      {/* <InitStage /> */}
-      {/* <PrepareStage /> */}
+      {state === RoundState.Presentation && <PresentationStage />}
+      {state === RoundState.Defense && <DefenseStage />}
       {round.participants.slice(0, 2).map((p, i) => (
         <ChallengesSection
           key={p.teamId}

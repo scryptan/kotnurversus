@@ -1,5 +1,6 @@
 import { CreateRound, Round } from "~/types/round";
 import {
+  Tourney,
   TourneyRound,
   TourneyRoundState,
   TourneySpecification,
@@ -7,14 +8,14 @@ import {
 } from "~/types/tourney";
 
 export const castToCreateRound =
-  (tourneyId: string) =>
+  (tourney: Tourney) =>
   (round: TourneyRound, index: number): CreateRound => {
     if (!round.specification) {
       throw new Error("Темы бизнес-сценариев указаны не для всех раундов");
     }
 
     return {
-      gameId: tourneyId,
+      gameId: tourney.id,
       nextRoundId: round.nextMatchId,
       participants: round.participants.map((p, i) => ({
         teamId: p.id,
@@ -24,6 +25,7 @@ export const castToCreateRound =
         order: i + 1,
       })),
       specification: round.specification,
+      settings: tourney.settings,
       order: index + 1,
     };
   };

@@ -59,11 +59,15 @@ export const useRoundContext = () => {
 
   const state = round.currentState?.state;
   const isPublic = state !== undefined;
+  const currentTeamId = round.currentState?.value?.teamId;
 
   const getTeams = () =>
     round.participants
       .map((p) => tourney.teams.find((team) => p.teamId === team.id))
       .slice(0, 2);
+
+  const getCurrentTeam = () =>
+    tourney.teams.find((t) => t.id === currentTeamId);
 
   const getTimerEnd = () => {
     const startTime = round.currentState?.value?.start;
@@ -71,18 +75,28 @@ export const useRoundContext = () => {
 
     switch (state) {
       case RoundState.Prepare:
-        return addSeconds(startTime, round.settings.prepareSeconds - 1);
+        return addSeconds(startTime, round.settings.prepareSeconds);
+      case RoundState.Presentation:
+        return addSeconds(startTime, round.settings.presentationSeconds);
+      case RoundState.Defense:
+        return addSeconds(startTime, round.settings.defenseSeconds);
       default:
         return undefined;
     }
   };
+
+  const isStateFirstTime = (state: RoundState): boolean =>
+    round.history.filter((s) => s.state === state).length < 2;
 
   return {
     isPublic,
     tourney,
     round,
     state,
+    currentTeamId,
     getTeams,
     getTimerEnd,
+    getCurrentTeam,
+    isStateFirstTime,
   };
 };

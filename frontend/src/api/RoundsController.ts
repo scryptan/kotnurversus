@@ -37,6 +37,7 @@ export class RoundsController {
   async start(id: string, state: RoundState, teamId?: string): Promise<Round> {
     return await axiosClient.post(
       `/api/v1/Rounds/${id}/start/${state}`,
+      undefined,
       teamId ? { teamId } : {}
     );
   }
@@ -44,6 +45,7 @@ export class RoundsController {
   async end(id: string, state: RoundState, teamId?: string): Promise<Round> {
     return await axiosClient.post(
       `/api/v1/Rounds/${id}/end/${state}`,
+      undefined,
       teamId ? { teamId } : {}
     );
   }

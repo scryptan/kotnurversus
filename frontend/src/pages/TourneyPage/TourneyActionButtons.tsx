@@ -31,7 +31,7 @@ const TourneyActionButtons = ({ tourney }: Props) => {
     mutationFn: async () => {
       const rounds = createMatchesFromTeams(tourney.teams)
         .map(addSpecificationToRound(tourney.specifications))
-        .map(castToCreateRound(tourney.id));
+        .map(castToCreateRound(tourney));
 
       if (rounds.length < 2) {
         throw new Error("Недостаточно команд для начала раунда");

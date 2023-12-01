@@ -6,38 +6,37 @@ import ButtonWithAlert from "~/components/ButtonWithAlert";
 import TeamCard from "~/components/TeamCard";
 import useHandleError from "~/hooks/useHandleError";
 import { RoundState } from "~/types/round";
-import { TourneyTeam } from "~/types/tourney";
 import queryKeys from "~/utils/query-keys";
 import { useRoundContext } from "../round-context";
-import ChallengeSelectionWindow from "./ChallengeSelectionWindow";
 import RoundStageTimer from "./RoundStageTimer";
 import TimeoutButton from "./TimeoutButton";
 
-const STAGE_COLOR = "#D83161";
-const STAGE_STATE = RoundState.Prepare;
+const STAGE_COLOR = "#F03B36";
+const STAGE_STATE = RoundState.Presentation;
 
-const PrepareStage = () => {
+const PresentationStage = () => {
   const { getTimerEnd } = useRoundContext();
   const timerEnd = getTimerEnd();
 
   return timerEnd ? (
-    <PrepareEndStage timerEnd={timerEnd} />
+    <PresentationEndStage timerEnd={timerEnd} />
   ) : (
-    <PrepareStartStage />
+    <PresentationStartStage />
   );
 };
 
-const PrepareStartStage = () => {
+const PresentationStartStage = () => {
   const handleError = useHandleError();
   const queryClient = useQueryClient();
-  const { round, getTeams } = useRoundContext();
-  const [currentTeam, setCurrentTeam] = useState<TourneyTeam>();
+  const { round, currentTeamId, getTeams, isStateFirstTime } =
+    useRoundContext();
+  const [chosenTeamId, setChosenTeamId] = useState(currentTeamId);
 
-  const handleChoose = (team: TourneyTeam) => () => setCurrentTeam(team);
+  const isFirstTime = isStateFirstTime(STAGE_STATE);
 
   const startMutation = useMutation({
     mutationFn: async () => {
-      return await api.rounds.start(round.id, STAGE_STATE);
+      return await api.rounds.start(round.id, STAGE_STATE, chosenTeamId);
     },
     onSuccess: (round) => {
       queryClient.setQueryData(queryKeys.round(round.id), round);
@@ -55,8 +54,9 @@ const PrepareStartStage = () => {
             gridArea={`t${i + 1}`}
             activeColor={STAGE_COLOR}
             team={team}
-            isDisabled={startMutation.isPending}
-            onClick={handleChoose(team)}
+            isDisabled={!isFirstTime || startMutation.isPending}
+            isChosen={chosenTeamId === team.id}
+            onChoose={setChosenTeamId}
           />
         );
       })}
@@ -67,45 +67,41 @@ const PrepareStartStage = () => {
           lineHeight="150%"
           textTransform="uppercase"
         >
-          Выбор <br />
-          дополнительных <br />
-          требований
+          Подготовка команды к выступлению
         </Text>
       </Center>
       <Stack align="center" gridArea="b">
-        <Text textAlign="center" fontSize="md" lineHeight="150%">
-          Нажмите на команду, которая будет выбирать
-          <br />
-          Когда будете готовы - нажмите кнопку ниже
-        </Text>
+        {isFirstTime && (
+          <Text textAlign="center" fontSize="md" lineHeight="150%">
+            Нажмите на команду, которая будет выступать
+          </Text>
+        )}
         <Button
           colorScheme="teal"
           isLoading={startMutation.isPending}
+          isDisabled={chosenTeamId === undefined}
           onClick={() => startMutation.mutateAsync()}
           children="Запустить таймер"
         />
       </Stack>
-      <ChallengeSelectionWindow
-        isOpen={currentTeam !== undefined}
-        onClose={() => setCurrentTeam(undefined)}
-        team={currentTeam}
-      />
     </>
   );
 };
 
-type PrepareEndStageProps = {
+type PresentationEndStageProps = {
   timerEnd: Date;
 };
 
-const PrepareEndStage = ({ timerEnd }: PrepareEndStageProps) => {
+const PresentationEndStage = ({ timerEnd }: PresentationEndStageProps) => {
   const handleError = useHandleError();
   const queryClient = useQueryClient();
-  const { round, getTeams } = useRoundContext();
+  const { round, getTeams, getCurrentTeam } = useRoundContext();
+
+  const currentTeam = getCurrentTeam();
 
   const endMutation = useMutation({
     mutationFn: async () => {
-      return await api.rounds.end(round.id, STAGE_STATE);
+      return await api.rounds.end(round.id, STAGE_STATE, currentTeam?.id);
     },
     onSuccess: (round) => {
       queryClient.setQueryData(queryKeys.round(round.id), round);
@@ -118,7 +114,14 @@ const PrepareEndStage = ({ timerEnd }: PrepareEndStageProps) => {
       {getTeams().map((team, i) => {
         if (!team) return null;
         return (
-          <TeamCard.Base key={team.id} gridArea={`t${i + 1}`} team={team} />
+          <TeamCard.Button
+            key={team.id}
+            isDisabled
+            isChosen={currentTeam?.id == team.id}
+            activeColor={STAGE_COLOR}
+            gridArea={`t${i + 1}`}
+            team={team}
+          />
         );
       })}
       <RoundStageTimer
@@ -137,13 +140,13 @@ const PrepareEndStage = ({ timerEnd }: PrepareEndStageProps) => {
       ))}
       <Stack align="center" gridArea="b">
         <Text textAlign="center" fontSize="3xl" lineHeight="150%">
-          Команды формируют архитектуры
+          Презентация команды "{currentTeam?.title || "???"}"
         </Text>
         <ButtonWithAlert
           colorScheme="teal"
           isLoading={endMutation.isPending}
           onSubmit={() => endMutation.mutateAsync()}
-          buttonText="Перейти к следующему этапу"
+          buttonText="Перейти к защите команды"
           alertText={[
             "Вы уверены, что хотите перейти к следующему этапу?",
             "Вернуться будет невозможно",
@@ -154,4 +157,4 @@ const PrepareEndStage = ({ timerEnd }: PrepareEndStageProps) => {
   );
 };
 
-export default PrepareStage;
+export default PresentationStage;

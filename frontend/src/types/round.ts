@@ -8,15 +8,9 @@ export type Round = {
   specification: TourneySpecification;
   participants: RoundParticipant[];
   artifacts: unknown[];
-  history: unknown[];
+  history: RoundStateData[];
   winnerId?: string;
-  currentState?: {
-    state?: RoundState;
-    value?: {
-      currentState?: RoundState;
-      start?: Date;
-    };
-  };
+  currentState?: RoundStateData;
   order: number;
 };
 
@@ -25,6 +19,17 @@ export type CreateRound = {
   nextRoundId?: string | null;
   participants: RoundParticipant[];
   specification: TourneySpecification;
+  settings: TourneySettings;
+  order: number;
+};
+
+export type RoundStateData = {
+  state?: RoundState;
+  value?: {
+    currentState?: RoundState;
+    start?: Date;
+    teamId?: string;
+  };
   order: number;
 };
 

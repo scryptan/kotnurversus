@@ -1,5 +1,6 @@
 import { BoxProps, Button, Stack, Text, useDisclosure } from "@chakra-ui/react";
 import chroma from "chroma-js";
+import { memo } from "react";
 import useChallengesQuery from "~/hooks/useChallengesQuery";
 import ChallengeWindow from "~/pages/RoundPage/RoundStages/ChallengeWindow";
 import { Category } from "~/types/category";
@@ -41,48 +42,51 @@ type ChallengeCardProps = {
   challenge: Challenge;
 };
 
-const ChallengeCard = ({ challenge, category }: ChallengeCardProps) => {
-  const window = useDisclosure();
+const ChallengeCard = memo(
+  ({ challenge, category }: ChallengeCardProps) => {
+    const window = useDisclosure();
 
-  const fontColor =
-    chroma(category.color).luminance() < 0.5 ? "white" : "text.light.main";
+    const fontColor =
+      chroma(category.color).luminance() < 0.5 ? "white" : "text.light.main";
 
-  const borderColor = chroma(category.color).darken(0.25).hex();
+    const borderColor = chroma(category.color).darken(0.25).hex();
 
-  return (
-    <>
-      <Button
-        {...window.getButtonProps()}
-        px={4}
-        py={2}
-        variant="link"
-        color={fontColor}
-        bg={category.color}
-        borderRadius={8}
-        border="1px solid"
-        borderColor={borderColor}
-        whiteSpace="normal"
-        onClick={window.onOpen}
-        _active={{ textDecoration: "underline" }}
-        boxShadow={`0px 0px 5px 0px ${borderColor}`}
-      >
-        <Text
-          fontSize="xl"
-          lineHeight="150%"
-          fontWeight="normal"
-          wordBreak="break-word"
-          children={challenge.title}
+    return (
+      <>
+        <Button
+          {...window.getButtonProps()}
+          px={4}
+          py={2}
+          variant="link"
+          color={fontColor}
+          bg={category.color}
+          borderRadius={8}
+          border="1px solid"
+          borderColor={borderColor}
+          whiteSpace="normal"
+          onClick={window.onOpen}
+          _active={{ textDecoration: "underline" }}
+          boxShadow={`0px 0px 5px 0px ${borderColor}`}
+        >
+          <Text
+            fontSize="xl"
+            lineHeight="150%"
+            fontWeight="normal"
+            wordBreak="break-word"
+            children={challenge.title}
+          />
+        </Button>
+        <ChallengeWindow
+          {...window.getDisclosureProps()}
+          isOpen={window.isOpen}
+          onClose={window.onClose}
+          category={category}
+          challenge={challenge}
         />
-      </Button>
-      <ChallengeWindow
-        {...window.getDisclosureProps()}
-        isOpen={window.isOpen}
-        onClose={window.onClose}
-        category={category}
-        challenge={challenge}
-      />
-    </>
-  );
-};
+      </>
+    );
+  },
+  (prev, next) => prev.challenge.id === next.challenge.id
+);
 
 export default ChallengesSection;
