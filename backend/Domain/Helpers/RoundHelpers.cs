@@ -11,7 +11,7 @@ public static class RoundHelpers
         NextRoundId = args.NextRoundId,
         Order = args.Order,
         Specification = args.Specification,
-        Settings = new(),
+        Settings = args.Settings ?? new(),
         Artifacts = new(),
         History = new(),
         Participants = args.Participants ?? new List<Participant>()
