@@ -1,8 +1,13 @@
-import { BoxProps, Center, IconButton, Text, useToast } from "@chakra-ui/react";
+import { BoxProps, Center, Text, useDisclosure } from "@chakra-ui/react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import api from "~/api";
+import Alert from "~/components/Alert";
+import IconButtonWithTooltip from "~/components/IconButtonWithTooltip";
+import useHandleError from "~/hooks/useHandleError";
 import useTimer from "~/hooks/useTimer";
 import ResetIcon from "~/icons/ResetIcon";
+import queryKeys from "~/utils/query-keys";
 import { useRoundContext } from "../round-context";
-import { errorToast } from "~/utils/template-toasts";
 
 type Props = {
   endDate: Date;
@@ -10,7 +15,6 @@ type Props = {
 } & BoxProps;
 
 const RoundStageTimer = ({ endDate, activeColor, ...props }: Props) => {
-  const toast = useToast();
   const { isOrganizer } = useRoundContext();
   const { isRunning, totalSeconds } = useTimer({
     autoStart: true,
@@ -39,22 +43,55 @@ const RoundStageTimer = ({ endDate, activeColor, ...props }: Props) => {
       {...(isRunning ? activeProps : {})}
       {...props}
     >
-      {isOrganizer && (
-        <IconButton
-          size="md"
-          variant="link"
-          aria-label="Сбросить таймер"
-          icon={<ResetIcon boxSize={8} />}
-          // TODO реализовать
-          onClick={() => toast(errorToast("Не реализовано"))}
-        />
-      )}
+      {isOrganizer && <ResetTimerButton />}
       <Text ml={isNegative ? -4 : 0} userSelect="none" pointerEvents="none">
         {isNegative && <Text as="span" children="-" />}
         {Math.abs(totalMinutes).toString().padStart(2, "0")}:
         {Math.abs(seconds).toString().padStart(2, "0")}
       </Text>
     </Center>
+  );
+};
+
+const ResetTimerButton = () => {
+  const handleError = useHandleError();
+  const queryClient = useQueryClient();
+  const { round } = useRoundContext();
+  const alert = useDisclosure();
+
+  const resetTimerMutation = useMutation({
+    mutationFn: async () => {
+      return await api.rounds.resetTimer(round.id);
+    },
+    onSuccess: (round) => {
+      queryClient.setQueryData(queryKeys.round(round.id), round);
+    },
+    onError: handleError,
+  });
+
+  const handleSubmit = async () => {
+    await resetTimerMutation.mutateAsync();
+    alert.onClose();
+  };
+
+  return (
+    <>
+      <IconButtonWithTooltip
+        size="md"
+        variant="link"
+        label="Сбросить таймер"
+        icon={<ResetIcon boxSize={8} />}
+        isDisabled={resetTimerMutation.isPending}
+        onClick={alert.onOpen}
+      />
+      <Alert
+        isOpen={alert.isOpen}
+        isLoading={resetTimerMutation.isPending}
+        onClose={alert.onClose}
+        onSubmit={handleSubmit}
+        children="Вы уверены, что хотите перезапустить таймер для текущего этапа?"
+      />
+    </>
   );
 };
 

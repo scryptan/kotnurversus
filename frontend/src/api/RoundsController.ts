@@ -53,4 +53,8 @@ export class RoundsController {
   async finish(id: string, data: FinishRound): Promise<Round> {
     return await axiosClient.post(`/api/v1/Rounds/${id}/finish`, data);
   }
+
+  async resetTimer(id: string): Promise<Round> {
+    return await axiosClient.post(`/api/v1/Rounds/${id}/reset-timer`);
+  }
 }
