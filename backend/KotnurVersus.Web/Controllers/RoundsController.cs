@@ -9,6 +9,15 @@ namespace KotnurVersus.Web.Controllers;
 
 public class RoundsController : CreatableEntityControllerBase<Round, RoundCreationArgs, InvalidRoundDataReason, RoundSearchRequest>
 {
+    [HttpPost("{id:guid}/resetTimer")]
+    public async Task<ActionResult<Round, ErrorInfo<InvalidRoundDataReason>>> ResetRoundTimer(
+        [FromServices] IResetTimerCommand command,
+        [FromRoute] Guid id)
+    {
+        var result = await command.RunAsync(id);
+        return result.ToActionResult();
+    }
+
     [HttpPost("{id:guid}/init")]
     public async Task<ActionResult<Round, ErrorInfo<InvalidRoundDataReason>>> InitRound(
         [FromServices] IStartRoundCommand command,
