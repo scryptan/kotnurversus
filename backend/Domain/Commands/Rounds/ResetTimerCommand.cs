@@ -18,7 +18,7 @@ public class ResetTimerCommand : IResetTimerCommand
         this.roundsService = roundsService;
     }
 
-    public async Task<DomainResult<Round, InvalidRoundDataReason>> RunAsync(Guid id)
+    public async Task<DomainResult<Round, InvalidRoundDataReason>> RunAsync(Guid id, CancellationToken cancellationToken)
     {
         var result = await dataContextAccessor.AccessDataAsync<DomainResult<Round, InvalidRoundDataReason>>(
             async dbContext =>
@@ -36,7 +36,7 @@ public class ResetTimerCommand : IResetTimerCommand
                 round.CurrentState.Value.Start = DateTimeOffset.Now;
                 await roundsService.UpdateCurrentHistory(round);
 
-                await dbContext.SaveChangesAsync();
+                await dbContext.SaveChangesAsync(cancellationToken);
                 return round;
             });
 

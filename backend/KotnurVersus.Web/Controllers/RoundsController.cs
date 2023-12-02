@@ -3,18 +3,29 @@ using KotnurVersus.Web.Controllers.Base;
 using KotnurVersus.Web.Helpers;
 using Microsoft.AspNetCore.Mvc;
 using Models;
+using Models.Challenges;
 using Models.Rounds;
+using Models.Search;
 
 namespace KotnurVersus.Web.Controllers;
 
 public class RoundsController : CreatableEntityControllerBase<Round, RoundCreationArgs, InvalidRoundDataReason, RoundSearchRequest>
 {
     [HttpPost("{id:guid}/resetTimer")]
+    public async Task<ActionResult<SearchResult<Challenge>, ErrorInfo<AccessMultipleEntitiesError>>> GetAvailableChallenges(
+        [FromServices] IGetAvailableChallengesCommand command,
+        [FromRoute] Guid id)
+    {
+        var result = await command.RunAsync(id, HttpContext.RequestAborted);
+        return result.ToActionResult();
+    }
+    
+    [HttpPost("{id:guid}/resetTimer")]
     public async Task<ActionResult<Round, ErrorInfo<InvalidRoundDataReason>>> ResetRoundTimer(
         [FromServices] IResetTimerCommand command,
         [FromRoute] Guid id)
     {
-        var result = await command.RunAsync(id);
+        var result = await command.RunAsync(id, HttpContext.RequestAborted);
         return result.ToActionResult();
     }
 
