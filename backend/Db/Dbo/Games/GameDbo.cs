@@ -32,4 +32,10 @@ public class GameDbo : Dbo
 
     [Column("state")]
     public GameState State { get; set; }
+
+    [Column("cats_in_the_bag")]
+    public bool CatsInTheBag { get; set; }
+
+    [Column("without_challenges_repeat_in_final")]
+    public bool WithoutChallengesRepeatInFinal { get; set; }
 }
