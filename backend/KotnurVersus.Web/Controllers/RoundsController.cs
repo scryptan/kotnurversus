@@ -11,7 +11,7 @@ namespace KotnurVersus.Web.Controllers;
 
 public class RoundsController : CreatableEntityControllerBase<Round, RoundCreationArgs, InvalidRoundDataReason, RoundSearchRequest>
 {
-    [HttpPost("{id:guid}/resetTimer")]
+    [HttpGet("{id:guid}/get-available-challenges")]
     public async Task<ActionResult<SearchResult<Challenge>, ErrorInfo<AccessMultipleEntitiesError>>> GetAvailableChallenges(
         [FromServices] IGetAvailableChallengesCommand command,
         [FromRoute] Guid id)
@@ -20,7 +20,7 @@ public class RoundsController : CreatableEntityControllerBase<Round, RoundCreati
         return result.ToActionResult();
     }
     
-    [HttpPost("{id:guid}/resetTimer")]
+    [HttpPost("{id:guid}/reset-timer")]
     public async Task<ActionResult<Round, ErrorInfo<InvalidRoundDataReason>>> ResetRoundTimer(
         [FromServices] IResetTimerCommand command,
         [FromRoute] Guid id)
