@@ -1,11 +1,8 @@
 using Domain.Context;
 using Domain.Services.Rounds;
-using Microsoft.AspNetCore.JsonPatch;
-using Microsoft.AspNetCore.JsonPatch.Operations;
 using Models;
 using Models.Rounds;
 using Models.Rounds.History;
-using Newtonsoft.Json.Serialization;
 
 namespace Domain.Commands.Rounds;
 
