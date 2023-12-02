@@ -52,6 +52,9 @@ public class RoundsService : EntityServiceBase<Round, RoundDbo, RoundSearchReque
 
         if (searchRequest.GameId != null)
             res = res.Where(x => x.GameId == searchRequest.GameId);
+        
+        if (searchRequest.NextRoundId != null)
+            res = res.Where(x => x.NextRoundId == searchRequest.NextRoundId);
 
         res = await base.ApplyFilterAsync(res, searchRequest);
         return res;

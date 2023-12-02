@@ -23,7 +23,5 @@ public class CreateGameCommand : CreateCommandBase<Game, GameCreationArgs, Inval
         Form = args.Form,
         StartDate = args.StartDate,
         State = GameState.Prepare,
-        CatsInTheBag = args.CatsInTheBag,
-        WithoutChallengesRepeatInFinal = args.WithoutChallengesRepeatInFinal
     };
 }

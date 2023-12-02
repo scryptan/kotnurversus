@@ -24,8 +24,6 @@ public class GamesService : EntityServiceBase<Game, GameDbo, GameSearchRequest>,
         dbo.StartDate = entity.StartDate;
         dbo.Specifications = entity.Specifications;
         dbo.State = entity.State;
-        dbo.CatsInTheBag = entity.CatsInTheBag;
-        dbo.WithoutChallengesRepeatInFinal = entity.WithoutChallengesRepeatInFinal;
 
         return Task.CompletedTask;
     }
@@ -41,8 +39,6 @@ public class GamesService : EntityServiceBase<Game, GameDbo, GameSearchRequest>,
         entity.StartDate = dbo.StartDate;
         entity.Specifications = dbo.Specifications;
         entity.State = dbo.State;
-        entity.CatsInTheBag = dbo.CatsInTheBag;
-        entity.WithoutChallengesRepeatInFinal = dbo.WithoutChallengesRepeatInFinal;
 
         return Task.CompletedTask;
     }

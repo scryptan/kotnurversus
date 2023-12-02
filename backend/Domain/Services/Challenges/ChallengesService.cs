@@ -46,6 +46,9 @@ public class ChallengesService : EntityServiceBase<Challenge, ChallengeDbo, Chal
         if (searchRequest.CategoryId != null)
             res = res.Where(x => x.CategoryId == searchRequest.CategoryId.Value);
 
+        if (searchRequest.ExcludeIds != null)
+            res = res.Where(x => !searchRequest.ExcludeIds.Contains(x.Id));
+
         res = await base.ApplyFilterAsync(res, searchRequest);
         return res;
     }
