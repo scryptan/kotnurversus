@@ -45,6 +45,7 @@ export type TourneySpecification = {
   businessDescription?: string;
   techDescription?: string;
   order: number;
+  parentId?: string;
 };
 
 export type TourneySpecificationWithId = TourneySpecification & { id: string };
