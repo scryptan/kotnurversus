@@ -88,7 +88,7 @@ const EditTourneyPage = () => {
 
   return (
     <Stack mx="auto" w="full" maxW="wrapper" flex={1} spacing={14}>
-      <Heading>Изменение турнира</Heading>
+      <Heading textAlign="center">Изменение турнира</Heading>
       <TourneyForm
         id={formId}
         defaultValue={defaultFormData}

@@ -15,7 +15,7 @@ export type CreateTourney = {
   form: TourneyType;
   startDate: Date;
   description?: string;
-  settings?: TourneySettings;
+  settings?: Partial<TourneySettings>;
   specifications?: TourneySpecification[];
 };
 
@@ -36,6 +36,8 @@ export type TourneySettings = {
   prepareSeconds: number;
   presentationSeconds: number;
   defenseSeconds: number;
+  catsInTheBag: boolean;
+  withoutChallengesRepeatInFinal: boolean;
 };
 
 export type TourneySpecification = {
