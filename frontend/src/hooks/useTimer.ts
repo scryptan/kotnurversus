@@ -1,5 +1,6 @@
 import { useInterval } from "@chakra-ui/react";
-import { useState } from "react";
+import { isEqual } from "date-fns";
+import { useEffect, useState } from "react";
 
 const DEFAULT_DELAY = 1000;
 
@@ -22,6 +23,11 @@ const useTimer = ({
   const [delay, setDelay] = useState<number | null>(() =>
     getDelayFromExpiryTimestamp(expiryTimestamp)
   );
+
+  useEffect(() => {
+    if (isEqual(expiryTimestamp, expiry)) return;
+    setExpiryTimestamp(expiry);
+  }, [expiry]);
 
   const handleExpire = () => {
     setIsRunning(false);

@@ -1,6 +1,11 @@
 import { v4 as uuid } from "uuid";
-import { MatchState } from "~/types/match";
-import { TourneyMatch, TourneyTeam, TourneyType } from "~/types/tourney";
+import {
+  TourneyRound,
+  TourneyRoundState,
+  TourneySpecification,
+  TourneyTeam,
+  TourneyType,
+} from "~/types/tourney";
 
 export const TOURNEY_TYPE_NAMES: Record<TourneyType, string> = {
   [TourneyType.Offline]: "Оффлайн",
@@ -8,7 +13,7 @@ export const TOURNEY_TYPE_NAMES: Record<TourneyType, string> = {
 };
 
 export const createMatchesFromTeams = (teams: TourneyTeam[]) => {
-  const baseMatches = teams.reduce<TourneyMatch[]>((result, team, i) => {
+  const baseMatches = teams.reduce<TourneyRound[]>((result, team, i) => {
     if (i % 2 === 0) {
       result.push({
         ...createEmptyMatch(uuid()),
@@ -27,6 +32,14 @@ export const createMatchesFromTeams = (teams: TourneyTeam[]) => {
   return createMatches(baseMatches);
 };
 
+export const addSpecificationToRound =
+  (specifications: TourneySpecification[]) =>
+  (match: TourneyRound, index: number): TourneyRound => ({
+    ...match,
+    badgeValue: index + 1,
+    specification: specifications[index],
+  });
+
 const calcMissingMatchesCount = (teamsCount: number) => {
   let minTeams = 2;
   while (minTeams < teamsCount) {
@@ -35,10 +48,10 @@ const calcMissingMatchesCount = (teamsCount: number) => {
   return Math.floor((minTeams - teamsCount) / 2);
 };
 
-const createMatches = (baseMatches: TourneyMatch[]): TourneyMatch[] => {
+const createMatches = (baseMatches: TourneyRound[]): TourneyRound[] => {
   if (baseMatches.length < 2) return baseMatches;
 
-  const nextMatches = baseMatches.reduce<TourneyMatch[]>((result, match, i) => {
+  const nextMatches = baseMatches.reduce<TourneyRound[]>((result, match, i) => {
     if (i % 2 === 0) {
       const matchId = uuid();
       match.nextMatchId = matchId;
@@ -53,10 +66,10 @@ const createMatches = (baseMatches: TourneyMatch[]): TourneyMatch[] => {
   return [...baseMatches, ...createMatches(nextMatches)];
 };
 
-const createEmptyMatch = (matchId: string): TourneyMatch => ({
+const createEmptyMatch = (matchId: string): TourneyRound => ({
   id: matchId,
   nextMatchId: null,
-  state: MatchState.Init,
+  state: TourneyRoundState.Init,
   startTime: "",
   participants: [],
 });

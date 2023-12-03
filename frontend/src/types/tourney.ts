@@ -1,5 +1,3 @@
-import { MatchState } from "~/types/match";
-
 export type Tourney = {
   id: string;
   title: string;
@@ -17,7 +15,7 @@ export type CreateTourney = {
   form: TourneyType;
   startDate: Date;
   description?: string;
-  settings?: TourneySettings;
+  settings?: Partial<TourneySettings>;
   specifications?: TourneySpecification[];
 };
 
@@ -38,13 +36,16 @@ export type TourneySettings = {
   prepareSeconds: number;
   presentationSeconds: number;
   defenseSeconds: number;
+  catsInTheBag: boolean;
+  withoutChallengesRepeatInFinal: boolean;
 };
 
 export type TourneySpecification = {
   title: string;
   businessDescription?: string;
   techDescription?: string;
-  order: number
+  order: number;
+  parentId?: string;
 };
 
 export type TourneySpecificationWithId = TourneySpecification & { id: string };
@@ -56,17 +57,29 @@ export type TourneyTeam = {
   order: number;
 };
 
-export type TourneyMatch = {
+export type TourneyRound = {
   id: string;
   nextMatchId: string | null;
   startTime: string;
-  state: MatchState;
-  participants: TourneyMatchTeam[];
-  specificationTitle?: string | null;
+  state: TourneyRoundState;
+  participants: TourneyRoundTeam[];
+  specification?: TourneySpecification;
   badgeValue?: number;
+  isLoading?: boolean;
 };
 
-export type TourneyMatchTeam = {
+export enum TourneyRoundState {
+  Init = "init",
+  InitReady = "init-ready",
+  Prepare = "prepare",
+  Presentation = "presentation",
+  Defense = "defense",
+  Mark = "mark",
+  Complete = "complete",
+  Pause = "pause",
+}
+
+export type TourneyRoundTeam = {
   id: string;
   name: string;
   resultText?: string;

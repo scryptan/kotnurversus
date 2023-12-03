@@ -28,7 +28,7 @@ const EditSpecificationWindow = ({
 
   const handleSubmit = (data: SpecificationFormSchema) => {
     onSubmit?.({
-      id: specification.id,
+      ...specification,
       title: data.title,
       businessDescription: data.businessDescription,
       techDescription: data.techDescription,

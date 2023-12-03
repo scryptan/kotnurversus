@@ -7,7 +7,7 @@ const TourneysPage = lazy(() => import("./TourneysPage"));
 const CreateTourneyPage = lazy(() => import("./CreateTourneyPage"));
 const EditTourneyPage = lazy(() => import("./EditTourneyPage"));
 const TourneyPage = lazy(() => import("./TourneyPage"));
-const MatchPage = lazy(() => import("./MatchPage"));
+const RoundPage = lazy(() => import("./RoundPage"));
 const ProfilePage = lazy(() => import("./ProfilePage"));
 
 export default {
@@ -31,9 +31,9 @@ export default {
     path: paths.tourney.pathTemplate,
     Component: TourneyPage,
   },
-  match: {
-    path: paths.match.pathTemplate,
-    Component: MatchPage,
+  round: {
+    path: paths.round.pathTemplate,
+    Component: RoundPage,
   },
   profile: {
     path: paths.profile.pathTemplate,

@@ -14,6 +14,7 @@ import { ReactNode } from "react";
 import { Controller, useForm } from "react-hook-form";
 import DateInput from "~/components/DateInput";
 import Input from "~/components/Input";
+import Textarea from "~/components/Textarea";
 import TimeInput from "~/components/TimeInput";
 import { TourneyType } from "~/types/tourney";
 import { TOURNEY_TYPE_NAMES } from "~/utils/tourney";
@@ -81,6 +82,7 @@ const TourneyForm = ({ id, defaultValue, onSubmit }: Props) => {
               <TimeInput
                 {...field}
                 id={id}
+                placeholder="чч:мм"
                 containerProps={{ w: "140px" }}
                 errorMessage={error?.message}
               />
@@ -107,12 +109,14 @@ const TourneyForm = ({ id, defaultValue, onSubmit }: Props) => {
           )}
         />
       </FormLabel>
-      <FormLabel label="Место проведения">
+      <FormLabel label="Описание">
         {(id) => (
-          <Input
+          <Textarea
             {...register("description")}
             id={id}
-            placeholder="Введите место проведения"
+            maxH="200px"
+            resize="vertical"
+            placeholder="Введите описание турнира (место проведения - адрес или ссылку, дополнительные сведения)"
           />
         )}
       </FormLabel>
@@ -125,11 +129,23 @@ const TourneyForm = ({ id, defaultValue, onSubmit }: Props) => {
           >
             <Box my={1} as="span" w="fit-content">
               <Switch
-                {...register("enableRepeatChallengesInFinal")}
+                {...register("withoutChallengesRepeatInFinal")}
                 id={id}
                 size="lg"
-                colorScheme="cyan"
               />
+            </Box>
+          </Tooltip>
+        )}
+      </FormLabel>
+      <FormLabel label="Кот в мешке">
+        {(id) => (
+          <Tooltip
+            hasArrow
+            placement="right"
+            label="В раундах могут попасться неожиданные доп. требования 🐱👜"
+          >
+            <Box my={1} as="span" w="fit-content">
+              <Switch {...register("catsInTheBag")} id={id} size="lg" />
             </Box>
           </Tooltip>
         )}
@@ -160,7 +176,9 @@ const FormLabel = ({ label, isRequired, children }: FormLabelProps) => {
         {...(needId ? { as: "label", htmlFor: id } : {})}
       >
         {label}
-        {isRequired && <Text as="span" ml={2} color="red.500" children="*" />}
+        {isRequired && (
+          <Text pos="absolute" as="span" ml={2} color="red.500" children="*" />
+        )}
       </Text>
       {needId ? children(id) : children}
     </>

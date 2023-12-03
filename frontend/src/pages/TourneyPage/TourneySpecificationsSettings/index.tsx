@@ -11,8 +11,8 @@ import {
   TourneySpecification,
   TourneySpecificationWithId,
 } from "~/types/tourney";
-import { useAuthContext } from "~/utils/auth-context";
 import queryKeys from "~/utils/query-keys";
+import { useTourneyContext } from "../tourney-context";
 import SpecificationsList from "./SpecificationsList";
 
 type Props = {
@@ -26,7 +26,7 @@ const TourneySpecificationsSettings = ({
 }: Props) => {
   const debounce = useDebounce(500);
   const queryClient = useQueryClient();
-  const { isAuthenticated } = useAuthContext();
+  const { isEditable } = useTourneyContext();
   const [specifications, setSpecifications] = useState(() =>
     defaultSpecifications.map<TourneySpecificationWithId>((specification) => ({
       ...specification,
@@ -44,9 +44,7 @@ const TourneySpecificationsSettings = ({
     },
   });
 
-  if (!isAuthenticated) {
-    return null;
-  }
+  if (!isEditable) return null;
 
   const handleUpdate = (
     callback: (

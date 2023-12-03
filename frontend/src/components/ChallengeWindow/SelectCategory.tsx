@@ -1,15 +1,18 @@
-import { Circle } from "@chakra-ui/react";
+import { Circle, forwardRef } from "@chakra-ui/react";
 import { useQuery } from "@tanstack/react-query";
 import api from "~/api";
 import Select from "~/components/Select";
 import { SingleSelectProps } from "~/components/Select/SingleSelect";
 import queryKeys from "~/utils/query-keys";
 
-const SelectCategory = (props: Omit<SingleSelectProps<string>, "options">) => {
+const SelectCategory = forwardRef<
+  Omit<SingleSelectProps<string>, "options">,
+  "input"
+>((props, ref) => {
   const categoriesQuery = useQuery({
     queryKey: queryKeys.categories,
     queryFn: api.categories.find,
-    staleTime: 1000 * 60 * 50,
+    staleTime: 1000 * 60 * 5,
   });
 
   const options = (categoriesQuery.data?.items || []).map((c) => ({
@@ -23,6 +26,7 @@ const SelectCategory = (props: Omit<SingleSelectProps<string>, "options">) => {
 
   return (
     <Select.Single
+      ref={ref}
       key={categoriesQuery.isLoading ? "loading" : options.length}
       isHideClear
       isLoading={categoriesQuery.isLoading}
@@ -35,6 +39,6 @@ const SelectCategory = (props: Omit<SingleSelectProps<string>, "options">) => {
       {...props}
     />
   );
-};
+});
 
 export default SelectCategory;

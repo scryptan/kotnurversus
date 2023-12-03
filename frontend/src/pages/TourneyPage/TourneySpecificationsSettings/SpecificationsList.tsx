@@ -20,6 +20,7 @@ import {
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 import { useState } from "react";
+import { v4 as uuid } from "uuid";
 import { TourneySpecificationWithId } from "~/types/tourney";
 import SpecificationsListBaseItem from "./SpecificationsListItem";
 
@@ -46,7 +47,32 @@ const SpecificationsList = ({ specifications, onUpdate, ...props }: Props) => {
 
   const handleUpdate = (specification: TourneySpecificationWithId) => {
     onUpdate?.((items) =>
-      items.map((item) => (item.id === specification.id ? specification : item))
+      items.map((item) => {
+        // update current specification
+        if (item.id === specification.id) return specification;
+
+        // update duplicate specification
+        if (
+          specification.parentId &&
+          item.parentId === specification.parentId
+        ) {
+          return { ...specification, id: item.id };
+        }
+
+        return item;
+      })
+    );
+  };
+
+  const handleDuplicate = (id: string) => {
+    onUpdate?.((items) =>
+      items.flatMap((item) => {
+        if (item.id !== id) return [item];
+        const parentId = item.parentId || uuid();
+        const updated = { ...item, parentId };
+        const duplicated = { ...updated, id: uuid() };
+        return [updated, duplicated];
+      })
     );
   };
 
@@ -85,6 +111,7 @@ const SpecificationsList = ({ specifications, onUpdate, ...props }: Props) => {
               key={specification.id}
               specification={specification}
               onUpdate={handleUpdate}
+              onDuplicate={handleDuplicate}
               onRemove={handleRemove}
             />
           ))}
@@ -113,12 +140,14 @@ const dropAnimationConfig: DropAnimation = {
 type SpecificationsListItemProps = {
   specification: TourneySpecificationWithId;
   onUpdate: (specifications: TourneySpecificationWithId) => void;
+  onDuplicate: (id: string) => void;
   onRemove: (id: UniqueIdentifier) => void;
 };
 
 const SpecificationsListItem = ({
   specification,
   onUpdate,
+  onDuplicate,
   onRemove,
 }: SpecificationsListItemProps) => {
   const {
@@ -138,6 +167,7 @@ const SpecificationsListItem = ({
       isDragging={isDragging}
       specification={specification}
       onUpdate={onUpdate}
+      onDuplicate={() => onDuplicate(specification.id)}
       onRemove={() => onRemove(specification.id)}
       transform={transform}
       transition={transition}

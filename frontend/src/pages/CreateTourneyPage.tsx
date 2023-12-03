@@ -42,7 +42,7 @@ const CreateTourneyPage = () => {
 
   return (
     <Stack mx="auto" w="full" maxW="wrapper" flex={1} spacing={14}>
-      <Heading>Создание турнира</Heading>
+      <Heading textAlign="center">Создание турнира</Heading>
       <TourneyForm id={formId} onSubmit={createTourney.mutateAsync} />
       <Button
         px={10}

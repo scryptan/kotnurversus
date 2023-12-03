@@ -11,7 +11,7 @@ import { Link } from "react-router-dom";
 import api from "~/api";
 import Loading from "~/components/Loading";
 import TourneysTable from "~/components/TourneysTable";
-import PlusIcon from "~/icons/PlusIcon";
+import OutlinePlusIcon from "~/icons/OutlinePlusIcon";
 import paths from "~/pages/paths";
 import queryKeys from "~/utils/query-keys";
 
@@ -51,7 +51,7 @@ const CreateTourneyButton = () => (
     size="lg"
     colorScheme="teal"
     to={paths.createTourney.path}
-    leftIcon={<PlusIcon boxSize={6} />}
+    leftIcon={<OutlinePlusIcon boxSize={6} />}
     children="Создать турнир"
   />
 );

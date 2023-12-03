@@ -21,7 +21,7 @@ const CreateChallengeButton = ({ defaultCategoryId, ...props }: Props) => {
     },
     onSuccess: async () => {
       window.onClose();
-      await queryClient.refetchQueries({ queryKey: queryKeys.challenges });
+      await queryClient.refetchQueries({ queryKey: queryKeys.challenges() });
     },
     onError: handleError,
   });

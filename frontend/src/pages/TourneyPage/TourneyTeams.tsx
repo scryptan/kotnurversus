@@ -8,9 +8,9 @@ import TeamCard from "~/components/TeamCard";
 import useDebounce from "~/hooks/useDebounce";
 import useForceUpdate from "~/hooks/useForceUpdate";
 import { TourneyTeam } from "~/types/tourney";
-import { useAuthContext } from "~/utils/auth-context";
 import queryKeys from "~/utils/query-keys";
 import TourneySectionLayout from "./TourneySectionLayout";
+import { useTourneyContext } from "./tourney-context";
 
 type Props = {
   id: string;
@@ -20,7 +20,7 @@ type Props = {
 const TourneyTeams = ({ id, teams: defaultTeams }: Props) => {
   const debounce = useDebounce(500);
   const queryClient = useQueryClient();
-  const { isAuthenticated } = useAuthContext();
+  const { isEditable } = useTourneyContext();
   const { forceUpdate } = useForceUpdate();
   const teams = useRef(defaultTeams);
   const defaultTeam = useRef(createDefaultTeam());
@@ -60,11 +60,11 @@ const TourneyTeams = ({ id, teams: defaultTeams }: Props) => {
     forceUpdate();
   };
 
-  const allTeams = isAuthenticated
+  const allTeams = isEditable
     ? [...teams.current, defaultTeam.current]
     : teams.current;
 
-  if (!isAuthenticated && allTeams.length < 1) {
+  if (!isEditable && allTeams.length < 1) {
     return null;
   }
 
@@ -77,15 +77,19 @@ const TourneyTeams = ({ id, teams: defaultTeams }: Props) => {
       <Wrap mt={6} spacing={10}>
         {allTeams.map((team) => {
           const isDefault = team.id === defaultTeam.current.id;
-          return (
-            <TeamCard
-              key={team.id}
-              team={team}
-              isEditMode={isAuthenticated}
-              onChange={isDefault ? handleAdd : handleChange}
-              onRemove={isDefault ? undefined : handleRemove}
-            />
-          );
+
+          if (isEditable) {
+            return (
+              <TeamCard.Editable
+                key={team.id}
+                team={team}
+                onChange={isDefault ? handleAdd : handleChange}
+                onRemove={isDefault ? undefined : handleRemove}
+              />
+            );
+          }
+          
+          return <TeamCard.Base key={team.id} team={team} />;
         })}
       </Wrap>
     </TourneySectionLayout>

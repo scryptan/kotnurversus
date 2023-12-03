@@ -9,8 +9,10 @@ import {
 import { DraggableSyntheticListeners } from "@dnd-kit/core";
 import { Transform } from "@dnd-kit/utilities";
 import React, { forwardRef, memo } from "react";
+import IconButtonWithTooltip from "~/components/IconButtonWithTooltip";
 import SpecificationWindow from "~/components/SpecificationWindow";
 import DragHandleIcon from "~/icons/DragHandleIcon";
+import DuplicateIcon from "~/icons/DuplicateIcon";
 import { TourneySpecificationWithId } from "~/types/tourney";
 
 type Props = {
@@ -18,6 +20,7 @@ type Props = {
   isDragging?: boolean;
   isOverlay?: boolean;
   onUpdate?: (specification: TourneySpecificationWithId) => void;
+  onDuplicate?: () => void;
   onRemove?: () => void;
   specification: TourneySpecificationWithId;
   transform?: Transform | null;
@@ -33,6 +36,7 @@ const SpecificationsListItem = forwardRef<HTMLDivElement, Props>(
       handleRef,
       specification,
       onUpdate,
+      onDuplicate,
       onRemove,
       transform,
       listeners,
@@ -67,7 +71,6 @@ const SpecificationsListItem = forwardRef<HTMLDivElement, Props>(
         <Text ml={6} as="li" fontSize="lg">
           <Button
             {...window.getButtonProps()}
-            minW="200px"
             maxW="50vw"
             variant="link"
             color="text.light.main"
@@ -81,6 +84,7 @@ const SpecificationsListItem = forwardRef<HTMLDivElement, Props>(
             children={specification.title}
           />
         </Text>
+        {onDuplicate && <DuplicateButton onClick={onDuplicate} />}
         {onUpdate && (
           <SpecificationWindow.Edit
             {...window.getDisclosureProps()}
@@ -104,11 +108,24 @@ const HandleButton = forwardRef<HTMLButtonElement, ButtonProps>(
       variant="ghost"
       opacity={0}
       icon={<DragHandleIcon />}
-      aria-label="Кнопка для перетаскивания"
+      aria-label="Перетащить"
       _focusVisible={{ opacity: 1, boxShadow: "outline" }}
       {...props}
     />
   )
+);
+
+const DuplicateButton = (props: ButtonProps) => (
+  <IconButtonWithTooltip
+    size="sm"
+    variant="ghost"
+    opacity={0}
+    placement="right"
+    label="Дублировать"
+    icon={<DuplicateIcon boxSize={5} />}
+    _focusVisible={{ opacity: 1, boxShadow: "outline" }}
+    {...props}
+  />
 );
 
 const transformProperty = [

@@ -5,25 +5,22 @@ import {
   AccordionItem,
   AccordionPanel,
   Box,
+  BoxProps,
   Heading,
   Text,
 } from "@chakra-ui/react";
-import { MatchTask } from "~/types/match";
-import { createArrayFromMatchTask } from "~/utils/match";
+import { createArrayFromSpecification } from "~/utils/round";
+import { useRoundContext } from "./round-context";
 
-type Props = {
-  task: MatchTask;
-};
+const RoundSpecificationSection = (props: BoxProps) => {
+  const { isPublic, round } = useRoundContext();
 
-const MatchTaskSection = ({ task }: Props) => {
-  const items = createArrayFromMatchTask(task);
-
-  if (items.length === 0) {
-    return null;
-  }
+  if (!isPublic) return null;
+  const items = createArrayFromSpecification(round.specification);
+  if (items.length < 1) return null;
 
   return (
-    <Box>
+    <Box {...props}>
       <Heading mb={4} fontSize="3xl">
         Описание задачи
       </Heading>
@@ -49,4 +46,4 @@ const MatchTaskSection = ({ task }: Props) => {
   );
 };
 
-export default MatchTaskSection;
+export default RoundSpecificationSection;

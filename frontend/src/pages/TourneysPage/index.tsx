@@ -6,7 +6,7 @@ import api from "~/api";
 import Input from "~/components/Input";
 import Loading from "~/components/Loading";
 import useDebounce from "~/hooks/useDebounce";
-import PlusIcon from "~/icons/PlusIcon";
+import OutlinePlusIcon from "~/icons/OutlinePlusIcon";
 import SearchIcon from "~/icons/SearchIcon";
 import paths from "~/pages/paths";
 import { TourneyState } from "~/types/tourney";
@@ -89,7 +89,7 @@ const CreateTourneyButton = () => {
       size="lg"
       colorScheme="teal"
       to={paths.createTourney.path}
-      leftIcon={<PlusIcon boxSize={6} />}
+      leftIcon={<OutlinePlusIcon boxSize={6} />}
       children="Создать турнир"
     />
   );

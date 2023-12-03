@@ -1,5 +1,6 @@
 import { Operation, compare } from "fast-json-patch";
 import { PaginationResponse } from "~/types/pagination";
+import { CreateRound } from "~/types/round";
 import { CreateTourney, Tourney } from "~/types/tourney";
 import axiosClient from "~/utils/axios-client";
 
@@ -30,5 +31,11 @@ export class TourneysController {
 
   async delete(id: string): Promise<void> {
     await axiosClient.delete(`/api/v1/Games/${id}`);
+  }
+
+  async start(id: string, rounds: CreateRound[]): Promise<Tourney> {
+    return await axiosClient.post(`/api/v1/Games/${id}/start`, {
+      roundsToCreate: rounds,
+    });
   }
 }

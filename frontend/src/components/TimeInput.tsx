@@ -27,7 +27,6 @@ const TimeInput = forwardRef<TimeInputProps, "input">(
       <Input
         {...props}
         ref={inputRefs}
-        placeholder="00:00"
         onInput={maskDate}
         onChange={handleChange}
         rightElement={<TimeIcon />}
