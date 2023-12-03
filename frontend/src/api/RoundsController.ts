@@ -1,4 +1,5 @@
 import { Operation } from "fast-json-patch";
+import { Challenge } from "~/types/challenge";
 import { PaginationResponse } from "~/types/pagination";
 import { FinishRound, Round, RoundState } from "~/types/round";
 import axiosClient from "~/utils/axios-client";
@@ -24,6 +25,14 @@ export class RoundsController {
           participants: round.participants.sort((a, b) => a.order - b.order),
         })),
     };
+  }
+
+  async findAvailableChallenges(
+    id: string
+  ): Promise<PaginationResponse<Challenge>> {
+    return await axiosClient.get(
+      `/api/v1/Rounds/${id}/get-available-challenges`
+    );
   }
 
   async patch(id: string, operations: Operation[]): Promise<Round> {

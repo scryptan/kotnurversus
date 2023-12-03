@@ -36,7 +36,10 @@ const ChallengeSelectionWindow = ({
   const { round } = useRoundContext();
   const [chosenChallenge, setChosenChallenge] = useState<Challenge>();
 
-  const query = useChallengesQuery({ enabled: props.isOpen });
+  const query = useChallengesQuery({
+    roundId: round.id,
+    enabled: props.isOpen,
+  });
 
   const addChallengeMutation = useMutation({
     mutationFn: async (chosenChallengeId: string) => {
@@ -186,7 +189,11 @@ const calcAvailableChallenges = (round: Round, challenges: Challenge[]) => {
   const chosenChallengeIds = new Set(
     round.participants.map((p) => p.challenges).flat()
   );
-  return challenges.filter((c) => !chosenChallengeIds.has(c.id));
+  return challenges.filter(
+    (c) =>
+      (round.settings.catsInTheBag || !c.isCatInBag) &&
+      !chosenChallengeIds.has(c.id)
+  );
 };
 
 export default ChallengeSelectionWindow;

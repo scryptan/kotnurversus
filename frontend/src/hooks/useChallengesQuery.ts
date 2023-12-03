@@ -4,10 +4,14 @@ import { Challenge } from "~/types/challenge";
 import queryKeys from "~/utils/query-keys";
 
 type UseChallengesQueryParams = {
+  roundId?: string;
   enabled?: boolean;
 };
 
-const useChallengesQuery = ({ enabled }: UseChallengesQueryParams = {}) => {
+const useChallengesQuery = ({
+  roundId,
+  enabled,
+}: UseChallengesQueryParams = {}) => {
   const categoriesQuery = useQuery({
     queryKey: queryKeys.categories,
     queryFn: api.categories.find,
@@ -16,8 +20,11 @@ const useChallengesQuery = ({ enabled }: UseChallengesQueryParams = {}) => {
   });
 
   const challengesQuery = useQuery({
-    queryKey: queryKeys.challenges,
-    queryFn: api.challenges.find,
+    queryKey: queryKeys.challenges(roundId),
+    queryFn: () => {
+      if (roundId) return api.rounds.findAvailableChallenges(roundId);
+      return api.challenges.find();
+    },
     staleTime: 1000 * 60 * 50,
     enabled,
   });
