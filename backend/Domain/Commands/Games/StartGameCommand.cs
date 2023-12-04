@@ -97,6 +97,10 @@ public class StartGameCommand : IStartGameCommand
         if (finalRound == null)
             return false;
 
+        var isTeamsCountCorrect = IsNumberAPowOfTwo(game.Teams.Count); // количество команд это степень двойки
+        if (!isTeamsCountCorrect)
+            return false;
+        
         var isRoundsCountCorrect = IsNumberAPowOfTwo(rounds.Count + 1); // количество раундов это степень двойки, большая нуля
         if (!isRoundsCountCorrect)
             return false;
