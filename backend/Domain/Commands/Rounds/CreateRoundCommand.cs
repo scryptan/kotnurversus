@@ -1,5 +1,6 @@
 using Domain.Commands.Base;
 using Domain.Context;
+using Domain.Helpers;
 using Domain.Services.Base;
 using Models.Rounds;
 
@@ -12,14 +13,5 @@ public class CreateRoundCommand : CreateCommandBase<Round, RoundCreationArgs, In
     {
     }
 
-    protected override Round ConvertToEntity(RoundCreationArgs args) => new()
-    {
-        GameId = args.GameId,
-        NextRoundId = args.NextRoundId,
-        Order = args.Order,
-        Settings = new(),
-        Artifacts = new(),
-        History = new(),
-        Participants = new()
-    };
+    protected override Round ConvertToEntity(RoundCreationArgs args) => args.ToApiModel();
 }

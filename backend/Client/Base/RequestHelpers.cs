@@ -1,4 +1,5 @@
 using System.Globalization;
+using Core.Helpers;
 using Models.Search;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
@@ -37,7 +38,7 @@ internal static class RequestHelpers
         {
             new StringEnumConverter(new CamelCaseNamingStrategy()),
         },
-        FloatParseHandling = FloatParseHandling.Decimal,
+        FloatParseHandling = FloatParseHandling.Decimal
     };
 
     public static Request WithFieldFilter<T>(this Request request, T? filter)
@@ -71,7 +72,7 @@ internal static class RequestHelpers
 
     public static string Serialize<T>(T data) => JsonConvert.SerializeObject(data, jsonSerializerSettings);
 
-    public static T Deserialize<T>(string data) => JsonConvert.DeserializeObject<T>(data, jsonSerializerSettings) ?? throw new InvalidOperationException("Deserialized to null");
+    public static T Deserialize<T>(string data) => Serializer.Deserialize<T>(data) ?? throw new InvalidOperationException("Deserialized to null");
 
     public static object Deserialize(Type type, string data) => JsonConvert.DeserializeObject(data, type, jsonSerializerSettings) ?? throw new InvalidOperationException("Deserialized to null");
 

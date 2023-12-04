@@ -6,4 +6,5 @@ public class Specification
     public string BusinessDescription { get; set; } = null!;
     public string TechDescription { get; set; } = null!;
     public int Order { get; set; }
+    public Guid? ParentId { get; set; }
 }

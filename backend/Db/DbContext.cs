@@ -1,3 +1,4 @@
+using Db.Dbo.Categories;
 using Db.Dbo.Challenges;
 using Db.Dbo.Games;
 using Db.Dbo.Rounds;
@@ -18,6 +19,7 @@ public class DbContext : Microsoft.EntityFrameworkCore.DbContext
     public DbSet<RoundDbo> Rounds { get; set; } = null!;
     public DbSet<GameDbo> Games { get; set; } = null!;
     public DbSet<ChallengeDbo> Challenge { get; set; } = null!;
+    public DbSet<CategoryDbo> Categories { get; set; } = null!;
 
     protected override void OnConfiguring(DbContextOptionsBuilder builder)
     {
@@ -39,6 +41,6 @@ public class DbContext : Microsoft.EntityFrameworkCore.DbContext
 
         var challenge = modelBuilder.Entity<ChallengeDbo>();
         challenge.HasKey(x => x.Id);
-        challenge.HasIndex(x => new {x.Title, x.Theme}).IsUnique();
+        challenge.HasIndex(x => new {x.Title, Theme = x.CategoryId}).IsUnique();
     }
 }

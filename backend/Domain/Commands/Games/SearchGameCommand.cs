@@ -1,7 +1,6 @@
 using Domain.Commands.Base;
 using Domain.Context;
 using Domain.Services.Base;
-using Models.Challenges;
 using Models.Games;
 
 namespace Domain.Commands.Games;

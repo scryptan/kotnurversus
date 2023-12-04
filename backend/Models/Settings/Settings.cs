@@ -7,4 +7,6 @@ public record Settings
     public int PrepareSeconds { get; set; } = 20 * 60;
     public int PresentationSeconds { get; set; } = 15 * 60;
     public int DefenseSeconds { get; set; } = 5 * 60;
+    public bool CatsInTheBag { get; set; }
+    public bool WithoutChallengesRepeatInFinal { get; set; }
 }

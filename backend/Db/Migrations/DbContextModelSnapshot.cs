@@ -27,11 +27,36 @@ namespace Db.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
+            modelBuilder.Entity("Db.Dbo.Categories.CategoryDbo", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<string>("Color")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("color");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("title");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("categories");
+                });
+
             modelBuilder.Entity("Db.Dbo.Challenges.ChallengeDbo", b =>
                 {
                     b.Property<Guid>("Id")
                         .HasColumnType("uuid")
                         .HasColumnName("id");
+
+                    b.Property<Guid>("CategoryId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("categoryId");
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -42,11 +67,6 @@ namespace Db.Migrations
                         .HasColumnType("boolean")
                         .HasColumnName("is_cat_in_bag");
 
-                    b.Property<string>("Theme")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("theme");
-
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("text")
@@ -54,7 +74,7 @@ namespace Db.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Title", "Theme")
+                    b.HasIndex("Title", "CategoryId")
                         .IsUnique();
 
                     b.ToTable("challenges");

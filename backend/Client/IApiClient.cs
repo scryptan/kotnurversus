@@ -1,3 +1,4 @@
+using Client.Categories;
 using Client.Challenges;
 using Client.Games;
 using Client.Rounds;
@@ -9,4 +10,5 @@ public interface IApiClient
     IChallengeClient Challenges { get; }
     IGameClient Games { get; }
     IRoundClient Rounds { get; }
+    ICategoryClient Categories { get; }
 }

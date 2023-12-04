@@ -16,8 +16,9 @@ public class CreateChallengeCommand : CreateCommandBase<Challenge, ChallengeCrea
     protected override Challenge ConvertToEntity(ChallengeCreationArgs args) => new()
     {
         Description = args.Description,
-        Theme = args.Theme,
-        Title = args.Title
+        CategoryId = args.CategoryId,
+        Title = args.Title,
+        IsCatInBag = args.IsCatInBag,
     };
 
     protected override CreateErrorInfo<CreateEntityError, InvalidChallengeDataReason>? TryHandleConstraintViolation(string constraintName, Challenge entity)
@@ -29,7 +30,7 @@ public class CreateChallengeCommand : CreateCommandBase<Challenge, ChallengeCrea
                 {
                     InvalidData.Create(
                         "challenge.Title challenge.Theme",
-                        $"{entity.Title} {entity.Theme}",
+                        $"{entity.Title} {entity.CategoryId}",
                         InvalidChallengeDataReason.DuplicatesThemeAndTitle)
                 }
             };

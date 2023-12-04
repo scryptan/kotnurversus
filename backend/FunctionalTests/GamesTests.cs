@@ -4,7 +4,9 @@ using FunctionalTests.Base;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.JsonPatch.Operations;
 using Models.Games;
+using Models.Rounds;
 using Models.Settings;
+using Models.Specifications;
 using Newtonsoft.Json.Serialization;
 using Vostok.Logging.Abstractions;
 
@@ -162,5 +164,88 @@ public class GamesTests : ApiTestBase
         searchAsync.EnsureSuccess();
 
         searchAsync.Result.Count.Should().BeGreaterThan(0);
+    }
+
+    [Test]
+    public async Task Start_CreatedWithCorrectData_ShouldBeSuccessful()
+    {
+        var creationArgs = new GameCreationArgs
+        {
+            Description = "Some me",
+            Title = $"Test starting Game {Guid.NewGuid()}",
+            StartDate = DateTimeOffset.Now,
+            Settings = new Settings(),
+            Form = GameForm.Online,
+        };
+
+        var entityRes = await Client.Games.CreateAsync(creationArgs);
+
+        entityRes.EnsureSuccess();
+        var gameId = entityRes.Result.Id;
+        var createResul = await Client.Games.StartGame(
+            gameId,
+            new List<RoundCreationArgs>
+            {
+                new()
+                {
+                    GameId = gameId,
+                    Specification = new Specification
+                    {
+                        Title = Guid.NewGuid().ToString(),
+                        BusinessDescription = Guid.NewGuid().ToString(),
+                        TechDescription = Guid.NewGuid().ToString(),
+                    },
+                    Order = 0,
+                    Participants = new List<Participant>
+                    {
+                        new()
+                        {
+                            Order = 0,
+                            TeamId = Guid.NewGuid()
+                        }
+                    },
+                    NextRoundId = Guid.NewGuid()
+                },
+                new()
+                {
+                    GameId = gameId,
+                    Specification = new Specification
+                    {
+                        Title = Guid.NewGuid().ToString(),
+                        BusinessDescription = Guid.NewGuid().ToString(),
+                        TechDescription = Guid.NewGuid().ToString(),
+                    },
+                    Order = 1,
+                    Participants = new List<Participant>
+                    {
+                        new()
+                        {
+                            Order = 0,
+                            TeamId = Guid.NewGuid()
+                        }
+                    },
+                    NextRoundId = Guid.NewGuid()
+                },
+                new()
+                {
+                    GameId = gameId,
+                    Specification = new Specification
+                    {
+                        Title = Guid.NewGuid().ToString(),
+                        BusinessDescription = Guid.NewGuid().ToString(),
+                        TechDescription = Guid.NewGuid().ToString(),
+                    },
+                    Order = 2,
+                    Participants = new List<Participant>
+                    {
+                        new()
+                        {
+                            Order = 0,
+                            TeamId = Guid.NewGuid()
+                        }
+                    }
+                },
+            });
+        createResul.EnsureSuccess();
     }
 }

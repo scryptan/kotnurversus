@@ -10,4 +10,6 @@ public class GameCreationArgs : EntityCreationArgs
     public string Description { get; set; } = null!;
     public GameForm Form { get; set; }
     public DateTimeOffset StartDate { get; set; }
+    public bool CatsInTheBag { get; set; }
+    public bool WithoutChallengesRepeatInFinal { get; set; }
 }

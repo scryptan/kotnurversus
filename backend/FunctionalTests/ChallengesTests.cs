@@ -2,6 +2,7 @@ using FluentAssertions;
 using FunctionalTests.Base;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.JsonPatch.Operations;
+using Models.Categories;
 using Models.Challenges;
 using Newtonsoft.Json.Serialization;
 
@@ -9,13 +10,26 @@ namespace FunctionalTests;
 
 public class ChallengesTests : ApiTestBase
 {
+    private Guid categoryId;
+    [OneTimeSetUp]
+    public async Task Setup()
+    {
+        var result = await Client.Categories.CreateAsync(new CategoryCreationArgs
+        {
+            Title = $"Категория {Guid.NewGuid()}",
+            Color = "#FFFFFF"
+        });
+        
+        categoryId = result.Result.Id;
+    }
+    
     [Test]
     public async Task Create_WithCorrectData_ShouldBeSuccessful()
     {
         var creationArgs = new ChallengeCreationArgs
         {
             Description = "Some me",
-            Theme = "Cat in the box",
+            CategoryId = categoryId,
             Title = $"Im Bob Cat {Guid.NewGuid()}"
         };
 
@@ -25,7 +39,7 @@ public class ChallengesTests : ApiTestBase
         var entity = result.Result;
         entity.Id.Should().NotBe(Guid.Empty);
         entity.Description.Should().Be(creationArgs.Description);
-        entity.Theme.Should().Be(creationArgs.Theme);
+        entity.CategoryId.Should().Be(creationArgs.CategoryId);
         entity.Title.Should().Be(creationArgs.Title);
     }
 
@@ -35,7 +49,7 @@ public class ChallengesTests : ApiTestBase
         var creationArgs = new ChallengeCreationArgs
         {
             Description = "Some me",
-            Theme = "Cat in the box",
+            CategoryId = categoryId,
             Title = $"Im Bob Cat {Guid.NewGuid()}"
         };
 
@@ -50,7 +64,7 @@ public class ChallengesTests : ApiTestBase
         entity = result.Result;
         entity.Id.Should().NotBe(Guid.Empty);
         entity.Description.Should().Be(creationArgs.Description);
-        entity.Theme.Should().Be(creationArgs.Theme);
+        entity.CategoryId.Should().Be(creationArgs.CategoryId);
         entity.Title.Should().Be(creationArgs.Title);
     }
 
@@ -60,7 +74,7 @@ public class ChallengesTests : ApiTestBase
         var creationArgs = new ChallengeCreationArgs
         {
             Description = "Some me",
-            Theme = "Cat in the box",
+            CategoryId = categoryId,
             Title = $"Im Bob Cat {Guid.NewGuid()}"
         };
 
@@ -88,7 +102,7 @@ public class ChallengesTests : ApiTestBase
         entity = result.Result;
         entity.Id.Should().NotBe(Guid.Empty);
         entity.Description.Should().Be(newDescription);
-        entity.Theme.Should().Be(creationArgs.Theme);
+        entity.CategoryId.Should().Be(creationArgs.CategoryId);
         entity.Title.Should().Be(creationArgs.Title);
     }
 
@@ -98,7 +112,7 @@ public class ChallengesTests : ApiTestBase
         var creationArgs = new ChallengeCreationArgs
         {
             Description = "Some me",
-            Theme = "Cat in the box",
+            CategoryId = categoryId,
             Title = $"Im Bob Cat {Guid.NewGuid()}"
         };
 
@@ -120,7 +134,7 @@ public class ChallengesTests : ApiTestBase
         var creationArgs = new ChallengeCreationArgs
         {
             Description = "Some me",
-            Theme = "Cat in the box",
+            CategoryId = categoryId,
             Title = $"Im Bob Cat {Guid.NewGuid()}"
         };
 
