@@ -42,7 +42,7 @@ public class GetAvailableChallengesCommand : IGetAvailableChallengesCommand
                 var withoutRepeat = game.Settings.WithoutChallengesRepeatInFinal;
                 HashSet<Guid>? challengesToExclude = null;
                 
-                if (withoutRepeat)
+                if (withoutRepeat && round.NextRoundId == null)
                 {
                     var previousRounds = await roundsService.SearchAsync(
                         new RoundSearchRequest
