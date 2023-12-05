@@ -27,7 +27,11 @@ const TourneysTable = ({ tourneys, ...props }: Props) => (
 );
 
 const HeaderRow = (props: GridProps) => (
-  <Grid {...props} gridTemplateColumns="1fr 150px 200px" fontSize="sm">
+  <Grid
+    {...props}
+    gridTemplateColumns={{ base: "1fr 60px 80px", md: "1fr 150px 200px" }}
+    fontSize={{ base: "xs", md: "sm" }}
+  >
     <HeaderCell>Турнир</HeaderCell>
     <HeaderCell textAlign="center">Дата</HeaderCell>
     <HeaderCell textAlign="center">Тип</HeaderCell>
@@ -43,9 +47,9 @@ const BodyRow = memo(
     <Grid
       as={Link}
       href={paths.tourney.path(tourney.id)}
-      gridTemplateColumns="1fr 150px 200px"
-      gridAutoRows="64px"
-      fontSize="lg"
+      gridTemplateColumns={{ base: "1fr 60px 80px", md: "1fr 150px 200px" }}
+      gridAutoRows={{ base: "50px", md: "64px" }}
+      fontSize={{ base: "sm", md: "lg" }}
       bg="blackAlpha.50"
       alignItems="center"
       _hover={{ bg: "blackAlpha.100" }}
@@ -67,7 +71,12 @@ const BodyRow = memo(
 const HeaderCell = (props: TextProps) => <Text color="#909090" {...props} />;
 
 const BodyCell = (props: TextProps) => (
-  <Text px={8} noOfLines={1} wordBreak="break-all" {...props} />
+  <Text
+    px={{ base: 2, md: 8 }}
+    noOfLines={{ base: 2, md: 1 }}
+    wordBreak={{ base: "break-word", md: "break-all" }}
+    {...props}
+  />
 );
 
 export default TourneysTable;
