@@ -13,7 +13,6 @@ const nameSchema = z.object({
 
 const NameSettings = ({
   formId,
-  inputId,
   defaultValue,
   onLoading,
 }: SettingsFormProps) => {
@@ -42,7 +41,6 @@ const NameSettings = ({
     <form id={formId} onSubmit={onSubmit}>
       <Input
         {...register("value")}
-        id={inputId}
         placeholder="Введите новое имя"
         errorMessage={errors.value?.message}
       />

@@ -10,7 +10,6 @@ const loginSchema = z.object({ value: loginField });
 
 const LoginSettings = ({
   formId,
-  inputId,
   defaultValue,
   onLoading,
 }: SettingsFormProps) => {
@@ -39,7 +38,6 @@ const LoginSettings = ({
     <form id={formId} onSubmit={onSubmit}>
       <Input
         {...register("value")}
-        id={inputId}
         placeholder="Введите новый логин"
         errorMessage={errors.value?.message}
       />

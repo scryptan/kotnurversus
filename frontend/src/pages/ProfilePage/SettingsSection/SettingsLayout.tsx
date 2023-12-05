@@ -15,14 +15,12 @@ type Props = {
 
 export type SettingsFormProps = {
   formId: string;
-  inputId: string;
   defaultValue: string;
   onLoading: (callback: () => Promise<string>) => void;
 };
 
 const SettingsLayout = ({ name, value, Form }: Props) => {
   const formId = useId();
-  const inputId = useId();
 
   const valueRef = useRef(value);
   const [isEdit, setIsEdit] = useBoolean(false);
@@ -43,8 +41,6 @@ const SettingsLayout = ({ name, value, Form }: Props) => {
     <>
       <Text
         m={2}
-        as="label"
-        htmlFor={inputId}
         color="blackAlpha.500"
         _dark={{ color: "whiteAlpha.500" }}
         fontWeight="semibold"
@@ -53,7 +49,6 @@ const SettingsLayout = ({ name, value, Form }: Props) => {
       {isEdit ? (
         <Form
           formId={formId}
-          inputId={inputId}
           defaultValue={valueRef.current}
           onLoading={onLoading}
         />
