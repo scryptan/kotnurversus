@@ -48,8 +48,17 @@ type InfoRowProps = {
 
 const InfoRow = ({ name, children, ...props }: InfoRowProps) => (
   <Stack {...props}>
-    <Text opacity={0.75} fontSize="sm" fontWeight="medium" children={name} />
-    <Text fontSize="lg" whiteSpace="pre-line" children={children} />
+    <Text
+      opacity={0.75}
+      fontSize={{ base: "xs", md: "sm" }}
+      fontWeight="medium"
+      children={name}
+    />
+    <Text
+      fontSize={{ base: "md", md: "lg" }}
+      whiteSpace="pre-line"
+      children={children}
+    />
   </Stack>
 );
 

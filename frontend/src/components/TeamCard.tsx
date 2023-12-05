@@ -189,7 +189,8 @@ const TeamCardLayout = forwardRef<BoxProps, "div">(
   ({ _dark, ...props }, ref) => (
     <Box
       ref={ref}
-      w={{ base: "175px", md: "250px" }}
+      maxW={{ base: "175px", md: "250px" }}
+      w="full"
       h="fit-content"
       bg="blackAlpha.100"
       boxShadow="base"

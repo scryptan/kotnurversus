@@ -48,7 +48,11 @@ const PauseStage = () => {
         />
       )}
       <Stack align="center" gridArea="b">
-        <Heading textAlign="center" fontSize="4xl" lineHeight="150%">
+        <Heading
+          textAlign="center"
+          fontSize={{ base: "xl", md: "4xl" }}
+          lineHeight="150%"
+        >
           Таумаут команды "{currentTeam?.title || "???"}"
         </Heading>
         {isOrganizer && (

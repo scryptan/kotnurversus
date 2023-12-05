@@ -17,7 +17,7 @@ type Props = {
 const Breadcrumb = ({ items }: Props) => (
   <BaseBreadcrumb
     spacing={2}
-    fontSize="sm"
+    fontSize={{ base: "xs", md: "sm" }}
     color="blackAlpha.800"
     _dark={{ color: "whiteAlpha.800" }}
     separator={<BreadcrumbIcon mb={1} boxSize="9px" />}

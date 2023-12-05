@@ -12,13 +12,17 @@ const RoundHeader = () => {
   return (
     <>
       <Breadcrumb items={createBreadcrumbItems(tourney)} />
-      <Heading mt={8} fontSize="4xl">
+      <Heading
+        mt={{ base: 6, md: 8 }}
+        fontSize={{ base: "lg", md: "4xl" }}
+        textAlign={{ base: "center", md: "left" }}
+      >
         Игра "{calcRoundName(round, tourney.teams)}"
       </Heading>
       {isPublic && (
         <Text
-          mt={12}
-          fontSize="3xl"
+          mt={{ base: 8, md: 12 }}
+          fontSize={{ base: "md", md: "3xl" }}
           fontWeight="bold"
           textAlign="center"
           children={round.specification.title}
@@ -30,7 +34,6 @@ const RoundHeader = () => {
 };
 
 const createBreadcrumbItems = (tourney: Tourney) => [
-  { name: "Главная", link: paths.main.path },
   { name: "Турниры", link: paths.tourneys.path },
   { name: tourney.title, link: paths.tourney.path(tourney.id) },
 ];

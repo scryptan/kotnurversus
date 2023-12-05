@@ -57,7 +57,7 @@ const DefenseStartStage = () => {
       <Center gridArea="main">
         <Text
           textAlign="center"
-          fontSize="2xl"
+          fontSize={{ base: "lg", md: "2xl" }}
           lineHeight="150%"
           textTransform="uppercase"
         >
@@ -134,7 +134,11 @@ const DefenseEndStage = ({ timerEnd }: DefenseEndStageProps) => {
         />
       ))}
       <Stack align="center" gridArea="b">
-        <Text textAlign="center" fontSize="3xl" lineHeight="150%">
+        <Text
+          textAlign="center"
+          fontSize={{ base: "xl", md: "3xl" }}
+          lineHeight="150%"
+        >
           Защита команды "{currentTeam?.title || "???"}"
         </Text>
         {isOrganizer && (

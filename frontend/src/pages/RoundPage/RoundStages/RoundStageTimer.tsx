@@ -34,7 +34,7 @@ const RoundStageTimer = ({ endDate, activeColor, ...props }: Props) => {
   return (
     <Center
       py={2}
-      mb={4}
+      mb={{ md: 4 }}
       w="200px"
       borderRadius={8}
       border="1px solid transparent"
@@ -44,11 +44,20 @@ const RoundStageTimer = ({ endDate, activeColor, ...props }: Props) => {
       {...props}
     >
       {isOrganizer && <ResetTimerButton />}
-      <Text ml={isNegative ? -4 : 0} userSelect="none" pointerEvents="none">
-        {isNegative && <Text as="span" children="-" />}
-        {Math.abs(totalMinutes).toString().padStart(2, "0")}:
-        {Math.abs(seconds).toString().padStart(2, "0")}
-      </Text>
+      {Math.abs(totalMinutes) < 1000 ? (
+        <Text
+          ml={isNegative ? -4 : 0}
+          color={isNegative ? "secondary" : "inherit"}
+          userSelect="none"
+          pointerEvents="none"
+        >
+          {isNegative && <Text as="span" children="-" />}
+          {Math.abs(totalMinutes).toString().padStart(2, "0")}:
+          {Math.abs(seconds).toString().padStart(2, "0")}
+        </Text>
+      ) : (
+        <Text children="∞" />
+      )}
     </Center>
   );
 };
