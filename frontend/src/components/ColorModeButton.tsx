@@ -15,7 +15,7 @@ const ColorModeButton = () => {
       label="Переключить тему"
       placement="right"
       onClick={toggleColorMode}
-      icon={<Icon color="#AAB3BA" boxSize={6} />}
+      icon={<Icon color="#AAB3BA" boxSize={{ base: 5, md: 6 }} />}
     />
   );
 };

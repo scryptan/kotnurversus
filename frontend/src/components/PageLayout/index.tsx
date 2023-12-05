@@ -10,7 +10,7 @@ type Props = {
 
 const PageLayout = ({ children }: Props) => (
   <Flex as="main" flexDir="column">
-    <Header mb={9} />
+    <Header mb={{ base: 4, md: 9 }} />
     <Suspense fallback={<Loading flex={1} />} children={children} />
     <Footer />
   </Flex>
