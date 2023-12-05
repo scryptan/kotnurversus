@@ -8,6 +8,7 @@ import {
   useColorMode,
 } from "@chakra-ui/react";
 import { MatchComponentProps } from "@g-loot/react-tournament-brackets/dist/src/types";
+import { TouchEvent, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import paths from "~/pages/paths";
 import { TourneyRoundState } from "~/types/tourney";
@@ -20,6 +21,7 @@ const Match = ({
   bottomWon,
 }: MatchComponentProps) => {
   const { colorMode } = useColorMode();
+  const startTouch = useRef(0);
   const navigate = useNavigate();
 
   const isLoading = "isLoading" in match ? Boolean(match.isLoading) : false;
@@ -37,7 +39,13 @@ const Match = ({
         transition: "opacity 200ms ease-out",
         _hover: { opacity: 0.75 },
         // https://github.com/chrvadala/react-svg-pan-zoom/issues/81
-        onTouchEnd: () => navigate(paths.round.path(match.id)),
+        onTouchStart: (e: TouchEvent<HTMLDivElement>) => {
+          startTouch.current = e.timeStamp;
+        },
+        onTouchEnd: (e: TouchEvent<HTMLDivElement>) => {
+          if (e.timeStamp - startTouch.current > 100) return;
+          navigate(paths.round.path(match.id));
+        },
       }
     : {};
 

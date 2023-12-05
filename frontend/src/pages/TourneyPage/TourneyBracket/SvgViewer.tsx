@@ -76,6 +76,7 @@ const SvgViewer = ({
         background={bgColor}
         SVGBackground={bgColor}
         detectWheel={false}
+        detectPinchGesture={false}
         detectAutoPan={false}
         disableDoubleClickZoomWithToolAuto
         tool="auto"
