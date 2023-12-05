@@ -75,7 +75,14 @@ const TourneyBracket = ({ id, state, teams, specifications }: Props) => {
       ? "Создайте минимум 4 команды для построения турнирной сетки"
       : "Турнирная сетка не построена";
 
-    return <Heading my="100px" mx="auto" fontSize="lg" children={message} />;
+    return (
+      <Heading
+        my="100px"
+        mx="auto"
+        fontSize={{ base: "md", md: "lg" }}
+        children={message}
+      />
+    );
   }
 
   const bracket = (
@@ -84,7 +91,7 @@ const TourneyBracket = ({ id, state, teams, specifications }: Props) => {
       matches={rounds}
       matchComponent={Match}
       svgWrapper={({ children, ...props }) => (
-        <SvgViewer {...props} containerProps={{ px: 4 }} children={children} />
+        <SvgViewer {...props} children={children} />
       )}
     />
   );
@@ -109,7 +116,8 @@ const TourneyBracket = ({ id, state, teams, specifications }: Props) => {
 const options: CommonTreeProps["options"] = {
   style: {
     width: 268,
-    boxHeight: 124,
+    boxHeight: 132,
+    canvasPadding: 8,
     spaceBetweenRows: 20,
     horizontalOffset: 0,
     roundSeparatorWidth: 50,

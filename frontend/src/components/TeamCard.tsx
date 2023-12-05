@@ -31,23 +31,24 @@ const BaseTeamCard = ({ team, ...props }: BaseTeamCardProps) => (
   <TeamCardLayout {...props}>
     <TeamCardTitle>
       <Text
-        fontSize="2xl"
+        fontSize={{ base: "md", md: "2xl" }}
         noOfLines={1}
         wordBreak="break-all"
-        children={team?.title || "Команда"}
+        children={team?.title || "???"}
       />
     </TeamCardTitle>
     <TeamCardMates>
       {team?.mates?.map((p, i) => (
-        <ListItem ml={4} key={i}>
+        <ListItem ml={4} key={i} fontSize={{ base: "sm", md: "md" }}>
           <Text noOfLines={1} wordBreak="break-all" children={p} />
         </ListItem>
       ))}
       {!team?.mates?.length && (
         <Text
-          py={10}
+          py={{ base: 6, md: 10 }}
           opacity={0.75}
           textAlign="center"
+          fontSize={{ base: "sm", md: "md" }}
           children="Участники не указаны"
         />
       )}
@@ -188,7 +189,7 @@ const TeamCardLayout = forwardRef<BoxProps, "div">(
   ({ _dark, ...props }, ref) => (
     <Box
       ref={ref}
-      w="250px"
+      w={{ base: "175px", md: "250px" }}
       h="fit-content"
       bg="blackAlpha.100"
       boxShadow="base"
@@ -206,14 +207,19 @@ const TeamCardLayout = forwardRef<BoxProps, "div">(
 );
 
 const TeamCardTitle = (props: BoxProps) => (
-  <Flex px={4} h="42px" align="center" {...props} />
+  <Flex
+    px={{ base: 2, md: 4 }}
+    h={{ base: "32px", md: "42px" }}
+    align="center"
+    {...props}
+  />
 );
 
 const TeamCardMates = (props: ListProps) => (
   <OrderedList
     m={0}
-    px={4}
-    py={2}
+    px={{ base: 2, md: 4 }}
+    py={{ base: 1.5, md: 2 }}
     spacing={1}
     borderTop="1px solid"
     borderColor="blackAlpha.400"

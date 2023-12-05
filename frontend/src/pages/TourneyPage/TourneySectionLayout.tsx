@@ -51,6 +51,7 @@ const Header = ({ isOpen, onToggle, heading }: HeaderProps) => {
 
   return (
     <HStack
+      px={{ base: 2, md: 0 }}
       w="fit-content"
       cursor="pointer"
       userSelect="none"
@@ -58,7 +59,11 @@ const Header = ({ isOpen, onToggle, heading }: HeaderProps) => {
       transition="opacity 200ms"
       _hover={{ opacity: 0.75 }}
     >
-      <Heading fontSize="2xl" fontWeight="medium" children={heading} />
+      <Heading
+        fontSize={{ base: "md", md: "2xl" }}
+        fontWeight="medium"
+        children={heading}
+      />
       <IconButton
         ref={buttonRef}
         size="sm"
@@ -67,7 +72,7 @@ const Header = ({ isOpen, onToggle, heading }: HeaderProps) => {
         onClick={onToggle}
         icon={
           <ArrowDownIcon
-            boxSize={6}
+            boxSize={{ base: 5, md: 6 }}
             transition="transform 200ms ease-out"
             transform={`rotate(${isOpen ? -180 : 0}deg)`}
           />

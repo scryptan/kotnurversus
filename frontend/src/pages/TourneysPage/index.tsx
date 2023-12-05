@@ -24,7 +24,7 @@ import TourneysTable from "./TourneysTable";
 const TourneysPage = () => (
   <Stack
     mx="auto"
-    p={{ base: 4, md: 8 }}
+    px={2}
     w="full"
     maxW="wrapper"
     flex={1}

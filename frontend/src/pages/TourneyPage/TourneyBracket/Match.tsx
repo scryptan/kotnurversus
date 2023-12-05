@@ -8,7 +8,7 @@ import {
   useColorMode,
 } from "@chakra-ui/react";
 import { MatchComponentProps } from "@g-loot/react-tournament-brackets/dist/src/types";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import paths from "~/pages/paths";
 import { TourneyRoundState } from "~/types/tourney";
 
@@ -20,6 +20,7 @@ const Match = ({
   bottomWon,
 }: MatchComponentProps) => {
   const { colorMode } = useColorMode();
+  const navigate = useNavigate();
 
   const isLoading = "isLoading" in match ? Boolean(match.isLoading) : false;
 
@@ -35,14 +36,16 @@ const Match = ({
         cursor: "pointer",
         transition: "opacity 200ms ease-out",
         _hover: { opacity: 0.75 },
+        // https://github.com/chrvadala/react-svg-pan-zoom/issues/81
+        onTouchEnd: () => navigate(paths.round.path(match.id)),
       }
     : {};
 
   return (
     <Skeleton
       ml={3}
-      my={5}
-      h="calc(100% - 40px)"
+      my={6}
+      h="calc(100% - 48px)"
       borderRadius={4}
       isLoaded={!isLoading}
       startColor={colorMode === "light" ? "blackAlpha.100" : "whiteAlpha.100"}
@@ -143,7 +146,7 @@ type ExtensionsProps = {
 const SpecificationLabel = ({ value }: ExtensionsProps) => (
   <Text
     pos="absolute"
-    top={-1}
+    top={0}
     left={3}
     w="calc(100% - 12px)"
     textAlign="center"
