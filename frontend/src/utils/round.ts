@@ -6,6 +6,7 @@ import {
   TourneySpecification,
   TourneyTeam,
 } from "~/types/tourney";
+import { isDefined } from "~/utils";
 
 export const castToCreateRound =
   (tourney: Tourney) =>
@@ -70,10 +71,11 @@ export const createArrayFromSpecification = (
 ) => {
   const array: Array<{ name: string; text: string }> = [];
 
-  array.push({ name: "Бизнес сценарий", text: specification.title });
   array.push({
-    name: "Описание",
-    text: specification.businessDescription || "Информация не указана",
+    name: "Бизнес сценарий",
+    text: [specification.title, specification.businessDescription]
+      .filter(isDefined)
+      .join("\n"),
   });
   array.push({
     name: "Общие требования к архитектуре",
