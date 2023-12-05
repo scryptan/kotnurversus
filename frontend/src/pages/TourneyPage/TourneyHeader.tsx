@@ -8,8 +8,6 @@ import {
 } from "@chakra-ui/react";
 import { format } from "date-fns";
 import { ReactNode } from "react";
-import Breadcrumb from "~/components/Breadcrumb";
-import paths from "~/pages/paths";
 import { Tourney } from "~/types/tourney";
 import { TOURNEY_TYPE_NAMES } from "~/utils/tourney";
 
@@ -18,22 +16,17 @@ type Props = {
 } & BoxProps;
 
 const TourneyHeader = ({ tourney, ...props }: Props) => (
-  <Stack spacing={8} {...props}>
-    <Breadcrumb items={breadcrumbItems} />
-    <TourneyInfo tourney={tourney} />
-  </Stack>
-);
-
-const breadcrumbItems = [
-  { name: "Главная", link: paths.main.path },
-  { name: "Турниры", link: paths.tourneys.path },
-];
-
-const TourneyInfo = ({ tourney, ...props }: Props) => (
-  <Grid gridTemplateColumns="1.5fr 1fr" gridGap={8} {...props}>
-    <Stack spacing={9}>
-      <Heading fontSize="4xl">Турнир "{tourney.title}"</Heading>
-    </Stack>
+  <Grid
+    gridTemplateColumns={{ base: "1fr", md: "1.5fr 1fr" }}
+    gridGap={{ base: 6, md: 8 }}
+    {...props}
+  >
+    <Heading
+      fontSize={{ base: "lg", md: "4xl" }}
+      textAlign={{ base: "center", md: "left" }}
+    >
+      Турнир "{tourney.title}"
+    </Heading>
     <Stack spacing={2} justify="center">
       <TourneyInfoRow name="Формат">
         {TOURNEY_TYPE_NAMES[tourney.form]?.toLowerCase() || "неизвестно"}
@@ -57,7 +50,7 @@ const TourneyInfoRow = ({ name, children }: TourneyInfoRowProps) => {
   const { colorMode } = useColorMode();
 
   return (
-    <Text wordBreak="break-word">
+    <Text fontSize={{ base: "sm", md: "md" }} wordBreak="break-word">
       <Text as="span" color={`text.${colorMode}.extra.1`}>
         {name}:
       </Text>{" "}

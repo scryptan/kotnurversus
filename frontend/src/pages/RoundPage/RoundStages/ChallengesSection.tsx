@@ -22,7 +22,7 @@ const ChallengesSection = ({ teamId, ...props }: Props) => {
   if (chosenChallengeIds.length < 1) return null;
 
   return (
-    <Stack spacing={4} {...props}>
+    <Stack maxW="200px" w="95%" spacing={4} {...props}>
       {chosenChallengeIds.map((id) => {
         const challenge = query.challenges.find((c) => c.id === id);
         const category = query.categories.find(
@@ -69,7 +69,7 @@ const ChallengeCard = memo(
           boxShadow={`0px 0px 5px 0px ${borderColor}`}
         >
           <Text
-            fontSize="xl"
+            fontSize={{ base: "sm", md: "xl" }}
             lineHeight="150%"
             fontWeight="normal"
             wordBreak="break-word"

@@ -21,20 +21,31 @@ const RoundSpecificationSection = (props: BoxProps) => {
 
   return (
     <Box {...props}>
-      <Heading mb={4} fontSize="3xl">
-        Описание задачи
-      </Heading>
+      <Heading
+        mb={4}
+        fontSize={{ base: "md", md: "3xl" }}
+        textAlign={{ base: "center", md: "left" }}
+        children="Описание задачи"
+      />
+
       <Accordion allowMultiple>
         {items.map((item, i) => (
           <AccordionItem key={i}>
             <AccordionButton py={3}>
-              <Text as="span" flex={1} textAlign="left" children={item.name} />
+              <Text
+                as="span"
+                flex={1}
+                textAlign="left"
+                fontSize={{ base: "sm", md: "md" }}
+                children={item.name}
+              />
               <AccordionIcon />
             </AccordionButton>
             <AccordionPanel
               p={4}
               pt={2}
               color="blackAlpha.700"
+              fontSize={{ base: "sm", md: "md" }}
               whiteSpace="pre-line"
               children={item.text.trim()}
               _dark={{ color: "whiteAlpha.700" }}

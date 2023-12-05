@@ -1,4 +1,11 @@
-import { Button, Center, HStack, Heading, Stack } from "@chakra-ui/react";
+import {
+  Button,
+  Center,
+  HStack,
+  Heading,
+  Stack,
+  useMediaQuery,
+} from "@chakra-ui/react";
 import { useQuery } from "@tanstack/react-query";
 import { ChangeEvent, useState } from "react";
 import { Link } from "react-router-dom";
@@ -15,9 +22,20 @@ import queryKeys from "~/utils/query-keys";
 import TourneysTable from "./TourneysTable";
 
 const TourneysPage = () => (
-  <Stack mx="auto" p={8} w="full" maxW="wrapper" flex={1} spacing={10}>
-    <HStack justify="space-between">
-      <Heading fontSize="4xl">Турниры по архитектуре приложений</Heading>
+  <Stack
+    mx="auto"
+    px={2}
+    w="full"
+    maxW="wrapper"
+    flex={1}
+    spacing={{ base: 6, md: 10 }}
+  >
+    <HStack justify={{ base: "center", md: "space-between" }}>
+      <Heading
+        fontSize={{ base: "lg", md: "4xl" }}
+        textAlign={{ base: "center", md: "left" }}
+        children="Турниры по архитектуре приложений"
+      />
       <CreateTourneyButton />
     </HStack>
     <TourneysSection />
@@ -53,23 +71,25 @@ const TourneysSection = () => {
   return (
     <>
       <Input
-        size="lg"
+        size={{ base: "sm", md: "lg" }}
         onChange={handleSearch}
         placeholder="Поиск по названию турнира"
-        rightElement={<SearchIcon boxSize={6} />}
+        rightElement={<SearchIcon boxSize={{ base: 4, md: 6 }} />}
         rightElementProps={{ pointerEvents: "none" }}
-        containerProps={{ mx: "auto", w: "70%" }}
+        containerProps={{ mx: "auto", w: { base: "90%", md: "70%" } }}
       />
       {tourneysQuery.isLoading ? (
         <Loading py={10} />
       ) : currentTourneys.length > 0 || pastTourneys.length > 0 ? (
-        <Stack spacing={8}>
+        <Stack spacing={{ base: 6, md: 8 }}>
           <TourneysTable title="Текущие турниры" tourneys={currentTourneys} />
           <TourneysTable title="Прошедшие турниры" tourneys={pastTourneys} />
         </Stack>
       ) : (
         <Center py={10}>
-          <Heading fontSize="2xl">Турниры не найдены</Heading>
+          <Heading fontSize={{ base: "lg", md: "2xl" }}>
+            Турниры не найдены
+          </Heading>
         </Center>
       )}
     </>
@@ -78,8 +98,9 @@ const TourneysSection = () => {
 
 const CreateTourneyButton = () => {
   const { isAuthenticated } = useAuthContext();
+  const [isDesktop] = useMediaQuery("(min-width: 48em)");
 
-  if (!isAuthenticated) {
+  if (!(isAuthenticated && isDesktop)) {
     return null;
   }
 

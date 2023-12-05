@@ -33,7 +33,7 @@ const TimeoutButton = ({ teamId, ...props }: Props) => {
   });
 
   return (
-    <Stack px={10} spacing={2} {...props}>
+    <Stack px={{ md: 10 }} spacing={{ base: 1, md: 2 }} {...props}>
       {isOrganizer ? (
         <Button
           colorScheme="gray"

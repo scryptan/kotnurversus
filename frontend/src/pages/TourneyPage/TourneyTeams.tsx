@@ -74,7 +74,11 @@ const TourneyTeams = ({ id, teams: defaultTeams }: Props) => {
       heading="Участники"
       storageKey={`tourney:${id}:teams-visibility `}
     >
-      <Wrap mt={6} spacing={10}>
+      <Wrap
+        mt={{ base: 4, md: 6 }}
+        spacing={{ base: 4, md: 10 }}
+        justify={{ base: "space-evenly", md: "flex-start" }}
+      >
         {allTeams.map((team) => {
           const isDefault = team.id === defaultTeam.current.id;
 
@@ -88,7 +92,7 @@ const TourneyTeams = ({ id, teams: defaultTeams }: Props) => {
               />
             );
           }
-          
+
           return <TeamCard.Base key={team.id} team={team} />;
         })}
       </Wrap>

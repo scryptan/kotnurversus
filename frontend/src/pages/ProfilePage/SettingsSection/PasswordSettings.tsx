@@ -9,7 +9,6 @@ import { SettingsFormProps } from "./SettingsLayout";
 
 const PasswordSettings = ({
   formId,
-  inputId,
   defaultValue,
   onLoading,
 }: SettingsFormProps) => {
@@ -37,7 +36,6 @@ const PasswordSettings = ({
     <Stack as="form" id={formId} spacing={4} onSubmit={onSubmit}>
       <PasswordInput
         {...register("oldPassword")}
-        id={inputId}
         label="Старый пароль"
         placeholder="Введите старый пароль"
         errorMessage={errors.oldPassword?.message}

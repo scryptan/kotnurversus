@@ -63,7 +63,7 @@ const PresentationStartStage = () => {
       <Center gridArea="main">
         <Text
           textAlign="center"
-          fontSize="2xl"
+          fontSize={{ base: "lg", md: "2xl" }}
           lineHeight="150%"
           textTransform="uppercase"
         >
@@ -141,7 +141,11 @@ const PresentationEndStage = ({ timerEnd }: PresentationEndStageProps) => {
         />
       ))}
       <Stack align="center" gridArea="b">
-        <Text textAlign="center" fontSize="3xl" lineHeight="150%">
+        <Text
+          textAlign="center"
+          fontSize={{ base: "xl", md: "3xl" }}
+          lineHeight="150%"
+        >
           Презентация команды "{currentTeam?.title || "???"}"
         </Text>
         {isOrganizer && (

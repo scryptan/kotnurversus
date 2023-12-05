@@ -49,7 +49,7 @@ const TourneyPage = () => {
         w="full"
         maxW="wrapper"
         flex={1}
-        spacing={8}
+        spacing={{ base: 4, md: 8 }}
       >
         <TourneyHeader tourney={tourney} />
         <TourneyActionButtons tourney={tourney} />

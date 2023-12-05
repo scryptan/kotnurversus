@@ -12,7 +12,11 @@ const TourneysTable = ({ title, tourneys }: Props) => {
 
   return (
     <Stack spacing={4}>
-      <Heading fontSize="xl" textTransform="uppercase" textAlign="center">
+      <Heading
+        fontSize={{ base: "md", md: "xl" }}
+        textTransform="uppercase"
+        textAlign="center"
+      >
         {title}
       </Heading>
       <BaseTourneysTable tourneys={tourneys} />

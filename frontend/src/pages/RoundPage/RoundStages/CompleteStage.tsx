@@ -26,11 +26,16 @@ const CompleteStage = () => {
         );
       })}
       <Stack gridArea="main" alignSelf="center" align="center">
-        <Text fontSize="2xl" lineHeight="150%" textTransform="uppercase">
+        <Text
+          fontSize={{ base: "lg", md: "2xl" }}
+          lineHeight="150%"
+          textTransform="uppercase"
+        >
           Завершено
         </Text>
         <Button
           as={Link}
+          size={{ base: "sm", md: "md" }}
           w="fit-content"
           to={paths.tourney.path(round.gameId)}
           children="Вернуться к турниру"
@@ -45,7 +50,12 @@ const CompleteStage = () => {
           isWinner={p.isWinner}
         />
       ))}
-      <Heading gridArea="b" textAlign="center" fontSize="4xl" lineHeight="150%">
+      <Heading
+        gridArea="b"
+        textAlign="center"
+        fontSize={{ base: "xl", md: "4xl" }}
+        lineHeight="150%"
+      >
         Победа команды
         <br />"{winnerTeam?.title || "???"}"
       </Heading>
@@ -61,9 +71,9 @@ type MarkProps = {
 const Mark = ({ value, isWinner, ...props }: MarkProps) => (
   <Center
     {...props}
-    boxSize={24}
+    boxSize={{ base: 16, md: 24 }}
     borderRadius="full"
-    fontSize="4xl"
+    fontSize={{ base: "2xl", md: "4xl" }}
     fontWeight="bold"
     border="2px solid"
     bg="blackAlpha.50"

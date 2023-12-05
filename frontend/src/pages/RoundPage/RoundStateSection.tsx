@@ -1,4 +1,4 @@
-import { Box, BoxProps, HStack, Text } from "@chakra-ui/react";
+import { Box, BoxProps, Stack, Text } from "@chakra-ui/react";
 import { RoundState } from "~/types/round";
 import { useRoundContext } from "./round-context";
 
@@ -13,7 +13,13 @@ const RoundStateSection = (props: BoxProps) => {
         )?.state;
 
   return (
-    <HStack spacing={9} justify="center" {...props}>
+    <Stack
+      spacing={{ base: 2, md: 9 }}
+      justify="center"
+      align="center"
+      direction={{ base: "column", md: "row" }}
+      {...props}
+    >
       {stateItems.map((item) => (
         <StateCard
           key={item.name}
@@ -23,7 +29,7 @@ const RoundStateSection = (props: BoxProps) => {
           isDisabled={!state || item.state.disabled.includes(state)}
         />
       ))}
-    </HStack>
+    </Stack>
   );
 };
 
@@ -47,6 +53,8 @@ const StateCard = ({
     <Box
       px={4}
       py={2}
+      w={{ base: "full", md: "fit-content" }}
+      maxW="400px"
       borderRadius={6}
       border="1px solid"
       bg={withActiveColor("blackAlpha.100")}
@@ -57,9 +65,10 @@ const StateCard = ({
       }}
     >
       <Text
-        fontSize="lg"
+        fontSize={{ base: "md", md: "lg" }}
         fontWeight="semibold"
         lineHeight="normal"
+        textAlign="center"
         opacity={isDisabled && !isActive ? 0.6 : 1}
         color={withActiveColor("text.light.main", "white")}
         _dark={{ color: withActiveColor("text.dark.main", "white") }}

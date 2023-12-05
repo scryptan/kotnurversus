@@ -63,13 +63,11 @@ const PrepareStartStage = () => {
       <Center gridArea="main">
         <Text
           textAlign="center"
-          fontSize="2xl"
+          fontSize={{ base: "lg", md: "2xl" }}
           lineHeight="150%"
           textTransform="uppercase"
         >
-          Выбор <br />
-          дополнительных <br />
-          требований
+          Выбор дополнительных требований
         </Text>
       </Center>
       {isOrganizer && (
@@ -140,7 +138,11 @@ const PrepareEndStage = ({ timerEnd }: PrepareEndStageProps) => {
         />
       ))}
       <Stack align="center" gridArea="b">
-        <Text textAlign="center" fontSize="3xl" lineHeight="150%">
+        <Text
+          textAlign="center"
+          fontSize={{ base: "xl", md: "3xl" }}
+          lineHeight="150%"
+        >
           Команды формируют архитектуры
         </Text>
         {isOrganizer && (

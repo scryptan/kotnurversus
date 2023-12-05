@@ -46,7 +46,7 @@ const InitStage = () => {
         ) : (
           <Text
             textAlign="center"
-            fontSize="2xl"
+            fontSize={{ base: "lg", md: "2xl" }}
             lineHeight="150%"
             textTransform="uppercase"
           >
