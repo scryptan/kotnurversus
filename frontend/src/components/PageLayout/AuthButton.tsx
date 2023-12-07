@@ -15,6 +15,7 @@ import { z } from "zod";
 import Input from "~/components/Input";
 import PasswordInput from "~/components/PasswordInput";
 import Window, { WindowProps } from "~/components/Window";
+import useBreakpoint from "~/hooks/useBreakpoint";
 import paths from "~/pages/paths";
 import { useAuthContext } from "~/utils/auth-context";
 import { loginFormSchema, registerFormSchema } from "~/utils/auth-schemas";
@@ -22,6 +23,11 @@ import { loginFormSchema, registerFormSchema } from "~/utils/auth-schemas";
 const AuthButton = () => {
   const window = useDisclosure();
   const { isAuthenticated } = useAuthContext();
+  const breakpoint = useBreakpoint(["base", "md", "xl"]);
+
+  if (breakpoint === "base") {
+    return null;
+  }
 
   if (isAuthenticated) {
     return (
@@ -29,7 +35,7 @@ const AuthButton = () => {
         as={Link}
         display="flex"
         to={paths.profile.path}
-        children="Профиль организатора"
+        children={breakpoint === "xl" ? "Профиль организатора" : "Профиль"}
       />
     );
   }

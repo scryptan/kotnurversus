@@ -50,7 +50,8 @@ const TourneyBracketContainer = ({ bracketWidth, ...props }: Props) => {
       overflowX="auto"
       w={{
         base: "95vw",
-        md: `min(750px, ${bracketWidth}px)`,
+        md: `min(800px, ${bracketWidth}px)`,
+        lg: `min(950px, ${bracketWidth}px)`,
         xl: `min(1200px, ${bracketWidth}px)`,
       }}
       css={{
