@@ -42,7 +42,7 @@ const TourneyForm = ({ id, defaultValue, onSubmit }: Props) => {
       as="form"
       gridRowGap={8}
       gridColumnGap={16}
-      gridTemplateColumns="300px 500px"
+      gridTemplateColumns="min(300px, 30%) min(500px, 60%)"
       onSubmit={handleSubmit(onSubmit)}
     >
       <FormLabel isRequired label="Название турнира">
@@ -172,6 +172,7 @@ const FormLabel = ({ label, isRequired, children }: FormLabelProps) => {
         fontSize="lg"
         fontWeight="medium"
         justifySelf="flex-end"
+        textAlign="right"
         {...(needId ? { as: "label", htmlFor: id } : {})}
       >
         {label}
