@@ -43,7 +43,7 @@ const TimeoutButton = ({ teamId, ...props }: Props) => {
           onClick={() => startTimeoutMutation.mutateAsync()}
         />
       ) : (
-        <Heading textAlign="center" fontSize="md" children="Таумауты" />
+        <Heading textAlign="center" fontSize="md" children="Таймауты" />
       )}
       <Text textAlign="center" fontSize="sm">
         Осталось {leftTimeouts} из {maxTimeouts}

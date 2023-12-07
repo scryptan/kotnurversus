@@ -1,6 +1,5 @@
 import {
   BoxProps,
-  Center,
   HStack,
   IconButton,
   Input,
@@ -13,6 +12,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useRef } from "react";
 import api from "~/api";
 import ButtonWithAlert from "~/components/ButtonWithAlert";
+import StateCard from "~/components/StateCard";
 import TeamCard from "~/components/TeamCard";
 import useHandleError from "~/hooks/useHandleError";
 import MinusIcon from "~/icons/MinusIcon";
@@ -62,16 +62,12 @@ const MarkStage = () => {
           <TeamCard.Base key={team.id} gridArea={`t${i + 1}`} team={team} />
         );
       })}
-      <Center gridArea="main">
-        <Text
-          textAlign="center"
-          fontSize={{ base: "lg", md: "2xl" }}
-          lineHeight="150%"
-          textTransform="uppercase"
-        >
-          Оценка команд
-        </Text>
-      </Center>
+      <StateCard
+        gridArea="main"
+        alignSelf="center"
+        justifySelf="center"
+        name="Оценка команд"
+      />
       {isOrganizer &&
         round.participants
           .slice(0, 2)

@@ -8,8 +8,9 @@ import {
 } from "@chakra-ui/react";
 import { format } from "date-fns";
 import { ReactNode } from "react";
+import StateCard from "~/components/StateCard";
 import { Tourney } from "~/types/tourney";
-import { TOURNEY_TYPE_NAMES } from "~/utils/tourney";
+import { TOURNEY_STATE_NAMES, TOURNEY_TYPE_NAMES } from "~/utils/tourney";
 
 type Props = {
   tourney: Tourney;
@@ -21,12 +22,17 @@ const TourneyHeader = ({ tourney, ...props }: Props) => (
     gridGap={{ base: 6, md: 8 }}
     {...props}
   >
-    <Heading
-      fontSize={{ base: "lg", md: "4xl" }}
-      textAlign={{ base: "center", md: "left" }}
+    <Stack
+      spacing={{ base: 2, md: 4 }}
+      align={{ base: "center", md: "flex-start" }}
     >
-      Турнир "{tourney.title}"
-    </Heading>
+      <Heading
+        fontSize={{ base: "lg", md: "4xl" }}
+        textAlign={{ base: "center", md: "left" }}
+        children={`Турнир "${tourney.title}"`}
+      />
+      <StateCard name={TOURNEY_STATE_NAMES[tourney.state]} />
+    </Stack>
     <Stack spacing={2} justify="center">
       <TourneyInfoRow name="Формат">
         {TOURNEY_TYPE_NAMES[tourney.form]?.toLowerCase() || "неизвестно"}
