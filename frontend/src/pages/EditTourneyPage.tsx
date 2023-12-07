@@ -87,14 +87,14 @@ const EditTourneyPage = () => {
   const defaultFormData = castToFormSchema(tourneyQuery.data);
 
   return (
-    <Stack mx="auto" w="full" maxW="wrapper" flex={1} spacing={14}>
+    <Stack px={2} mx="auto" w="full" maxW="wrapper" flex={1} spacing={14}>
       <Heading textAlign="center">Изменение турнира</Heading>
       <TourneyForm
         id={formId}
         defaultValue={defaultFormData}
         onSubmit={editTourney.mutateAsync}
       />
-      <HStack ml="365px" spacing={8}>
+      <HStack ml="calc(min(300px, 30%) + 65px)" spacing={8}>
         <Button
           px={10}
           form={formId}

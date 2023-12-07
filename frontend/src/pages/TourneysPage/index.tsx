@@ -32,7 +32,7 @@ const TourneysPage = () => (
   >
     <HStack justify={{ base: "center", md: "space-between" }}>
       <Heading
-        fontSize={{ base: "lg", md: "4xl" }}
+        fontSize={{ base: "lg", md: "2xl", lg: "4xl" }}
         textAlign={{ base: "center", md: "left" }}
         children="Турниры по архитектуре приложений"
       />

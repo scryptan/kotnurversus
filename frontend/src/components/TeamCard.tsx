@@ -31,7 +31,7 @@ const BaseTeamCard = ({ team, ...props }: BaseTeamCardProps) => (
   <TeamCardLayout {...props}>
     <TeamCardTitle>
       <Text
-        fontSize={{ base: "md", md: "2xl" }}
+        fontSize={{ base: "md", md: "lg" }}
         noOfLines={1}
         wordBreak="break-all"
         children={team?.title || "???"}
@@ -165,7 +165,8 @@ const ButtonTeamCard = ({
   return (
     <Box
       as="button"
-      w="fit-content"
+      w="full"
+      maxW={{ base: "175px", md: "250px" }}
       outline="none"
       textAlign="start"
       _hover={{ "#card": hoverProps }}

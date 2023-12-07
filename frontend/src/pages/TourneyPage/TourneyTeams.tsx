@@ -77,7 +77,7 @@ const TourneyTeams = ({ id, teams: defaultTeams }: Props) => {
       <Wrap
         mt={{ base: 4, md: 6 }}
         spacing={{ base: 4, md: 10 }}
-        justify={{ base: "space-evenly", md: "flex-start" }}
+        justify={{ base: "space-evenly", xl: "flex-start" }}
       >
         {allTeams.map((team) => {
           const isDefault = team.id === defaultTeam.current.id;

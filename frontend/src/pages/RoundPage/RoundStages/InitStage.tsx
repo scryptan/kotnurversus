@@ -1,6 +1,7 @@
-import { Button, Center, Text } from "@chakra-ui/react";
+import { Button, Center } from "@chakra-ui/react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import api from "~/api";
+import StateCard from "~/components/StateCard";
 import TeamCard from "~/components/TeamCard";
 import useHandleError from "~/hooks/useHandleError";
 import ArrowRightIcon from "~/icons/ArrowRightIcon";
@@ -44,14 +45,7 @@ const InitStage = () => {
             onClick={() => initRoundMutation.mutateAsync()}
           />
         ) : (
-          <Text
-            textAlign="center"
-            fontSize={{ base: "lg", md: "2xl" }}
-            lineHeight="150%"
-            textTransform="uppercase"
-          >
-            Ожидайте <br /> начало раунда
-          </Text>
+          <StateCard name="Ожидание игры" />
         )}
       </Center>
     </>

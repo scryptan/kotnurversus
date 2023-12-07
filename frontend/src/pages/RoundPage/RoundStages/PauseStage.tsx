@@ -53,7 +53,7 @@ const PauseStage = () => {
           fontSize={{ base: "xl", md: "4xl" }}
           lineHeight="150%"
         >
-          Таумаут команды "{currentTeam?.title || "???"}"
+          Таймаут команды "{currentTeam?.title || "???"}"
         </Heading>
         {isOrganizer && (
           <Button

@@ -40,11 +40,12 @@ const ChallengeForm = ({ id, defaultValue, onSubmit }: Props) => {
       <Textarea {...register("description")} minH="160px" label="Описание" />
       <Switch
         {...register("isCatInBag")}
+        my={2}
         w="fit-content"
         colorScheme="teal"
         display="flex"
         alignItems="center"
-        children="Может стать котом в мешке"
+        children="Может быть котом в мешке"
       />
     </Stack>
   );

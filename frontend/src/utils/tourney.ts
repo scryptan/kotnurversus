@@ -3,6 +3,7 @@ import {
   TourneyRound,
   TourneyRoundState,
   TourneySpecification,
+  TourneyState,
   TourneyTeam,
   TourneyType,
 } from "~/types/tourney";
@@ -10,6 +11,12 @@ import {
 export const TOURNEY_TYPE_NAMES: Record<TourneyType, string> = {
   [TourneyType.Offline]: "Оффлайн",
   [TourneyType.Online]: "Онлайн",
+};
+
+export const TOURNEY_STATE_NAMES: Record<TourneyState, string> = {
+  [TourneyState.Prepare]: "Подготовка",
+  [TourneyState.InProgress]: "В процессе",
+  [TourneyState.Complete]: "Завершен",
 };
 
 export const createMatchesFromTeams = (teams: TourneyTeam[]) => {

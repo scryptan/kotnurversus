@@ -18,9 +18,9 @@ import {
 } from "~/utils/tourney";
 import { useTourneyContext } from "../tourney-context";
 import Match from "./Match";
-import SvgViewer from "./SvgViewer";
 import TeamsManualSortingButton from "./TeamsManualSortingButton";
 import TeamsShuffleButton from "./TeamsShuffleButton";
+import TourneyBracketContainer from "./TourneyBracketContainer";
 
 type Props = {
   id: string;
@@ -31,7 +31,7 @@ type Props = {
 
 const TourneyBracket = ({ id, state, teams, specifications }: Props) => {
   const queryClient = useQueryClient();
-  const { isEditable } = useTourneyContext();
+  const { isDesktop, isEditable } = useTourneyContext();
   const isPrepare = state === TourneyState.Prepare;
 
   const roundsQuery = useQuery({
@@ -87,11 +87,15 @@ const TourneyBracket = ({ id, state, teams, specifications }: Props) => {
 
   const bracket = (
     <SingleEliminationBracket
-      options={options}
+      options={isDesktop ? desktopOptions : mobileOptions}
       matches={rounds}
       matchComponent={Match}
-      svgWrapper={({ children, ...props }) => (
-        <SvgViewer {...props} children={children} />
+      svgWrapper={({ children, bracketWidth }) => (
+        <TourneyBracketContainer
+          mt={4}
+          bracketWidth={bracketWidth}
+          children={children}
+        />
       )}
     />
   );
@@ -113,11 +117,11 @@ const TourneyBracket = ({ id, state, teams, specifications }: Props) => {
   return bracket;
 };
 
-const options: CommonTreeProps["options"] = {
+const mobileOptions: CommonTreeProps["options"] = {
   style: {
-    width: 268,
-    boxHeight: 132,
-    canvasPadding: 8,
+    width: 228,
+    boxHeight: 112,
+    canvasPadding: 0,
     spaceBetweenRows: 20,
     horizontalOffset: 0,
     roundSeparatorWidth: 50,
@@ -126,6 +130,14 @@ const options: CommonTreeProps["options"] = {
     lineInfo: {
       homeVisitorSpread: 0,
     },
+  },
+};
+
+const desktopOptions: CommonTreeProps["options"] = {
+  style: {
+    ...mobileOptions.style,
+    width: 268,
+    boxHeight: 132,
   },
 };
 

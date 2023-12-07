@@ -1,12 +1,6 @@
-import {
-  BoxProps,
-  Button,
-  Center,
-  Heading,
-  Stack,
-  Text,
-} from "@chakra-ui/react";
+import { BoxProps, Button, Center, Heading, Stack } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
+import StateCard from "~/components/StateCard";
 import TeamCard from "~/components/TeamCard";
 import paths from "~/pages/paths";
 import { useRoundContext } from "../round-context";
@@ -25,14 +19,8 @@ const CompleteStage = () => {
           <TeamCard.Base key={team.id} gridArea={`t${i + 1}`} team={team} />
         );
       })}
-      <Stack gridArea="main" alignSelf="center" align="center">
-        <Text
-          fontSize={{ base: "lg", md: "2xl" }}
-          lineHeight="150%"
-          textTransform="uppercase"
-        >
-          Завершено
-        </Text>
+      <Stack gridArea="main" alignSelf="center" align="center" spacing={4}>
+        <StateCard name="Завершен" />
         <Button
           as={Link}
           size={{ base: "sm", md: "md" }}

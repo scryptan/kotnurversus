@@ -1,4 +1,4 @@
-import { BoxProps, HStack, Stack, Text } from "@chakra-ui/react";
+import { BoxProps, Stack, Text, Wrap } from "@chakra-ui/react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { compare } from "fast-json-patch";
@@ -9,11 +9,11 @@ import api from "~/api";
 import NumberInput from "~/components/NumberInput";
 import TimeInput from "~/components/TimeInput";
 import useDebounce from "~/hooks/useDebounce";
-import { useTourneyContext } from "./tourney-context";
 import { TourneySettings } from "~/types/tourney";
 import queryKeys from "~/utils/query-keys";
 import time from "~/utils/time";
 import TourneySectionLayout from "./TourneySectionLayout";
+import { useTourneyContext } from "./tourney-context";
 
 type Props = {
   id: string;
@@ -85,11 +85,13 @@ const TourneyTimersSettings = ({ id, settings: defaultSettings }: Props) => {
       heading="Настройки таймера"
       storageKey={`tourney:${id}:timers-visibility `}
     >
-      <HStack
+      <Wrap
         mt={6}
         as="form"
-        spacing="100px"
+        spacingX="100px"
+        spacingY={6}
         align="flex-start"
+        justify="space-around"
         onChange={onSubmit}
       >
         <FormLabel label="Подготовка">
@@ -179,7 +181,7 @@ const TourneyTimersSettings = ({ id, settings: defaultSettings }: Props) => {
             />
           )}
         </FormLabel>
-      </HStack>
+      </Wrap>
     </TourneySectionLayout>
   );
 };

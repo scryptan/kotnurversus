@@ -1,6 +1,7 @@
 import { Box, HStack, LinkProps, Text, useMediaQuery } from "@chakra-ui/react";
 import BaseLink from "~/components/Link";
 import paths from "~/pages/paths";
+import QrCodeButton from "./QrCodeButton";
 
 const Footer = () => {
   const [isDesktop] = useMediaQuery("(min-width: 48em)");
@@ -17,7 +18,7 @@ const Footer = () => {
       >
         <Text color="#808080">© Команда Котнур 2023</Text>
         {isDesktop && <Link href={paths.tourneys.path}>Турниры</Link>}
-        {isDesktop && <Link href="/">О проекте</Link>}
+        {isDesktop && <QrCodeButton />}
       </HStack>
     </Box>
   );

@@ -1,4 +1,4 @@
-import { addDays, startOfDay } from "date-fns";
+import { startOfDay } from "date-fns";
 import { ZodIssueCode, z } from "zod";
 import { CreateTourney, Tourney, TourneyType } from "~/types/tourney";
 import time from "~/utils/time";
@@ -14,7 +14,7 @@ export const tourneyFormSchema = z.object({
         return { message: map[issue.code] || "Заполните поле" };
       },
     })
-    .min(startOfDay(addDays(new Date(), 1)), "Укажите будущую дату"),
+    .min(startOfDay(new Date()), "Укажите будущую дату"),
   time: z
     .string({ required_error: "Заполните поле" })
     .min(5, "Заполните поле")

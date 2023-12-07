@@ -10,6 +10,7 @@ const styles: Styles = {
     },
     body: {
       h: "100%",
+      background: `bg.${colorMode}.1`,
       color: `text.${colorMode}.main`,
       "&::-webkit-scrollbar": {
         w: "8px",
