@@ -4,10 +4,12 @@ import { Tourney, TourneyState } from "~/types/tourney";
 import { useAuthContext } from "~/utils/auth-context";
 
 type TourneyContext = {
+  isDesktop: boolean;
   isEditable: boolean;
 };
 
 const Context = createContext<TourneyContext>({
+  isDesktop: true,
   isEditable: false,
 });
 
@@ -26,6 +28,7 @@ export const TourneyProvider = ({
 
   const contextValue = useMemo(
     () => ({
+      isDesktop,
       isEditable: isDesktop && isAuthenticated && isPrepare,
     }),
     [isDesktop, isAuthenticated, isPrepare]

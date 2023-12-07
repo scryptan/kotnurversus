@@ -14,8 +14,12 @@ const StateCard = ({ name, ...props }: Props) => (
     lineHeight="100%"
     textTransform="uppercase"
     borderRadius={8}
-    border="1px solid #35607D"
-    boxShadow="0px 0px 10px 0px #35607D"
+    border="1px solid #61b4eb"
+    boxShadow="0px 0px 5px 0px #61b4eb"
+    _dark={{
+      border: "1px solid #35607D",
+      boxShadow: "0px 0px 5px 0px #35607D",
+    }}
     children={name}
     {...props}
   />
