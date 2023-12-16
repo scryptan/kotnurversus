@@ -4,7 +4,7 @@ import {
   HStack,
   Heading,
   Stack,
-  useMediaQuery,
+  useBreakpointValue,
 } from "@chakra-ui/react";
 import { useQuery } from "@tanstack/react-query";
 import { ChangeEvent, useState } from "react";
@@ -98,7 +98,10 @@ const TourneysSection = () => {
 
 const CreateTourneyButton = () => {
   const { isAuthenticated } = useAuthContext();
-  const [isDesktop] = useMediaQuery("(min-width: 48em)");
+  const isDesktop = useBreakpointValue(
+    { base: false, sm: true },
+    { ssr: false }
+  );
 
   if (!(isAuthenticated && isDesktop)) {
     return null;

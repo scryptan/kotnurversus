@@ -1,4 +1,4 @@
-import { HStack, Heading } from "@chakra-ui/react";
+import { HStack, Heading, useBreakpointValue } from "@chakra-ui/react";
 import { SingleEliminationBracket } from "@g-loot/react-tournament-brackets";
 import { CommonTreeProps } from "@g-loot/react-tournament-brackets/dist/src/types";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -31,7 +31,12 @@ type Props = {
 
 const TourneyBracket = ({ id, state, teams, specifications }: Props) => {
   const queryClient = useQueryClient();
-  const { isDesktop, isEditable } = useTourneyContext();
+  const { isEditable } = useTourneyContext();
+  const isDesktop = useBreakpointValue(
+    { base: false, sm: true },
+    { ssr: false }
+  );
+
   const isPrepare = state === TourneyState.Prepare;
 
   const roundsQuery = useQuery({
@@ -40,11 +45,9 @@ const TourneyBracket = ({ id, state, teams, specifications }: Props) => {
     enabled: !isPrepare,
   });
 
-  const [previewRounds, setPreviewRounds] = useState(() => {
-    const rounds = calcRounds(teams, isEditable ? specifications : undefined);
-    if (!roundsQuery.isLoading) return rounds;
-    return rounds.map((r) => ({ ...r, isLoading: true }));
-  });
+  const [previewRounds, setPreviewRounds] = useState(() =>
+    calcRounds(teams, isEditable ? specifications : undefined)
+  );
 
   useEffect(() => {
     if (!isPrepare) return;
@@ -65,7 +68,9 @@ const TourneyBracket = ({ id, state, teams, specifications }: Props) => {
 
   const rounds =
     isPrepare || roundsQuery.isLoading
-      ? previewRounds
+      ? roundsQuery.isLoading
+        ? previewRounds.map((r) => ({ ...r, isLoading: true }))
+        : previewRounds
       : (roundsQuery.data?.items || []).map(castToTourneyRound(teams));
 
   if (teams.length < 4 || rounds.length < 2 || roundsQuery.isError) {

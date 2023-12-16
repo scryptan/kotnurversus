@@ -42,11 +42,14 @@ const Header = (props: BoxProps) => (
 
 const Logo = () => {
   const { isAuthenticated } = useAuthContext();
-  const logoLabel = useBreakpointValue({
-    base: "К",
-    md: isAuthenticated ? "К" : "Котнур",
-    lg: "Котнур",
-  });
+  const logoLabel = useBreakpointValue(
+    {
+      base: "К",
+      md: isAuthenticated ? "К" : "Котнур",
+      lg: "Котнур",
+    },
+    { ssr: false }
+  );
 
   return (
     <BaseLink href={paths.main.path} _hover={{ transform: "scale(1.025)" }}>
