@@ -12,57 +12,72 @@ import ArrowDownIcon from "~/icons/ArrowDownIcon";
 import storage from "~/utils/storage";
 
 type Props = {
-  heading: string;
-  storageKey: string;
-  defaultIsOpen: boolean;
+  label: string;
+  storageKey?: string;
+  defaultIsOpen?: boolean;
+  headerProps?: BoxProps;
 } & BoxProps;
 
-const TourneySectionLayout = ({
-  heading,
+const CollapsibleSection = ({
+  label,
   storageKey,
-  defaultIsOpen,
+  defaultIsOpen = true,
+  headerProps,
   children,
   ...props
 }: Props) => {
   const [isOpen, setIsOpen] = useBoolean(() =>
-    storage.has(storageKey) ? storage.getBoolean(storageKey) : defaultIsOpen
+    storageKey && storage.has(storageKey)
+      ? storage.getBoolean(storageKey)
+      : defaultIsOpen
   );
 
   useEffect(() => {
+    if (!storageKey) return;
     storage.set(storageKey, String(isOpen));
-  }, [isOpen]);
+  }, [isOpen, storageKey]);
 
   return (
     <Box {...props}>
-      <Header isOpen={isOpen} onToggle={setIsOpen.toggle} heading={heading} />
+      <CollapsibleHeader
+        label={label}
+        isOpen={isOpen}
+        onToggle={setIsOpen.toggle}
+        {...headerProps}
+      />
       <Collapse in={isOpen} unmountOnExit children={children} />
     </Box>
   );
 };
 
-type HeaderProps = {
+type CollapsibleHeaderProps = {
+  label: string;
   isOpen: boolean;
   onToggle: () => void;
-  heading: string;
-};
+} & BoxProps;
 
-const Header = ({ isOpen, onToggle, heading }: HeaderProps) => {
+const CollapsibleHeader = ({
+  label,
+  isOpen,
+  onToggle,
+  ...props
+}: CollapsibleHeaderProps) => {
   const buttonRef = useRef<HTMLButtonElement>(null);
 
   return (
     <HStack
-      px={{ base: 2, md: 0 }}
       w="fit-content"
       cursor="pointer"
       userSelect="none"
-      onClick={() => buttonRef.current?.click()}
       transition="opacity 200ms"
       _hover={{ opacity: 0.75 }}
+      onClick={() => buttonRef.current?.click()}
+      {...props}
     >
       <Heading
         fontSize={{ base: "md", md: "2xl" }}
         fontWeight="medium"
-        children={heading}
+        children={label}
       />
       <IconButton
         ref={buttonRef}
@@ -77,10 +92,10 @@ const Header = ({ isOpen, onToggle, heading }: HeaderProps) => {
             transform={`rotate(${isOpen ? -180 : 0}deg)`}
           />
         }
-        aria-label={`${isOpen ? "Скрыть" : "Показать"} секцию`}
+        aria-label={`${isOpen ? "Скрыть" : "Показать"} раздел`}
       />
     </HStack>
   );
 };
 
-export default TourneySectionLayout;
+export default CollapsibleSection;

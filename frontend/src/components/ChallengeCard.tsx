@@ -16,8 +16,6 @@ const ChallengeCard = ({
   const fontColor =
     chroma(category.color).luminance() < 0.5 ? "white" : "text.light.main";
 
-  const shadowColor = chroma(category.color).darken(0.25).hex();
-
   return (
     <Box
       as="button"
@@ -26,7 +24,7 @@ const ChallengeCard = ({
       borderRadius={8}
       transition="box-shadow 200ms ease-out"
       _dark={{ bg: "whiteAlpha.300" }}
-      _hover={{ boxShadow: `0px 0px 7px 0px ${shadowColor}` }}
+      _hover={{ boxShadow: `0px 0px 7px 0px ${category.color}` }}
       _focusVisible={{ boxShadow: "outline" }}
       {...props}
     >
