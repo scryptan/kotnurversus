@@ -1,15 +1,15 @@
-import { BoxProps, Button, Stack, Text, useDisclosure } from "@chakra-ui/react";
-import chroma from "chroma-js";
+import { Wrap, WrapProps, useDisclosure } from "@chakra-ui/react";
 import { memo } from "react";
+import BaseChallengeCard from "~/components/ChallengeCard";
 import useChallengesQuery from "~/hooks/useChallengesQuery";
-import ChallengeWindow from "~/pages/RoundPage/RoundStages/ChallengeWindow";
+import { useRoundContext } from "~/pages/RoundPage/round-context";
 import { Category } from "~/types/category";
 import { Challenge } from "~/types/challenge";
-import { useRoundContext } from "../round-context";
+import ChallengeWindow from "./ChallengeWindow";
 
 type Props = {
   teamId: string;
-} & BoxProps;
+} & WrapProps;
 
 const ChallengesSection = ({ teamId, ...props }: Props) => {
   const { round } = useRoundContext();
@@ -21,8 +21,17 @@ const ChallengesSection = ({ teamId, ...props }: Props) => {
 
   if (chosenChallengeIds.length < 1) return null;
 
+  const isFirstTeam = round.participants.at(0)?.teamId === teamId;
+
   return (
-    <Stack maxW="200px" w="95%" spacing={4} {...props}>
+    <Wrap
+      w="full"
+      spacing={4}
+      align="flex-start"
+      justifySelf={isFirstTeam ? "flex-end" : "flex-start"}
+      justify={{ base: "center", md: isFirstTeam ? "flex-end" : "flex-start" }}
+      {...props}
+    >
       {chosenChallengeIds.map((id) => {
         const challenge = query.challenges.find((c) => c.id === id);
         const category = query.categories.find(
@@ -33,7 +42,7 @@ const ChallengesSection = ({ teamId, ...props }: Props) => {
           <ChallengeCard key={id} category={category} challenge={challenge} />
         );
       })}
-    </Stack>
+    </Wrap>
   );
 };
 
@@ -46,36 +55,15 @@ const ChallengeCard = memo(
   ({ challenge, category }: ChallengeCardProps) => {
     const window = useDisclosure();
 
-    const fontColor =
-      chroma(category.color).luminance() < 0.5 ? "white" : "text.light.main";
-
-    const borderColor = chroma(category.color).darken(0.25).hex();
-
     return (
       <>
-        <Button
-          {...window.getButtonProps()}
-          px={4}
-          py={2}
-          variant="link"
-          color={fontColor}
-          bg={category.color}
-          borderRadius={8}
-          border="1px solid"
-          borderColor={borderColor}
-          whiteSpace="normal"
+        <BaseChallengeCard
+          w="95%"
+          maxW="160px"
+          category={category}
+          challenge={challenge}
           onClick={window.onOpen}
-          _active={{ textDecoration: "underline" }}
-          boxShadow={`0px 0px 5px 0px ${borderColor}`}
-        >
-          <Text
-            fontSize={{ base: "sm", md: "xl" }}
-            lineHeight="150%"
-            fontWeight="normal"
-            wordBreak="break-word"
-            children={challenge.title}
-          />
-        </Button>
+        />
         <ChallengeWindow
           {...window.getDisclosureProps()}
           isOpen={window.isOpen}

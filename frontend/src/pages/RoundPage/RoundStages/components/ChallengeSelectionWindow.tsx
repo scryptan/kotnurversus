@@ -14,12 +14,12 @@ import api from "~/api";
 import Window, { WindowProps } from "~/components/Window";
 import useChallengesQuery from "~/hooks/useChallengesQuery";
 import useHandleError from "~/hooks/useHandleError";
+import { useRoundContext } from "~/pages/RoundPage/round-context";
 import { Category } from "~/types/category";
 import { Challenge } from "~/types/challenge";
 import { Round } from "~/types/round";
 import { TourneyTeam } from "~/types/tourney";
 import queryKeys from "~/utils/query-keys";
-import { useRoundContext } from "../round-context";
 import ChallengeWindow from "./ChallengeWindow";
 
 type Props = {

@@ -28,7 +28,7 @@ const TeamsShuffleButton = ({ teams, onTeamsChange, ...props }: Props) => {
       isLoading={isLoading}
       leftIcon={<ShuffleIcon boxSize={4} />}
       onClick={handleClick}
-      children="Перемещать участников"
+      children="Перемешать участников"
     />
   );
 };

@@ -1,15 +1,16 @@
-import { Button, Center, Stack, Text } from "@chakra-ui/react";
+import { Button, Stack, Text } from "@chakra-ui/react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import api from "~/api";
 import ButtonWithAlert from "~/components/ButtonWithAlert";
-import TeamCard from "~/components/TeamCard";
 import useHandleError from "~/hooks/useHandleError";
 import { RoundState } from "~/types/round";
 import queryKeys from "~/utils/query-keys";
 import { useRoundContext } from "../round-context";
-import RoundStageTimer from "./RoundStageTimer";
-import TimeoutButton from "./TimeoutButton";
+import MainInfo from "./components/MainInfo";
+import RoundStageTimer from "./components/RoundStageTimer";
+import TeamButton from "./components/TeamButton";
+import TimeoutButton from "./components/TimeoutButton";
 
 const STAGE_COLOR = "#F03B36";
 const STAGE_STATE = RoundState.Presentation;
@@ -49,7 +50,7 @@ const PresentationStartStage = () => {
       {getTeams().map((team, i) => {
         if (!team) return null;
         return (
-          <TeamCard.Button
+          <TeamButton
             key={team.id}
             gridArea={`t${i + 1}`}
             activeColor={STAGE_COLOR}
@@ -60,21 +61,12 @@ const PresentationStartStage = () => {
           />
         );
       })}
-      <Center gridArea="main">
-        <Text
-          textAlign="center"
-          fontSize={{ base: "lg", md: "2xl" }}
-          lineHeight="150%"
-          textTransform="uppercase"
-        >
-          Подготовка команды к выступлению
-        </Text>
-      </Center>
+      <MainInfo isMinContent children="Подготовка команды к выступлению" />
       {isOrganizer && (
         <Stack align="center" gridArea="b">
           {isFirstTime && (
             <Text textAlign="center" fontSize="md" lineHeight="150%">
-              Нажмите на команду, которая будет выступать
+              Нажмите на команду, <br /> которая будет выступать
             </Text>
           )}
           <Button
@@ -113,21 +105,18 @@ const PresentationEndStage = ({ timerEnd }: PresentationEndStageProps) => {
 
   return (
     <>
-      {getTeams().map((team, i) => {
-        if (!team) return null;
-        return (
-          <TeamCard.Button
-            key={team.id}
-            isDisabled
-            isChosen={currentTeam?.id == team.id}
-            activeColor={STAGE_COLOR}
-            gridArea={`t${i + 1}`}
-            team={team}
-          />
-        );
-      })}
+      {getTeams().map((team, i) => (
+        <TeamButton
+          key={team?.id || i}
+          isDisabled
+          isChosen={currentTeam?.id == team?.id}
+          activeColor={STAGE_COLOR}
+          gridArea={`t${i + 1}`}
+          team={team}
+        />
+      ))}
       <RoundStageTimer
-        gridArea="main"
+        gridArea="m"
         alignSelf="center"
         justifySelf="center"
         endDate={timerEnd}
@@ -140,12 +129,8 @@ const PresentationEndStage = ({ timerEnd }: PresentationEndStageProps) => {
           teamId={p.teamId}
         />
       ))}
-      <Stack align="center" gridArea="b">
-        <Text
-          textAlign="center"
-          fontSize={{ base: "xl", md: "3xl" }}
-          lineHeight="150%"
-        >
+      <Stack align="center" gridArea="b" spacing={4}>
+        <Text textAlign="center" fontSize={{ base: "xl", md: "2xl" }}>
           Презентация команды "{currentTeam?.title || "???"}"
         </Text>
         {isOrganizer && (

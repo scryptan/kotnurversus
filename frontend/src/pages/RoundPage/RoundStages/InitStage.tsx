@@ -1,10 +1,10 @@
 import { Button, Center } from "@chakra-ui/react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import api from "~/api";
-import StateCard from "~/components/StateCard";
 import TeamCard from "~/components/TeamCard";
 import useHandleError from "~/hooks/useHandleError";
 import ArrowRightIcon from "~/icons/ArrowRightIcon";
+import MainInfo from "~/pages/RoundPage/RoundStages/components/MainInfo";
 import queryKeys from "~/utils/query-keys";
 import { useRoundContext } from "../round-context";
 
@@ -31,8 +31,8 @@ const InitStage = () => {
           <TeamCard.Base key={team.id} gridArea={`t${i + 1}`} team={team} />
         );
       })}
-      <Center gridArea="main">
-        {isOrganizer ? (
+      {isOrganizer ? (
+        <Center gridArea="s">
           <Button
             size="lg"
             variant="outline"
@@ -44,10 +44,10 @@ const InitStage = () => {
             isLoading={initRoundMutation.isPending}
             onClick={() => initRoundMutation.mutateAsync()}
           />
-        ) : (
-          <StateCard name="Ожидание игры" />
-        )}
-      </Center>
+        </Center>
+      ) : (
+        <MainInfo gridArea="s" children="Ожидание игры" />
+      )}
     </>
   );
 };

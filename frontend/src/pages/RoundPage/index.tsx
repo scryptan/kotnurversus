@@ -24,7 +24,7 @@ const RoundPage = () => {
         flexDir="column"
       >
         <RoundHeader />
-        <RoundStages mt={12} />
+        <RoundStages mt={5} />
         <RoundSpecificationSection mt={{ base: 10, md: 20 }} />
       </Flex>
     </RoundProvider>

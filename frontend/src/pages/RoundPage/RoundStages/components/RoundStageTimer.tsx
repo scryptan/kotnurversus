@@ -6,8 +6,8 @@ import IconButtonWithTooltip from "~/components/IconButtonWithTooltip";
 import useHandleError from "~/hooks/useHandleError";
 import useTimer from "~/hooks/useTimer";
 import ResetIcon from "~/icons/ResetIcon";
+import { useRoundContext } from "~/pages/RoundPage/round-context";
 import queryKeys from "~/utils/query-keys";
-import { useRoundContext } from "../round-context";
 
 type Props = {
   endDate: Date;
@@ -34,7 +34,6 @@ const RoundStageTimer = ({ endDate, activeColor, ...props }: Props) => {
   return (
     <Center
       py={2}
-      mb={{ md: 4 }}
       w="200px"
       borderRadius={8}
       border="1px solid transparent"

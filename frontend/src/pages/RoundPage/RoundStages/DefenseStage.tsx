@@ -1,14 +1,15 @@
-import { Button, Center, Stack, Text } from "@chakra-ui/react";
+import { Button, Stack, Text } from "@chakra-ui/react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import api from "~/api";
 import ButtonWithAlert from "~/components/ButtonWithAlert";
-import TeamCard from "~/components/TeamCard";
 import useHandleError from "~/hooks/useHandleError";
+import MainInfo from "~/pages/RoundPage/RoundStages/components/MainInfo";
 import { RoundState } from "~/types/round";
 import queryKeys from "~/utils/query-keys";
 import { useRoundContext } from "../round-context";
-import RoundStageTimer from "./RoundStageTimer";
-import TimeoutButton from "./TimeoutButton";
+import RoundStageTimer from "./components/RoundStageTimer";
+import TeamButton from "./components/TeamButton";
+import TimeoutButton from "./components/TimeoutButton";
 
 const STAGE_COLOR = "#F03B36";
 const STAGE_STATE = RoundState.Defense;
@@ -41,29 +42,19 @@ const DefenseStartStage = () => {
 
   return (
     <>
-      {getTeams().map((team, i) => {
-        if (!team) return null;
-        return (
-          <TeamCard.Button
-            key={team.id}
-            isDisabled
-            isChosen={currentTeamId === team.id}
-            gridArea={`t${i + 1}`}
-            activeColor={STAGE_COLOR}
-            team={team}
-          />
-        );
-      })}
-      <Center gridArea="main">
-        <Text
-          textAlign="center"
-          fontSize={{ base: "lg", md: "2xl" }}
-          lineHeight="150%"
-          textTransform="uppercase"
-        >
-          Подготовка команды для защиты
-        </Text>
-      </Center>
+      {getTeams().map((team, i) => (
+        <TeamButton
+          key={team?.id || i}
+          isDisabled
+          isChosen={currentTeamId === team?.id}
+          gridArea={`t${i + 1}`}
+          activeColor={STAGE_COLOR}
+          team={team}
+        />
+      ))}
+      <MainInfo>
+        Подготовка <br /> команды для защиты
+      </MainInfo>
       {isOrganizer && (
         <Button
           gridArea="b"
@@ -106,21 +97,18 @@ const DefenseEndStage = ({ timerEnd }: DefenseEndStageProps) => {
 
   return (
     <>
-      {getTeams().map((team, i) => {
-        if (!team) return null;
-        return (
-          <TeamCard.Button
-            isDisabled
-            isChosen={currentTeam?.id == team.id}
-            activeColor={STAGE_COLOR}
-            key={team.id}
-            gridArea={`t${i + 1}`}
-            team={team}
-          />
-        );
-      })}
+      {getTeams().map((team, i) => (
+        <TeamButton
+          isDisabled
+          isChosen={currentTeam?.id == team?.id}
+          activeColor={STAGE_COLOR}
+          key={team?.id || i}
+          gridArea={`t${i + 1}`}
+          team={team}
+        />
+      ))}
       <RoundStageTimer
-        gridArea="main"
+        gridArea="m"
         alignSelf="center"
         justifySelf="center"
         endDate={timerEnd}
@@ -133,10 +121,10 @@ const DefenseEndStage = ({ timerEnd }: DefenseEndStageProps) => {
           teamId={p.teamId}
         />
       ))}
-      <Stack align="center" gridArea="b">
+      <Stack align="center" gridArea="b" spacing={4}>
         <Text
           textAlign="center"
-          fontSize={{ base: "xl", md: "3xl" }}
+          fontSize={{ base: "xl", md: "2xl" }}
           lineHeight="150%"
         >
           Защита команды "{currentTeam?.title || "???"}"
