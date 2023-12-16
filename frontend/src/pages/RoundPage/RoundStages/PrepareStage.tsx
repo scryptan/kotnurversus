@@ -4,15 +4,12 @@ import { useState } from "react";
 import api from "~/api";
 import ButtonWithAlert from "~/components/ButtonWithAlert";
 import useHandleError from "~/hooks/useHandleError";
-import MainInfo from "~/pages/RoundPage/RoundStages/components/MainInfo";
 import { RoundState } from "~/types/round";
 import { TourneyTeam } from "~/types/tourney";
 import queryKeys from "~/utils/query-keys";
 import { useRoundContext } from "../round-context";
-import ChallengeSelectionWindow from "./components/ChallengeSelectionWindow";
-import RoundStageTimer from "./components/RoundStageTimer";
-import TeamButton from "./components/TeamButton";
-import TimeoutButton from "./components/TimeoutButton";
+import Stage from "./Stage";
+import ChallengeSelectionWindow from "./Stage/ChallengeSelectionWindow";
 
 const STAGE_COLOR = "#D83161";
 const STAGE_STATE = RoundState.Prepare;
@@ -49,7 +46,7 @@ const PrepareStartStage = () => {
   return (
     <>
       {getTeams().map((team, i) => (
-        <TeamButton
+        <Stage.Team
           key={team?.id || i}
           gridArea={`t${i + 1}`}
           activeColor={STAGE_COLOR}
@@ -58,7 +55,7 @@ const PrepareStartStage = () => {
           onClick={handleChoose(team)}
         />
       ))}
-      <MainInfo isMinContent children="Выбор дополнительных требований" />
+      <Stage.MainInfo isMinContent children="Выбор дополнительных требований" />
       {isOrganizer && (
         <Stack align="center" gridArea="b">
           <Text textAlign="center" fontSize="md" lineHeight="150%">
@@ -107,9 +104,9 @@ const PrepareEndStage = ({ timerEnd }: PrepareEndStageProps) => {
   return (
     <>
       {getTeams().map((team, i) => (
-        <TeamButton key={team?.id || i} gridArea={`t${i + 1}`} team={team} />
+        <Stage.Team key={team?.id || i} gridArea={`t${i + 1}`} team={team} />
       ))}
-      <RoundStageTimer
+      <Stage.Timer
         gridArea="m"
         alignSelf="center"
         justifySelf="center"
@@ -117,7 +114,7 @@ const PrepareEndStage = ({ timerEnd }: PrepareEndStageProps) => {
         activeColor={STAGE_COLOR}
       />
       {round.participants.slice(0, 2).map((p, i) => (
-        <TimeoutButton
+        <Stage.Timeout
           key={p.teamId}
           gridArea={`e${i + 1}`}
           teamId={p.teamId}

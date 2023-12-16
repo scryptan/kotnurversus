@@ -3,13 +3,10 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import api from "~/api";
 import ButtonWithAlert from "~/components/ButtonWithAlert";
 import useHandleError from "~/hooks/useHandleError";
-import MainInfo from "~/pages/RoundPage/RoundStages/components/MainInfo";
 import { RoundState } from "~/types/round";
 import queryKeys from "~/utils/query-keys";
 import { useRoundContext } from "../round-context";
-import RoundStageTimer from "./components/RoundStageTimer";
-import TeamButton from "./components/TeamButton";
-import TimeoutButton from "./components/TimeoutButton";
+import Stage from "./Stage";
 
 const STAGE_COLOR = "#F03B36";
 const STAGE_STATE = RoundState.Defense;
@@ -43,7 +40,7 @@ const DefenseStartStage = () => {
   return (
     <>
       {getTeams().map((team, i) => (
-        <TeamButton
+        <Stage.Team
           key={team?.id || i}
           isDisabled
           isChosen={currentTeamId === team?.id}
@@ -52,9 +49,9 @@ const DefenseStartStage = () => {
           team={team}
         />
       ))}
-      <MainInfo>
+      <Stage.MainInfo>
         Подготовка <br /> команды для защиты
-      </MainInfo>
+      </Stage.MainInfo>
       {isOrganizer && (
         <Button
           gridArea="b"
@@ -98,7 +95,7 @@ const DefenseEndStage = ({ timerEnd }: DefenseEndStageProps) => {
   return (
     <>
       {getTeams().map((team, i) => (
-        <TeamButton
+        <Stage.Team
           isDisabled
           isChosen={currentTeam?.id == team?.id}
           activeColor={STAGE_COLOR}
@@ -107,7 +104,7 @@ const DefenseEndStage = ({ timerEnd }: DefenseEndStageProps) => {
           team={team}
         />
       ))}
-      <RoundStageTimer
+      <Stage.Timer
         gridArea="m"
         alignSelf="center"
         justifySelf="center"
@@ -115,7 +112,7 @@ const DefenseEndStage = ({ timerEnd }: DefenseEndStageProps) => {
         activeColor={STAGE_COLOR}
       />
       {round.participants.slice(0, 2).map((p, i) => (
-        <TimeoutButton
+        <Stage.Timeout
           key={p.teamId}
           gridArea={`e${i + 1}`}
           teamId={p.teamId}

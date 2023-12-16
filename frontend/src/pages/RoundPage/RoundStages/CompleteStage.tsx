@@ -2,7 +2,7 @@ import { BoxProps, Button, Center, Heading } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
 import paths from "~/pages/paths";
 import { useRoundContext } from "../round-context";
-import TeamButton from "./components/TeamButton";
+import Stage from "./Stage";
 
 const CompleteStage = () => {
   const { round, getTeams } = useRoundContext();
@@ -13,7 +13,7 @@ const CompleteStage = () => {
   return (
     <>
       {teams.map((team, i) => (
-        <TeamButton key={team?.id || i} gridArea={`t${i + 1}`} team={team} />
+        <Stage.Team key={team?.id || i} gridArea={`t${i + 1}`} team={team} />
       ))}
       <Button
         as={Link}
@@ -56,9 +56,9 @@ type MarkProps = {
 const Mark = ({ value, isWinner, ...props }: MarkProps) => (
   <Center
     {...props}
-    boxSize={{ base: 16, xl: 24 }}
+    boxSize={16}
     borderRadius="full"
-    fontSize={{ base: "2xl", xl: "4xl" }}
+    fontSize="2xl"
     fontWeight="bold"
     border="2px solid"
     bg="blackAlpha.50"

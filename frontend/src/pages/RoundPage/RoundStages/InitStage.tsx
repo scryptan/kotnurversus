@@ -4,9 +4,9 @@ import api from "~/api";
 import TeamCard from "~/components/TeamCard";
 import useHandleError from "~/hooks/useHandleError";
 import ArrowRightIcon from "~/icons/ArrowRightIcon";
-import MainInfo from "~/pages/RoundPage/RoundStages/components/MainInfo";
 import queryKeys from "~/utils/query-keys";
 import { useRoundContext } from "../round-context";
+import Stage from "./Stage";
 
 const InitStage = () => {
   const handleError = useHandleError();
@@ -46,7 +46,7 @@ const InitStage = () => {
           />
         </Center>
       ) : (
-        <MainInfo gridArea="s" children="Ожидание игры" />
+        <Stage.MainInfo gridArea="s" children="Ожидание игры" />
       )}
     </>
   );

@@ -11,7 +11,7 @@ type Props = {
   teamId: string;
 } & WrapProps;
 
-const ChallengesSection = ({ teamId, ...props }: Props) => {
+const StageChallenges = ({ teamId, ...props }: Props) => {
   const { round } = useRoundContext();
 
   const chosenChallengeIds =
@@ -77,4 +77,4 @@ const ChallengeCard = memo(
   (prev, next) => prev.challenge.id === next.challenge.id
 );
 
-export default ChallengesSection;
+export default StageChallenges;

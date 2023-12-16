@@ -5,8 +5,7 @@ import useHandleError from "~/hooks/useHandleError";
 import { RoundState } from "~/types/round";
 import queryKeys from "~/utils/query-keys";
 import { useRoundContext } from "../round-context";
-import RoundStageTimer from "./components/RoundStageTimer";
-import TeamButton from "./components/TeamButton";
+import Stage from "./Stage";
 
 const STAGE_COLOR = "#38B2AC";
 const STAGE_STATE = RoundState.Pause;
@@ -33,10 +32,10 @@ const PauseStage = () => {
   return (
     <>
       {getTeams().map((team, i) => (
-        <TeamButton key={team?.id || i} gridArea={`t${i + 1}`} team={team} />
+        <Stage.Team key={team?.id || i} gridArea={`t${i + 1}`} team={team} />
       ))}
       {timerEnd && (
-        <RoundStageTimer
+        <Stage.Timer
           gridArea="m"
           alignSelf="center"
           justifySelf="center"

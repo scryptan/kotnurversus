@@ -12,7 +12,7 @@ type Props = {
   onClick?: () => void;
 } & BoxProps;
 
-const TeamButton = ({
+const StageTeam = ({
   isChosen,
   isDisabled,
   activeColor,
@@ -44,7 +44,7 @@ const TeamButton = ({
 
   if (isDisabled || !activeColor) {
     return (
-      <BaseTeamButton
+      <BaseTeam
         team={team}
         bodyProps={isChosen && activeColor ? activeProps : undefined}
         {...containerBaseProps}
@@ -59,7 +59,7 @@ const TeamButton = ({
   };
 
   return (
-    <BaseTeamButton
+    <BaseTeam
       as="button"
       outline="none"
       team={team}
@@ -78,12 +78,12 @@ const TeamButton = ({
   );
 };
 
-type BaseProps = {
+type BaseTeamProps = {
   team: TourneyTeam;
   bodyProps?: BoxProps;
 } & BoxProps;
 
-const BaseTeamButton = forwardRef<BaseProps, "div">(
+const BaseTeam = forwardRef<BaseTeamProps, "div">(
   ({ team, bodyProps, _dark, ...props }, ref) => (
     <Box ref={ref} textAlign="center" {...props}>
       <Text
@@ -121,4 +121,4 @@ const BaseTeamButton = forwardRef<BaseProps, "div">(
   )
 );
 
-export default TeamButton;
+export default StageTeam;

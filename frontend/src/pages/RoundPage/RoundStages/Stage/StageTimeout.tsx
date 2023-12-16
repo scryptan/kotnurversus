@@ -10,7 +10,7 @@ type Props = {
   teamId: string;
 } & BoxProps;
 
-const TimeoutButton = ({ teamId, ...props }: Props) => {
+const StageTimeout = ({ teamId, ...props }: Props) => {
   const handleError = useHandleError();
   const queryClient = useQueryClient();
   const { isOrganizer, round } = useRoundContext();
@@ -74,4 +74,4 @@ const TimeoutButton = ({ teamId, ...props }: Props) => {
   );
 };
 
-export default TimeoutButton;
+export default StageTimeout;

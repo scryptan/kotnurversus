@@ -7,10 +7,7 @@ import useHandleError from "~/hooks/useHandleError";
 import { RoundState } from "~/types/round";
 import queryKeys from "~/utils/query-keys";
 import { useRoundContext } from "../round-context";
-import MainInfo from "./components/MainInfo";
-import RoundStageTimer from "./components/RoundStageTimer";
-import TeamButton from "./components/TeamButton";
-import TimeoutButton from "./components/TimeoutButton";
+import Stage from "./Stage";
 
 const STAGE_COLOR = "#F03B36";
 const STAGE_STATE = RoundState.Presentation;
@@ -50,7 +47,7 @@ const PresentationStartStage = () => {
       {getTeams().map((team, i) => {
         if (!team) return null;
         return (
-          <TeamButton
+          <Stage.Team
             key={team.id}
             gridArea={`t${i + 1}`}
             activeColor={STAGE_COLOR}
@@ -61,7 +58,10 @@ const PresentationStartStage = () => {
           />
         );
       })}
-      <MainInfo isMinContent children="Подготовка команды к выступлению" />
+      <Stage.MainInfo
+        isMinContent
+        children="Подготовка команды к выступлению"
+      />
       {isOrganizer && (
         <Stack align="center" gridArea="b">
           {isFirstTime && (
@@ -106,7 +106,7 @@ const PresentationEndStage = ({ timerEnd }: PresentationEndStageProps) => {
   return (
     <>
       {getTeams().map((team, i) => (
-        <TeamButton
+        <Stage.Team
           key={team?.id || i}
           isDisabled
           isChosen={currentTeam?.id == team?.id}
@@ -115,7 +115,7 @@ const PresentationEndStage = ({ timerEnd }: PresentationEndStageProps) => {
           team={team}
         />
       ))}
-      <RoundStageTimer
+      <Stage.Timer
         gridArea="m"
         alignSelf="center"
         justifySelf="center"
@@ -123,7 +123,7 @@ const PresentationEndStage = ({ timerEnd }: PresentationEndStageProps) => {
         activeColor={STAGE_COLOR}
       />
       {round.participants.slice(0, 2).map((p, i) => (
-        <TimeoutButton
+        <Stage.Timeout
           key={p.teamId}
           gridArea={`e${i + 1}`}
           teamId={p.teamId}

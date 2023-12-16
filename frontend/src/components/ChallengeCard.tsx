@@ -32,7 +32,7 @@ const ChallengeCard = ({
     >
       <Box px={4} py={2} color={fontColor} bg={category.color} borderRadius={8}>
         <Text
-          fontSize={{ base: "sm", md: "xl" }}
+          fontSize={{ base: "sm", md: "lg" }}
           lineHeight="130%"
           fontWeight="normal"
           wordBreak="break-word"

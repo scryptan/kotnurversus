@@ -8,13 +8,12 @@ import MarkStage from "./MarkStage";
 import PauseStage from "./PauseStage";
 import PrepareStage from "./PrepareStage";
 import PresentationStage from "./PresentationStage";
-import ChallengesSection from "./components/ChallengesSection";
-import RoundStateCard from "./components/RoundStateCard";
+import Stage from "./Stage";
 
 const RoundStages = (props: BoxProps) => {
   const { round, state } = useRoundContext();
 
-  const Stage = (state && STAGES[state]) || InitStage;
+  const StageByState = (state && STAGES[state]) || InitStage;
 
   return (
     <Grid
@@ -54,10 +53,10 @@ const RoundStages = (props: BoxProps) => {
       justifyItems={{ base: "center", xl: "normal" }}
       {...props}
     >
-      <RoundStateCard />
-      <Stage />
+      <Stage.State />
+      <StageByState />
       {round.participants.slice(0, 2).map((p, i) => (
-        <ChallengesSection
+        <Stage.Challenges
           key={p.teamId}
           gridArea={`c${i + 1}`}
           teamId={p.teamId}

@@ -16,12 +16,11 @@ import ButtonWithAlert from "~/components/ButtonWithAlert";
 import useHandleError from "~/hooks/useHandleError";
 import MinusIcon from "~/icons/MinusIcon";
 import PlusIcon from "~/icons/PlusIcon";
-import MainInfo from "~/pages/RoundPage/RoundStages/components/MainInfo";
 import { getErrorApiStatus } from "~/utils/error";
 import queryKeys from "~/utils/query-keys";
 import { warningToast } from "~/utils/template-toasts";
 import { useRoundContext } from "../round-context";
-import TeamButton from "./components/TeamButton";
+import Stage from "./Stage";
 
 const MarkStage = () => {
   const toast = useToast();
@@ -58,7 +57,7 @@ const MarkStage = () => {
   return (
     <>
       {getTeams().map((team, i) => (
-        <TeamButton key={team?.id || i} gridArea={`t${i + 1}`} team={team} />
+        <Stage.Team key={team?.id || i} gridArea={`t${i + 1}`} team={team} />
       ))}
       {isOrganizer &&
         round.participants
@@ -71,7 +70,7 @@ const MarkStage = () => {
               onChange={handleMark(p.teamId)}
             />
           ))}
-      <MainInfo children="Оценка команд" />
+      <Stage.MainInfo children="Оценка команд" />
       {isOrganizer ? (
         <Stack align="center" gridArea="b">
           <Text textAlign="center" fontSize="md" lineHeight="150%">
