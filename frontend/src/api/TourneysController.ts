@@ -20,7 +20,12 @@ export class TourneysController {
   async update(tourney: Tourney, newData: CreateTourney): Promise<Tourney> {
     const operations = compare(
       { ...tourney, startDate: tourney.startDate.toJSON() },
-      { ...tourney, ...newData, startDate: newData.startDate.toJSON() }
+      {
+        ...tourney,
+        ...newData,
+        settings: { ...tourney.settings, ...newData.settings },
+        startDate: newData.startDate.toJSON(),
+      }
     );
     return await axiosClient.patch(`/api/v1/Games/${tourney.id}`, operations);
   }

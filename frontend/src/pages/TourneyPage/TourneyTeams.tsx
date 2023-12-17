@@ -4,12 +4,12 @@ import { compare } from "fast-json-patch";
 import { memo, useEffect, useRef } from "react";
 import { v4 as uuid } from "uuid";
 import api from "~/api";
+import CollapsibleSection from "~/components/CollapsibleSection";
 import TeamCard from "~/components/TeamCard";
 import useDebounce from "~/hooks/useDebounce";
 import useForceUpdate from "~/hooks/useForceUpdate";
 import { TourneyTeam } from "~/types/tourney";
 import queryKeys from "~/utils/query-keys";
-import TourneySectionLayout from "./TourneySectionLayout";
 import { useTourneyContext } from "./tourney-context";
 
 type Props = {
@@ -69,10 +69,10 @@ const TourneyTeams = ({ id, teams: defaultTeams }: Props) => {
   }
 
   return (
-    <TourneySectionLayout
-      defaultIsOpen
-      heading="Участники"
-      storageKey={`tourney:${id}:teams-visibility `}
+    <CollapsibleSection
+      label="Участники"
+      storageKey={`tourney:${id}:teams-visibility`}
+      headerProps={{ px: { base: 2, md: 0 } }}
     >
       <Wrap
         mt={{ base: 4, md: 6 }}
@@ -96,7 +96,7 @@ const TourneyTeams = ({ id, teams: defaultTeams }: Props) => {
           return <TeamCard.Base key={team.id} team={team} />;
         })}
       </Wrap>
-    </TourneySectionLayout>
+    </CollapsibleSection>
   );
 };
 

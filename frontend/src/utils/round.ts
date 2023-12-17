@@ -3,10 +3,8 @@ import {
   Tourney,
   TourneyRound,
   TourneyRoundState,
-  TourneySpecification,
   TourneyTeam,
 } from "~/types/tourney";
-import { isDefined } from "~/utils";
 
 export const castToCreateRound =
   (tourney: Tourney) =>
@@ -64,23 +62,4 @@ export const calcRoundName = (match: Round, teams: TourneyTeam[]) => {
   );
 
   return `${firstName || "???"} vs ${secondName || "???"}`;
-};
-
-export const createArrayFromSpecification = (
-  specification: TourneySpecification
-) => {
-  const array: Array<{ name: string; text: string }> = [];
-
-  array.push({
-    name: "Бизнес сценарий",
-    text: [specification.title, specification.businessDescription]
-      .filter(isDefined)
-      .join("\n"),
-  });
-  array.push({
-    name: "Общие требования к архитектуре",
-    text: specification.techDescription || "Информация не указана",
-  });
-
-  return array;
 };

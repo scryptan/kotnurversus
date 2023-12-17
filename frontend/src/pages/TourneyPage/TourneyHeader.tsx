@@ -8,6 +8,7 @@ import {
 } from "@chakra-ui/react";
 import { format } from "date-fns";
 import { ReactNode } from "react";
+import AutoLinkWrapper from "~/components/AutoLinkWrapper";
 import StateCard from "~/components/StateCard";
 import { Tourney } from "~/types/tourney";
 import { TOURNEY_STATE_NAMES, TOURNEY_TYPE_NAMES } from "~/utils/tourney";
@@ -41,7 +42,9 @@ const TourneyHeader = ({ tourney, ...props }: Props) => (
         {format(tourney.startDate, "d MMMM yyyy HH:mm")}
       </TourneyInfoRow>
       {tourney.description && (
-        <TourneyInfoRow name="Описание" children={tourney.description} />
+        <AutoLinkWrapper>
+          <TourneyInfoRow name="Описание" children={tourney.description} />
+        </AutoLinkWrapper>
       )}
     </Stack>
   </Grid>
@@ -56,7 +59,11 @@ const TourneyInfoRow = ({ name, children }: TourneyInfoRowProps) => {
   const { colorMode } = useColorMode();
 
   return (
-    <Text fontSize={{ base: "sm", md: "md" }} wordBreak="break-word">
+    <Text
+      fontSize={{ base: "sm", md: "md" }}
+      whiteSpace="pre-line"
+      wordBreak="break-word"
+    >
       <Text as="span" color={`text.${colorMode}.extra.1`}>
         {name}:
       </Text>{" "}

@@ -1,9 +1,8 @@
-import { BoxProps, Button, Center, Heading, Stack } from "@chakra-ui/react";
+import { BoxProps, Button, Center, Heading } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
-import StateCard from "~/components/StateCard";
-import TeamCard from "~/components/TeamCard";
 import paths from "~/pages/paths";
 import { useRoundContext } from "../round-context";
+import Stage from "./Stage";
 
 const CompleteStage = () => {
   const { round, getTeams } = useRoundContext();
@@ -13,27 +12,26 @@ const CompleteStage = () => {
 
   return (
     <>
-      {teams.map((team, i) => {
-        if (!team) return null;
-        return (
-          <TeamCard.Base key={team.id} gridArea={`t${i + 1}`} team={team} />
-        );
-      })}
-      <Stack gridArea="main" alignSelf="center" align="center" spacing={4}>
-        <StateCard name="Завершен" />
-        <Button
-          as={Link}
-          size={{ base: "sm", md: "md" }}
-          w="fit-content"
-          to={paths.tourney.path(round.gameId)}
-          children="Вернуться к турниру"
-        />
-      </Stack>
+      {teams.map((team, i) => (
+        <Stage.Team key={team?.id || i} gridArea={`t${i + 1}`} team={team} />
+      ))}
+      <Button
+        as={Link}
+        gridArea="m"
+        justifySelf="center"
+        size={{ base: "sm", md: "md" }}
+        w="fit-content"
+        to={paths.tourney.path(round.gameId)}
+        children="Вернуться к турниру"
+      />
       {round.participants.slice(0, 2).map((p, i) => (
         <Mark
           key={p.teamId}
           gridArea={`e${i + 1}`}
-          justifySelf="center"
+          justifySelf={{
+            base: "center",
+            md: i === 0 ? "flex-end" : "flex-start",
+          }}
           value={p.points}
           isWinner={p.isWinner}
         />
@@ -41,8 +39,7 @@ const CompleteStage = () => {
       <Heading
         gridArea="b"
         textAlign="center"
-        fontSize={{ base: "xl", md: "4xl" }}
-        lineHeight="150%"
+        fontSize={{ base: "xl", md: "2xl" }}
       >
         Победа команды
         <br />"{winnerTeam?.title || "???"}"
@@ -59,9 +56,9 @@ type MarkProps = {
 const Mark = ({ value, isWinner, ...props }: MarkProps) => (
   <Center
     {...props}
-    boxSize={{ base: 16, md: 24 }}
+    boxSize={16}
     borderRadius="full"
-    fontSize={{ base: "2xl", md: "4xl" }}
+    fontSize="2xl"
     fontWeight="bold"
     border="2px solid"
     bg="blackAlpha.50"

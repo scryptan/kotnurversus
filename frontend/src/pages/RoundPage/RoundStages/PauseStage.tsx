@@ -1,12 +1,11 @@
 import { Button, Heading, Stack } from "@chakra-ui/react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import api from "~/api";
-import TeamCard from "~/components/TeamCard";
 import useHandleError from "~/hooks/useHandleError";
 import { RoundState } from "~/types/round";
 import queryKeys from "~/utils/query-keys";
 import { useRoundContext } from "../round-context";
-import RoundStageTimer from "./RoundStageTimer";
+import Stage from "./Stage";
 
 const STAGE_COLOR = "#38B2AC";
 const STAGE_STATE = RoundState.Pause;
@@ -32,27 +31,20 @@ const PauseStage = () => {
 
   return (
     <>
-      {getTeams().map((team, i) => {
-        if (!team) return null;
-        return (
-          <TeamCard.Base key={team.id} gridArea={`t${i + 1}`} team={team} />
-        );
-      })}
+      {getTeams().map((team, i) => (
+        <Stage.Team key={team?.id || i} gridArea={`t${i + 1}`} team={team} />
+      ))}
       {timerEnd && (
-        <RoundStageTimer
-          gridArea="main"
+        <Stage.Timer
+          gridArea="m"
           alignSelf="center"
           justifySelf="center"
           endDate={timerEnd}
           activeColor={STAGE_COLOR}
         />
       )}
-      <Stack align="center" gridArea="b">
-        <Heading
-          textAlign="center"
-          fontSize={{ base: "xl", md: "4xl" }}
-          lineHeight="150%"
-        >
+      <Stack align="center" gridArea="b" spacing={4}>
+        <Heading textAlign="center" fontSize={{ base: "xl", md: "2xl" }}>
           Таймаут команды "{currentTeam?.title || "???"}"
         </Heading>
         {isOrganizer && (

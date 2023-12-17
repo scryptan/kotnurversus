@@ -1,17 +1,15 @@
-import { Button, Center, Stack, Text } from "@chakra-ui/react";
+import { Button, Stack, Text } from "@chakra-ui/react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import api from "~/api";
 import ButtonWithAlert from "~/components/ButtonWithAlert";
-import TeamCard from "~/components/TeamCard";
 import useHandleError from "~/hooks/useHandleError";
 import { RoundState } from "~/types/round";
 import { TourneyTeam } from "~/types/tourney";
 import queryKeys from "~/utils/query-keys";
 import { useRoundContext } from "../round-context";
-import ChallengeSelectionWindow from "./ChallengeSelectionWindow";
-import RoundStageTimer from "./RoundStageTimer";
-import TimeoutButton from "./TimeoutButton";
+import Stage from "./Stage";
+import ChallengeSelectionWindow from "./Stage/ChallengeSelectionWindow";
 
 const STAGE_COLOR = "#D83161";
 const STAGE_STATE = RoundState.Prepare;
@@ -33,7 +31,7 @@ const PrepareStartStage = () => {
   const { isOrganizer, round, getTeams } = useRoundContext();
   const [currentTeam, setCurrentTeam] = useState<TourneyTeam>();
 
-  const handleChoose = (team: TourneyTeam) => () => setCurrentTeam(team);
+  const handleChoose = (team?: TourneyTeam) => () => setCurrentTeam(team);
 
   const startMutation = useMutation({
     mutationFn: async () => {
@@ -47,29 +45,17 @@ const PrepareStartStage = () => {
 
   return (
     <>
-      {getTeams().map((team, i) => {
-        if (!team) return null;
-        return (
-          <TeamCard.Button
-            key={team.id}
-            gridArea={`t${i + 1}`}
-            activeColor={STAGE_COLOR}
-            team={team}
-            isDisabled={!isOrganizer || startMutation.isPending}
-            onClick={handleChoose(team)}
-          />
-        );
-      })}
-      <Center gridArea="main">
-        <Text
-          textAlign="center"
-          fontSize={{ base: "lg", md: "2xl" }}
-          lineHeight="150%"
-          textTransform="uppercase"
-        >
-          Выбор дополнительных требований
-        </Text>
-      </Center>
+      {getTeams().map((team, i) => (
+        <Stage.Team
+          key={team?.id || i}
+          gridArea={`t${i + 1}`}
+          activeColor={STAGE_COLOR}
+          team={team}
+          isDisabled={!isOrganizer || startMutation.isPending}
+          onClick={handleChoose(team)}
+        />
+      ))}
+      <Stage.MainInfo isMinContent children="Выбор дополнительных требований" />
       {isOrganizer && (
         <Stack align="center" gridArea="b">
           <Text textAlign="center" fontSize="md" lineHeight="150%">
@@ -117,32 +103,25 @@ const PrepareEndStage = ({ timerEnd }: PrepareEndStageProps) => {
 
   return (
     <>
-      {getTeams().map((team, i) => {
-        if (!team) return null;
-        return (
-          <TeamCard.Base key={team.id} gridArea={`t${i + 1}`} team={team} />
-        );
-      })}
-      <RoundStageTimer
-        gridArea="main"
+      {getTeams().map((team, i) => (
+        <Stage.Team key={team?.id || i} gridArea={`t${i + 1}`} team={team} />
+      ))}
+      <Stage.Timer
+        gridArea="m"
         alignSelf="center"
         justifySelf="center"
         endDate={timerEnd}
         activeColor={STAGE_COLOR}
       />
       {round.participants.slice(0, 2).map((p, i) => (
-        <TimeoutButton
+        <Stage.Timeout
           key={p.teamId}
           gridArea={`e${i + 1}`}
           teamId={p.teamId}
         />
       ))}
-      <Stack align="center" gridArea="b">
-        <Text
-          textAlign="center"
-          fontSize={{ base: "xl", md: "3xl" }}
-          lineHeight="150%"
-        >
+      <Stack align="center" gridArea="b" spacing={4}>
+        <Text textAlign="center" fontSize={{ base: "xl", md: "2xl" }}>
           Команды формируют архитектуры
         </Text>
         {isOrganizer && (

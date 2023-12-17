@@ -1,10 +1,19 @@
-import { Box, HStack, LinkProps, Text, useMediaQuery } from "@chakra-ui/react";
+import {
+  Box,
+  HStack,
+  LinkProps,
+  Text,
+  useBreakpointValue,
+} from "@chakra-ui/react";
 import BaseLink from "~/components/Link";
 import paths from "~/pages/paths";
 import QrCodeButton from "./QrCodeButton";
 
 const Footer = () => {
-  const [isDesktop] = useMediaQuery("(min-width: 48em)");
+  const isDesktop = useBreakpointValue(
+    { base: false, sm: true },
+    { ssr: false }
+  );
 
   return (
     <Box minH={{ base: "55px", md: "80px" }}>

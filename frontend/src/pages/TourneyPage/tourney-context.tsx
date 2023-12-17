@@ -1,15 +1,12 @@
-import { useMediaQuery } from "@chakra-ui/react";
 import { ReactNode, createContext, useContext, useMemo } from "react";
 import { Tourney, TourneyState } from "~/types/tourney";
 import { useAuthContext } from "~/utils/auth-context";
 
 type TourneyContext = {
-  isDesktop: boolean;
   isEditable: boolean;
 };
 
 const Context = createContext<TourneyContext>({
-  isDesktop: true,
   isEditable: false,
 });
 
@@ -23,15 +20,11 @@ export const TourneyProvider = ({
   children,
 }: TourneyProviderProps) => {
   const { isAuthenticated } = useAuthContext();
-  const [isDesktop] = useMediaQuery("(min-width: 48em)");
   const isPrepare = tourney.state === TourneyState.Prepare;
 
   const contextValue = useMemo(
-    () => ({
-      isDesktop,
-      isEditable: isDesktop && isAuthenticated && isPrepare,
-    }),
-    [isDesktop, isAuthenticated, isPrepare]
+    () => ({ isEditable: isAuthenticated && isPrepare }),
+    [isAuthenticated, isPrepare]
   );
 
   return <Context.Provider value={contextValue} children={children} />;

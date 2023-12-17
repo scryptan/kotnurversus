@@ -4,9 +4,9 @@ import { compare } from "fast-json-patch";
 import { memo, useState } from "react";
 import { v4 as uuid } from "uuid";
 import api from "~/api";
+import CollapsibleSection from "~/components/CollapsibleSection";
 import SpecificationWindow from "~/components/SpecificationWindow";
 import useDebounce from "~/hooks/useDebounce";
-import TourneySectionLayout from "~/pages/TourneyPage/TourneySectionLayout";
 import {
   TourneySpecification,
   TourneySpecificationWithId,
@@ -63,10 +63,10 @@ const TourneySpecificationsSettings = ({
   };
 
   return (
-    <TourneySectionLayout
-      defaultIsOpen
-      heading="Темы бизнес-сценариев"
-      storageKey={`tourney:${id}:specifications-visibility `}
+    <CollapsibleSection
+      label="Темы бизнес-сценариев"
+      storageKey={`tourney:${id}:specifications-visibility`}
+      headerProps={{ px: { base: 2, md: 0 } }}
     >
       {specifications.length > 0 && (
         <SpecificationsList
@@ -76,7 +76,7 @@ const TourneySpecificationsSettings = ({
         />
       )}
       <CreateSpecificationButton ml={20} mt={6} onCreate={handleCreate} />
-    </TourneySectionLayout>
+    </CollapsibleSection>
   );
 };
 

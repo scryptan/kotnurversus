@@ -1,4 +1,4 @@
-import { Center, Heading, useMediaQuery } from "@chakra-ui/react";
+import { Center, Heading, useBreakpointValue } from "@chakra-ui/react";
 import { useQuery } from "@tanstack/react-query";
 import { addSeconds } from "date-fns";
 import { ReactNode, createContext, useContext } from "react";
@@ -58,8 +58,11 @@ export const RoundProvider = ({ roundId, children }: RoundProviderProps) => {
 
 export const useRoundContext = () => {
   const { isAuthenticated } = useAuthContext();
-  const [isDesktop] = useMediaQuery("(min-width: 48em)");
   const { tourney, round } = useContext(Context);
+  const isDesktop = useBreakpointValue(
+    { base: false, sm: true },
+    { ssr: false }
+  );
 
   const state = round.currentState?.state;
   const isPublic = state !== undefined;

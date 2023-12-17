@@ -1,4 +1,4 @@
-import { useBreakpointValue } from "@chakra-ui/react";
+import { UseBreakpointOptions, useBreakpointValue } from "@chakra-ui/react";
 
 const breakpoints = {
   base: "0em", // 0px
@@ -11,9 +11,13 @@ const breakpoints = {
 
 type Breakpoint = keyof typeof breakpoints;
 
-const useBreakpoint = <T extends Breakpoint>(enabled: T[]) => {
+const useBreakpoint = <T extends Breakpoint>(
+  enabled: T[],
+  options: UseBreakpointOptions = {}
+) => {
   const breakpoint = useBreakpointValue(
-    Object.fromEntries(enabled.map((b) => [b, b]))
+    Object.fromEntries(enabled.map((b) => [b, b])),
+    { ssr: false, ...options }
   );
 
   return breakpoint;

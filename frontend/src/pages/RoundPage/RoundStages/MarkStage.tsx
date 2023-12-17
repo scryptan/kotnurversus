@@ -1,6 +1,7 @@
 import {
   BoxProps,
   HStack,
+  Heading,
   IconButton,
   Input,
   Stack,
@@ -12,8 +13,6 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useRef } from "react";
 import api from "~/api";
 import ButtonWithAlert from "~/components/ButtonWithAlert";
-import StateCard from "~/components/StateCard";
-import TeamCard from "~/components/TeamCard";
 import useHandleError from "~/hooks/useHandleError";
 import MinusIcon from "~/icons/MinusIcon";
 import PlusIcon from "~/icons/PlusIcon";
@@ -21,6 +20,7 @@ import { getErrorApiStatus } from "~/utils/error";
 import queryKeys from "~/utils/query-keys";
 import { warningToast } from "~/utils/template-toasts";
 import { useRoundContext } from "../round-context";
+import Stage from "./Stage";
 
 const MarkStage = () => {
   const toast = useToast();
@@ -56,18 +56,9 @@ const MarkStage = () => {
 
   return (
     <>
-      {getTeams().map((team, i) => {
-        if (!team) return null;
-        return (
-          <TeamCard.Base key={team.id} gridArea={`t${i + 1}`} team={team} />
-        );
-      })}
-      <StateCard
-        gridArea="main"
-        alignSelf="center"
-        justifySelf="center"
-        name="Оценка команд"
-      />
+      {getTeams().map((team, i) => (
+        <Stage.Team key={team?.id || i} gridArea={`t${i + 1}`} team={team} />
+      ))}
       {isOrganizer &&
         round.participants
           .slice(0, 2)
@@ -75,11 +66,12 @@ const MarkStage = () => {
             <MarkInput
               key={p.teamId}
               gridArea={`e${i + 1}`}
-              justifySelf="center"
+              justifySelf={i === 0 ? "flex-end" : "flex-start"}
               onChange={handleMark(p.teamId)}
             />
           ))}
-      {isOrganizer && (
+      <Stage.MainInfo children="Оценка команд" />
+      {isOrganizer ? (
         <Stack align="center" gridArea="b">
           <Text textAlign="center" fontSize="md" lineHeight="150%">
             Выставите командам баллы
@@ -98,6 +90,14 @@ const MarkStage = () => {
             ].join("\n")}
           />
         </Stack>
+      ) : (
+        <Heading
+          gridArea="m"
+          textAlign="center"
+          fontSize={{ base: "xl", md: "2xl" }}
+        >
+          Оценка команд
+        </Heading>
       )}
     </>
   );
@@ -129,30 +129,30 @@ const MarkInput = ({ onChange, ...props }: MarkInputProps) => {
       <IconButton
         {...getDecrementButtonProps()}
         px={0}
-        size="lg"
+        size="sm"
         variant="ghost"
         colorScheme="red"
         borderRadius="full"
-        icon={<MinusIcon boxSize={6} />}
+        icon={<MinusIcon boxSize={4} />}
         aria-label="Уменьшить"
       />
       <Input
         {...getInputProps()}
         maxLength={2}
-        boxSize={24}
+        boxSize={16}
         borderRadius="full"
-        fontSize="4xl"
+        fontSize="xl"
         fontWeight="bold"
         textAlign="center"
       />
       <IconButton
         {...getIncrementButtonProps()}
         px={0}
-        size="lg"
+        size="sm"
         variant="ghost"
         colorScheme="green"
         borderRadius="full"
-        icon={<PlusIcon boxSize={6} />}
+        icon={<PlusIcon boxSize={4} />}
         aria-label="Увеличить"
       />
     </HStack>

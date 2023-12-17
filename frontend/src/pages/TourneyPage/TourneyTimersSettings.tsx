@@ -6,13 +6,13 @@ import { ReactNode, memo, useId, useRef } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { z } from "zod";
 import api from "~/api";
+import CollapsibleSection from "~/components/CollapsibleSection";
 import NumberInput from "~/components/NumberInput";
 import TimeInput from "~/components/TimeInput";
 import useDebounce from "~/hooks/useDebounce";
 import { TourneySettings } from "~/types/tourney";
 import queryKeys from "~/utils/query-keys";
 import time from "~/utils/time";
-import TourneySectionLayout from "./TourneySectionLayout";
 import { useTourneyContext } from "./tourney-context";
 
 type Props = {
@@ -80,10 +80,10 @@ const TourneyTimersSettings = ({ id, settings: defaultSettings }: Props) => {
   });
 
   return (
-    <TourneySectionLayout
-      defaultIsOpen
-      heading="Настройки таймера"
-      storageKey={`tourney:${id}:timers-visibility `}
+    <CollapsibleSection
+      label="Настройки таймера"
+      storageKey={`tourney:${id}:timers-visibility`}
+      headerProps={{ px: { base: 2, md: 0 } }}
     >
       <Wrap
         mt={6}
@@ -182,7 +182,7 @@ const TourneyTimersSettings = ({ id, settings: defaultSettings }: Props) => {
           )}
         </FormLabel>
       </Wrap>
-    </TourneySectionLayout>
+    </CollapsibleSection>
   );
 };
 

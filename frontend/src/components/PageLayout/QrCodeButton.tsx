@@ -12,7 +12,10 @@ import Window from "~/components/Window";
 
 const QrCodeButton = () => {
   const [isShow, setIsShow] = useBoolean(false);
-  const isLarge = useBreakpointValue({ base: false, "2xl": true });
+  const isLarge = useBreakpointValue(
+    { base: false, "2xl": true },
+    { ssr: false }
+  );
 
   return (
     <>
