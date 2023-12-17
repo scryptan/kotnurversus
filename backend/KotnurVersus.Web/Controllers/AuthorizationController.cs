@@ -21,6 +21,16 @@ public class AuthorizationController : ControllerBase
         this.authSettings = authSettings;
     }
 
+    [HttpGet("users")]
+    [Authorize]
+    public async Task<ActionResult<IEnumerable<User>, ErrorInfo<AccessMultipleEntitiesError>>> GetUsers(
+        [FromServices] IGetUsersCommand command)
+    {
+        var result = await command.RunAsync();
+
+        return result.ToActionResult();
+    }
+
     [HttpPost("register")]
     public async Task<ActionResult<User, ErrorInfo<AccessSingleEntityError>>> Register(
         [FromServices] IRegisterCommand command,
