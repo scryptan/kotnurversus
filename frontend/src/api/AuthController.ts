@@ -1,4 +1,4 @@
-import { AuthRequest, AuthResponse } from "~/types/auth";
+import { AuthRequest, AuthResponse, User } from "~/types/auth";
 import axiosClient from "~/utils/axios-client";
 
 export class AuthController {
@@ -10,14 +10,15 @@ export class AuthController {
     return await axiosClient.post("/api/v1/Authorization/login", data);
   }
 
-  async setAuthorized(
-    id: string,
-    isAuthorized: boolean
-  ): Promise<AuthResponse> {
+  async setAuthorized(id: string, isAuthorized: boolean): Promise<User> {
     return await axiosClient.post(
       "/api/v1/Authorization/set-authorized",
       undefined,
       { id, isAuthorized }
     );
+  }
+
+  async findUsers(): Promise<User[]> {
+    return await axiosClient.get("/api/v1/Authorization/users");
   }
 }

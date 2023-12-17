@@ -1,4 +1,8 @@
 export default {
+  admin: {
+    pathTemplate: "/admin",
+    path: "/admin",
+  },
   challenges: {
     pathTemplate: "/challenges",
     path: "/challenges",
