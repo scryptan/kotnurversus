@@ -68,12 +68,7 @@ builder.Services.AddSingleton<ILog>(
 
 builder.Services.AddTransient<IAuthorizationHandler, AuthorizedHandler>();
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-    .AddCookie(
-        options =>
-        {
-            options.LoginPath = "/login";
-            options.AccessDeniedPath = "/login";
-        });
+    .AddCookie();
 
 builder.Services.AddAuthorization(
     opts =>
