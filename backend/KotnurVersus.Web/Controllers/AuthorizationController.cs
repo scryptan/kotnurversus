@@ -63,13 +63,6 @@ public class AuthorizationController : ControllerBase
         return result.ToActionResult();
     }
 
-    [HttpPost("logout")]
-    public async Task<IActionResult> Login()
-    {
-        await HttpContext.SignOutAsync();
-        return Ok();
-    }
-
     [HttpPost("set-authorized")]
     [Authorize]
     public async Task<ActionResult<User, ErrorInfo<AccessSingleEntityError>>> Login(
