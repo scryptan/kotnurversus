@@ -9,13 +9,15 @@ export const successToast = (description: string): UseToastOptions => ({
   isClosable: true,
 });
 
-export const warningToast = (description: string): UseToastOptions => ({
+export const warningToast = (
+  options?: Partial<UseToastOptions>
+): UseToastOptions => ({
   position: "bottom",
   title: "Предупреждение!",
-  description,
   status: "warning",
   duration: 2500,
   isClosable: true,
+  ...options,
 });
 
 export const errorToast = (description: string): UseToastOptions => ({

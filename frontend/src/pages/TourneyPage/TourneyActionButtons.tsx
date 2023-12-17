@@ -50,7 +50,7 @@ const TourneyActionButtons = ({ tourney }: Props) => {
       } else if (error?.message) {
         message = error?.message || message;
       }
-      toast(warningToast(message));
+      toast(warningToast({ description: message }));
     },
   });
 

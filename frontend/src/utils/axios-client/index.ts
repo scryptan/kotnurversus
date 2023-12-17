@@ -1,5 +1,7 @@
 import axiosStatic, { AxiosError, AxiosResponse } from "axios";
 import { isDev } from "~/utils";
+import { TOKEN_STORAGE_KEY } from "~/utils/auth-context";
+import storage from "~/utils/storage";
 import handleDates from "./handle-dates";
 
 const axios = axiosStatic.create({
@@ -8,7 +10,8 @@ const axios = axiosStatic.create({
 
 axios.interceptors.request.use(
   async (config) => {
-    // config.headers.set("Authorization", `Bearer ${xxx}`);
+    const token = storage.get(TOKEN_STORAGE_KEY);
+    if (token) config.headers.set("Authorization", `Bearer ${token}`);
     return config;
   },
   (error) => Promise.reject(error)

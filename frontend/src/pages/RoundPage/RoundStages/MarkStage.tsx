@@ -43,7 +43,11 @@ const MarkStage = () => {
     },
     onError: (error) => {
       if (getErrorApiStatus(error) === "sameMarks") {
-        toast(warningToast("Никакой ничьи. Всегда должен быть победитель!"));
+        toast(
+          warningToast({
+            description: "Никакой ничьи. Всегда должен быть победитель!",
+          })
+        );
       } else {
         handleError(error);
       }

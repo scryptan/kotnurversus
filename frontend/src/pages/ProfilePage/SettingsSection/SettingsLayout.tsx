@@ -80,6 +80,8 @@ const SettingsLayout = ({ name, value, Form }: Props) => {
           </>
         ) : (
           <Button
+            // TODO временно
+            isDisabled
             colorScheme="blue"
             onClick={setIsEdit.on}
             children="Изменить"

@@ -2,23 +2,33 @@ import {
   Button,
   ButtonProps,
   Stack,
+  UseToastOptions,
   forwardRef,
   useBoolean,
   useColorMode,
   useDisclosure,
+  useToast,
 } from "@chakra-ui/react";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation } from "@tanstack/react-query";
 import { useId } from "react";
 import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
 import { z } from "zod";
+import api from "~/api";
 import Input from "~/components/Input";
 import PasswordInput from "~/components/PasswordInput";
 import Window, { WindowProps } from "~/components/Window";
 import useBreakpoint from "~/hooks/useBreakpoint";
 import paths from "~/pages/paths";
+import { AuthRequest } from "~/types/auth";
 import { useAuthContext } from "~/utils/auth-context";
 import { loginFormSchema, registerFormSchema } from "~/utils/auth-schemas";
+import {
+  errorToast,
+  successToast,
+  warningToast,
+} from "~/utils/template-toasts";
 
 const AuthButton = () => {
   const window = useDisclosure();
@@ -76,20 +86,47 @@ const ActionButton = forwardRef<ButtonProps, "button">((props, ref) => {
 });
 
 const AuthWindow = (props: WindowProps) => {
+  const toast = useToast();
   const { onLogin } = useAuthContext();
   const [isRegistration, setIsRegistration] = useBoolean(false);
   const formId = useId();
 
-  const handleSubmit = (login: string, password: string) => {
-    onLogin(`${login} ${password}`);
-    props.onClose();
-  };
+  const auth = useMutation({
+    mutationFn: async (data: AuthRequest) => {
+      return await (isRegistration ? api.auth.register : api.auth.login)(data);
+    },
+    onSuccess: (response) => {
+      let toastOptions: UseToastOptions | undefined;
+      if (response.user.isAuthorized === false) {
+        toastOptions = warningToast({
+          duration: 10000,
+          containerStyle: { whiteSpace: "pre-line" },
+          description: [
+            "Требуется подтверждение аккаунта.",
+            "Обратитесь к администрации сервиса.",
+          ].join("\n"),
+        });
+      } else {
+        toastOptions = successToast("Авторизация прошла успешно");
+        onLogin(response.token);
+      }
+      toast(toastOptions);
+      props.onClose();
+    },
+    onError: () => {
+      const message = isRegistration
+        ? "Пользователь с таким логином уже существует"
+        : "Неверный логин или пароль";
+      toast(errorToast(message));
+    },
+  });
 
   const Form = isRegistration ? RegisterForm : LoginForm;
 
   return (
     <Window
       isHideCancel
+      isLoading={auth.isPending}
       heading={isRegistration ? "Регистрация" : "Вход в аккаунт"}
       contentProps={{ w: "450px" }}
       submitProps={{
@@ -101,11 +138,17 @@ const AuthWindow = (props: WindowProps) => {
         <Button
           variant="link"
           colorScheme="blue"
+          isDisabled={auth.isPending}
           onClick={setIsRegistration.toggle}
           children={isRegistration ? "Вход" : "Регистрация"}
         />
       }
-      children={<Form id={formId} onSubmit={handleSubmit} />}
+      children={
+        <Form
+          id={formId}
+          onSubmit={(email, password) => auth.mutateAsync({ email, password })}
+        />
+      }
       {...props}
     />
   );
@@ -135,7 +178,7 @@ const LoginForm = ({ id, onSubmit }: AuthFormProps) => {
       <Input
         {...register("login")}
         size="lg"
-        label="Имя пользователя или адрес эл.почты"
+        label="Имя пользователя"
         placeholder="Логин"
         errorMessage={errors.login?.message}
       />
@@ -169,7 +212,7 @@ const RegisterForm = ({ id, onSubmit }: AuthFormProps) => {
       <Input
         {...register("login")}
         size="lg"
-        label="Имя пользователя или адрес эл.почты"
+        label="Имя пользователя"
         placeholder="Логин"
         errorMessage={errors.login?.message}
       />
