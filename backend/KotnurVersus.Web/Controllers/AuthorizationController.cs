@@ -29,7 +29,7 @@ public class AuthorizationController : ControllerBase
 
         return result.ToActionResult();
     }
-    
+
     [HttpPost("login")]
     public async Task<ActionResult<User, ErrorInfo<AccessSingleEntityError>>> Login(
         [FromServices] ILoginCommand command,
@@ -45,7 +45,14 @@ public class AuthorizationController : ControllerBase
 
         return result.ToActionResult();
     }
-    
+
+    [HttpPost("logout")]
+    public async Task<IActionResult> Login()
+    {
+        await HttpContext.SignOutAsync();
+        return Ok();
+    }
+
     [HttpPost("set-authorized")]
     public async Task<ActionResult<User, ErrorInfo<AccessSingleEntityError>>> Login(
         [FromServices] ISetAuthorizedCommand command,
