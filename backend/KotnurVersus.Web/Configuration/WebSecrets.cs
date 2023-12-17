@@ -6,4 +6,5 @@ namespace KotnurVersus.Web.Configuration;
 public class WebSecrets
 {
     [Required] public string DbConnectionString = null!;
+    [Required] public string JwtKey = null!;
 }

@@ -16,4 +16,5 @@ public class WebSettings : IWebSettings
     public int MaxRetryOnFailureCount => 5;
 
     private IConfigurationProvider ConfigurationProvider => environment.ConfigurationProvider;
+    public string JwtKey => ConfigurationProvider.Get<WebSecrets>().JwtKey;
 }

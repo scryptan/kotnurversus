@@ -1,11 +1,10 @@
-using System.Security.Claims;
-using Core.Helpers;
 using Domain.Commands.Authorization;
+using KotnurVersus.Web.Configuration;
 using KotnurVersus.Web.Helpers;
 using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.JsonWebTokens;
 using Models;
 using Models.Authorization;
 
@@ -15,6 +14,13 @@ namespace KotnurVersus.Web.Controllers;
 [Route("api/v1/[controller]")]
 public class AuthorizationController : ControllerBase
 {
+    private readonly IAuthSettings authSettings;
+
+    public AuthorizationController(IAuthSettings authSettings)
+    {
+        this.authSettings = authSettings;
+    }
+
     [HttpPost("register")]
     public async Task<ActionResult<User, ErrorInfo<AccessSingleEntityError>>> Register(
         [FromServices] IRegisterCommand command,
@@ -24,8 +30,8 @@ public class AuthorizationController : ControllerBase
         if (result.Result != null)
         {
             var user = result.Result;
-            await HttpContext.SignInAsync(CreateClaimsPrincipal(user));
-            return Ok(result);
+
+            return Ok(GetTokenResult(user));
         }
 
         return result.ToActionResult();
@@ -40,8 +46,8 @@ public class AuthorizationController : ControllerBase
         if (result.Result != null)
         {
             var user = result.Result;
-            await HttpContext.SignInAsync(CreateClaimsPrincipal(user));
-            return Ok(result);
+
+            return Ok(GetTokenResult(user));
         }
 
         return result.ToActionResult();
@@ -66,16 +72,14 @@ public class AuthorizationController : ControllerBase
         return result.ToActionResult();
     }
 
-    private ClaimsPrincipal CreateClaimsPrincipal(User user)
+    private object GetTokenResult(User user)
     {
-        var claims = new List<Claim>
+        var token = JwtTokens.GenerateToken(user, authSettings);
+        return new
         {
-            new(ClaimTypes.NameIdentifier, user.Id.ToString()),
-            new(ClaimTypes.Email, user.Email),
-            new(CustomClaim.IsAuthorized, user.IsAuthorized.ToString())
+            JwtConstants.TokenType,
+            User = user,
+            Token = token
         };
-
-        var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-        return new ClaimsPrincipal(claimsIdentity);
     }
 }
