@@ -9,6 +9,7 @@ public static class UserHelpers
     {
         return new User
         {
+            Id = user.Id,
             Email = user.Email,
             IsAuthorized = user.IsAuthorized,
         };
