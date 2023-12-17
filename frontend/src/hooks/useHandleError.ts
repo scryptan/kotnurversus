@@ -1,11 +1,10 @@
-import { useToast } from "@chakra-ui/react";
 import { AxiosError } from "axios";
 import { useCallback } from "react";
+import useCustomToast from "~/hooks/useCustomToast";
 import { isDev } from "~/utils";
-import { errorToast, unknownErrorToast } from "~/utils/template-toasts";
 
 const useHandleError = () => {
-  const toast = useToast();
+  const toast = useCustomToast();
 
   return useCallback((error: unknown) => {
     isDev && console.error(error);
@@ -13,15 +12,16 @@ const useHandleError = () => {
     if (error instanceof AxiosError) {
       switch (error.status) {
         case 401:
-          toast(errorToast("Требуется авторизация"));
+          toast.error({ description: "Требуется авторизация" });
           return;
         case 403:
-          toast(errorToast("У вас недостаточно прав"));
+          toast.error({ description: "У вас недостаточно прав" });
+
           return;
       }
     }
 
-    toast(unknownErrorToast);
+    toast.unknown();
   }, []);
 };
 

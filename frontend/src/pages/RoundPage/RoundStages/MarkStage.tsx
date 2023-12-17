@@ -7,23 +7,22 @@ import {
   Stack,
   Text,
   useNumberInput,
-  useToast,
 } from "@chakra-ui/react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useRef } from "react";
 import api from "~/api";
 import ButtonWithAlert from "~/components/ButtonWithAlert";
+import useCustomToast from "~/hooks/useCustomToast";
 import useHandleError from "~/hooks/useHandleError";
 import MinusIcon from "~/icons/MinusIcon";
 import PlusIcon from "~/icons/PlusIcon";
 import { getErrorApiStatus } from "~/utils/error";
 import queryKeys from "~/utils/query-keys";
-import { warningToast } from "~/utils/template-toasts";
 import { useRoundContext } from "../round-context";
 import Stage from "./Stage";
 
 const MarkStage = () => {
-  const toast = useToast();
+  const toast = useCustomToast();
   const handleError = useHandleError();
   const queryClient = useQueryClient();
   const { isOrganizer, round, getTeams } = useRoundContext();
@@ -43,11 +42,9 @@ const MarkStage = () => {
     },
     onError: (error) => {
       if (getErrorApiStatus(error) === "sameMarks") {
-        toast(
-          warningToast({
-            description: "Никакой ничьи. Всегда должен быть победитель!",
-          })
-        );
+        toast.warning({
+          description: "Никакой ничьи. Всегда должен быть победитель!",
+        });
       } else {
         handleError(error);
       }

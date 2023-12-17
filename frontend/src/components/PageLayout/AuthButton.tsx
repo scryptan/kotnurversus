@@ -2,12 +2,10 @@ import {
   Button,
   ButtonProps,
   Stack,
-  UseToastOptions,
   forwardRef,
   useBoolean,
   useColorMode,
   useDisclosure,
-  useToast,
 } from "@chakra-ui/react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
@@ -20,15 +18,11 @@ import Input from "~/components/Input";
 import PasswordInput from "~/components/PasswordInput";
 import Window, { WindowProps } from "~/components/Window";
 import useBreakpoint from "~/hooks/useBreakpoint";
+import useCustomToast from "~/hooks/useCustomToast";
 import paths from "~/pages/paths";
 import { AuthRequest } from "~/types/auth";
 import { useAuthContext } from "~/utils/auth-context";
 import { loginFormSchema, registerFormSchema } from "~/utils/auth-schemas";
-import {
-  errorToast,
-  successToast,
-  warningToast,
-} from "~/utils/template-toasts";
 
 const AuthButton = () => {
   const window = useDisclosure();
@@ -86,7 +80,7 @@ const ActionButton = forwardRef<ButtonProps, "button">((props, ref) => {
 });
 
 const AuthWindow = (props: WindowProps) => {
-  const toast = useToast();
+  const toast = useCustomToast();
   const { onLogin } = useAuthContext();
   const [isRegistration, setIsRegistration] = useBoolean(false);
   const formId = useId();
@@ -96,9 +90,8 @@ const AuthWindow = (props: WindowProps) => {
       return await (isRegistration ? api.auth.register : api.auth.login)(data);
     },
     onSuccess: (response) => {
-      let toastOptions: UseToastOptions | undefined;
       if (response.user.isAuthorized === false) {
-        toastOptions = warningToast({
+        toast.warning({
           duration: 10000,
           containerStyle: { whiteSpace: "pre-line" },
           description: [
@@ -107,17 +100,17 @@ const AuthWindow = (props: WindowProps) => {
           ].join("\n"),
         });
       } else {
-        toastOptions = successToast("Авторизация прошла успешно");
+        toast.success({ description: "Авторизация прошла успешно" });
         onLogin(response.token);
       }
-      toast(toastOptions);
       props.onClose();
     },
     onError: () => {
-      const message = isRegistration
-        ? "Пользователь с таким логином уже существует"
-        : "Неверный логин или пароль";
-      toast(errorToast(message));
+      toast.error({
+        description: isRegistration
+          ? "Пользователь с таким логином уже существует"
+          : "Неверный логин или пароль",
+      });
     },
   });
 
