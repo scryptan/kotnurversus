@@ -4,6 +4,7 @@ using Domain.Commands.Authorization;
 using KotnurVersus.Web.Helpers;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Models;
 using Models.Authorization;
@@ -54,6 +55,7 @@ public class AuthorizationController : ControllerBase
     }
 
     [HttpPost("set-authorized")]
+    [Authorize]
     public async Task<ActionResult<User, ErrorInfo<AccessSingleEntityError>>> Login(
         [FromServices] ISetAuthorizedCommand command,
         [FromQuery] Guid id,
