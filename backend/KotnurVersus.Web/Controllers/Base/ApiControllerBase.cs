@@ -19,7 +19,7 @@ public abstract class ApiControllerBase : Controller
     {
         var systemContextAccessor = HttpContext.RequestServices.GetRequiredService<ISystemContextAccessor>();
 
-        using (systemContextAccessor.SetSystemContext("WebApp"))
+        using (systemContextAccessor.SetSystemContext("WebApp", context.HttpContext.User))
             await next();
     }
 

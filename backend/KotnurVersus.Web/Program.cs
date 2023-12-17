@@ -1,8 +1,11 @@
 using System.Reflection;
 using Db;
+using KotnurVersus.Web.Authorization;
 using KotnurVersus.Web.Configuration;
 using KotnurVersus.Web.Helpers;
 using KotnurVersus.Web.Helpers.DI;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Net.Http.Headers;
@@ -63,6 +66,24 @@ builder.Services.AddSingleton<ILog>(
     x =>
         x.GetRequiredService<IVostokHostingEnvironment>().Log.WithAllFlowingContextProperties());
 
+builder.Services.AddTransient<IAuthorizationHandler, AuthorizedHandler>();
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(
+        options =>
+        {
+            options.LoginPath = "/login";
+            options.AccessDeniedPath = "/login";
+        });
+
+builder.Services.AddAuthorization(
+    opts =>
+    {
+        opts.AddPolicy("AuthorizedReq", policy => policy.Requirements.Add(new AuthorizedRequirement()));
+        opts.DefaultPolicy = new AuthorizationPolicy(
+            new[] {new AuthorizedRequirement()},
+            new[] {CookieAuthenticationDefaults.AuthenticationScheme});
+    });
+
 var assemblyHelper = new AssemblyHelpers();
 var applicationAssemblies = new List<Assembly>(assemblyHelper.Assemblies);
 builder.Services.AddApplicationServices(
@@ -97,6 +118,7 @@ app.UseCors(
         .AllowCredentials()
         .SetIsOriginAllowed(_ => true)); // Allow any origin
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 var staticFileOptions = new StaticFileOptions

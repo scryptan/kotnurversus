@@ -1,5 +1,6 @@
 using Domain.Commands;
 using KotnurVersus.Web.Helpers;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Models;
 using Models.Search;
@@ -19,6 +20,7 @@ public abstract class EntityControllerBase<T, TInvalidDataReason, TSearchRequest
     }
 
     [HttpDelete("{id:guid}")]
+    [Authorize]
     public async Task<VoidActionResult<ErrorInfo<AccessSingleEntityError>>> Delete([FromServices] IDeleteCommand<T> command, Guid id)
     {
         var result = await command.RunAsync(id);
