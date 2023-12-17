@@ -8,7 +8,7 @@ using Models.Authorization;
 
 namespace Domain.Commands.Authorization;
 
-internal class RegisterCommand : IRegisterCommand
+public class RegisterCommand : IRegisterCommand
 {
     private readonly IDataContextAccessor dataContextAccessor;
 

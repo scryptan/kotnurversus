@@ -7,7 +7,7 @@ using Models.Authorization;
 
 namespace Domain.Commands.Authorization;
 
-internal class LoginCommand : ILoginCommand
+public class LoginCommand : ILoginCommand
 {
     private readonly IDataContextAccessor dataContextAccessor;
 
@@ -21,11 +21,14 @@ internal class LoginCommand : ILoginCommand
         var result = await dataContextAccessor.AccessDataAsync<DomainResult<User, AccessSingleEntityError>>(
             async dbContext =>
             {
-                var passwordHash = SecretHasher.Hash(request.Password);
                 var existing = await dbContext.Users
-                    .FirstOrDefaultAsync(x => x.Email == request.Email.ToLowerInvariant() && x.PasswordHash == passwordHash);
+                    .FirstOrDefaultAsync(x => x.Email == request.Email.ToLowerInvariant());
                 if (existing == null)
                     return new ErrorInfo<AccessSingleEntityError>(AccessSingleEntityError.NotFound, "User not found");
+
+                var verifyResult = SecretHasher.Verify(request.Password, existing.PasswordHash);
+                if (!verifyResult)
+                    return new ErrorInfo<AccessSingleEntityError>(AccessSingleEntityError.Forbidden, "Password is incorrect");
 
                 return existing.ToApiModel();
             });

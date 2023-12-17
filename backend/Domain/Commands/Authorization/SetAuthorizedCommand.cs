@@ -6,7 +6,7 @@ using Models.Authorization;
 
 namespace Domain.Commands.Authorization;
 
-internal class SetAuthorizedCommand : ISetAuthorizedCommand
+public class SetAuthorizedCommand : ISetAuthorizedCommand
 {
     private readonly IDataContextAccessor dataContextAccessor;
 
