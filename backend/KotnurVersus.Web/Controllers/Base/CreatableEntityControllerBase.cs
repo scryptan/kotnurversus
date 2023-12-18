@@ -1,5 +1,6 @@
 using Domain.Commands;
 using KotnurVersus.Web.Helpers;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Models;
@@ -14,6 +15,7 @@ public abstract class CreatableEntityControllerBase<T, TCreationArgs, TInvalidDa
     where TSearchRequest : SearchRequestBase, ISearchRequest, new()
 {
     [HttpPost]
+    [Authorize]
     public async Task<ActionResult<T, CreateErrorInfo<CreateEntityError, TInvalidDataReason>>> Create(
         [FromServices] ICreateCommand<T, TCreationArgs, TInvalidDataReason> createCommand,
         [FromBody] TCreationArgs args)
@@ -23,6 +25,7 @@ public abstract class CreatableEntityControllerBase<T, TCreationArgs, TInvalidDa
     }
 
     [HttpPatch("{id:guid}")]
+    [Authorize]
     public async Task<ActionResult<T, PatchErrorInfo<PatchEntityError, TInvalidDataReason>>> Patch(
         [FromServices] IPatchCommand<T, TInvalidDataReason> createCommand,
         [FromRoute] Guid id,

@@ -48,4 +48,17 @@ public class GamesService : EntityServiceBase<Game, GameDbo, GameSearchRequest>,
         var rounds = await Context.DbContext.Rounds.Where(x => x.GameId == gameId).ToArrayAsync();
         Context.DbContext.Rounds.RemoveRange(rounds);
     }
+
+    protected override Task RemoveSensitiveDataAsync(Game? entity)
+    {
+        if (entity == null)
+            return Task.CompletedTask;
+
+        if (IsUserAuthorized())
+            return Task.CompletedTask;
+
+        entity.Specifications.Clear();
+        
+        return Task.CompletedTask;
+    }
 }

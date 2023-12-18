@@ -1,22 +1,31 @@
 using System.Reflection;
 using Db;
+using KotnurVersus.Web.Authorization;
 using KotnurVersus.Web.Configuration;
 using KotnurVersus.Web.Helpers;
 using KotnurVersus.Web.Helpers.DI;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.Net.Http.Headers;
+using Microsoft.OpenApi.Models;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
 using Vostok.Applications.AspNetCore;
+using Vostok.Configuration;
+using Vostok.Configuration.Sources.Combined;
 using Vostok.Configuration.Sources.Environment;
+using Vostok.Configuration.Sources.Json;
 using Vostok.Hosting.Abstractions;
 using Vostok.Hosting.AspNetCore;
 using Vostok.Hosting.Setup;
 using Vostok.Logging.Abstractions;
 using Vostok.Logging.Console;
 using Vostok.Logging.Context;
+using ConfigurationProvider = Vostok.Configuration.ConfigurationProvider;
 
 var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
@@ -63,6 +72,34 @@ builder.Services.AddSingleton<ILog>(
     x =>
         x.GetRequiredService<IVostokHostingEnvironment>().Log.WithAllFlowingContextProperties());
 
+var configurationProvider = new ConfigurationProvider(new ConfigurationProviderSettings());
+configurationProvider.SetupSourceFor<WebSecrets>(new CombinedSource(new JsonFileSource("config/config.json"), new EnvironmentVariablesSource()));
+
+builder.Services.AddTransient<IAuthorizationHandler, AuthorizedHandler>();
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(
+        options =>
+        {
+            options.TokenValidationParameters = new TokenValidationParameters
+            {
+                ValidateIssuer = false,
+                ValidateAudience = false,
+                ClockSkew = TimeSpan.Zero,
+                ValidateLifetime = true,
+                ValidateIssuerSigningKey = true,
+                IssuerSigningKey = JwtTokens.SigningKey(configurationProvider.Get<WebSecrets>().JwtKey)
+            };
+        });
+
+builder.Services.AddAuthorization(
+    opts =>
+    {
+        opts.AddPolicy("AuthorizedReq", policy => policy.Requirements.Add(new AuthorizedRequirement()));
+        opts.DefaultPolicy = new AuthorizationPolicy(
+            new[] {new AuthorizedRequirement()},
+            new[] {JwtBearerDefaults.AuthenticationScheme});
+    });
+
 var assemblyHelper = new AssemblyHelpers();
 var applicationAssemblies = new List<Assembly>(assemblyHelper.Assemblies);
 builder.Services.AddApplicationServices(
@@ -76,7 +113,37 @@ builder.Services.AddSwaggerGenNewtonsoftSupport();
 builder.Services.AddVostokRequestLogging(_ => {});
 
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(
+    c =>
+    {
+        c.AddSecurityDefinition(
+            "Bearer",
+            new OpenApiSecurityScheme
+            {
+                Name = "Authorization",
+                Type = SecuritySchemeType.Http,
+                Scheme = "Bearer",
+                BearerFormat = "JWT",
+                In = ParameterLocation.Header,
+                Description = "Bearer",
+            });
+
+        c.AddSecurityRequirement(
+            new OpenApiSecurityRequirement
+            {
+                {
+                    new OpenApiSecurityScheme
+                    {
+                        Reference = new OpenApiReference
+                        {
+                            Type = ReferenceType.SecurityScheme,
+                            Id = "Bearer"
+                        }
+                    },
+                    new string[] {}
+                }
+            });
+    });
 builder.Services.AddCors();
 
 var app = builder.Build();
@@ -97,6 +164,7 @@ app.UseCors(
         .AllowCredentials()
         .SetIsOriginAllowed(_ => true)); // Allow any origin
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 var staticFileOptions = new StaticFileOptions

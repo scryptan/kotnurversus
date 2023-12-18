@@ -126,6 +126,7 @@ public abstract class EntityServiceBase<T, TDbo, TSearchRequest> : IEntityServic
         var result = new T();
 
         await FillEntityAsync(result, dbos);
+        await RemoveSensitiveDataAsync(result);
         return result;
     }
 
@@ -133,6 +134,13 @@ public abstract class EntityServiceBase<T, TDbo, TSearchRequest> : IEntityServic
     protected abstract Task FillDboAsync(TDbo dbo, T entity);
     protected abstract Task FillEntityAsync(T entity, TDbo dbo);
     protected virtual Task PreprocessAsync(T? entity) => Task.CompletedTask;
+    protected virtual Task RemoveSensitiveDataAsync(T? entity) => Task.CompletedTask;
+
+    protected bool IsUserAuthorized()
+    {
+        var authorizedUser = Context.User?.Claims.FirstOrDefault(x => x.Type == CustomClaim.IsAuthorized)?.Value;
+        return authorizedUser != null && bool.TryParse(authorizedUser, out var isAuthorized) && isAuthorized;
+    }
 
     private async Task<TDbo?> ReadDboAsync(Guid id) =>
         await getMainDbSet(Context.DbContext).Where(x => x.Id == id).AsTracking().FirstOrDefaultAsync();

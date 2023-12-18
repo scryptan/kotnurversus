@@ -52,7 +52,7 @@ public class RoundsService : EntityServiceBase<Round, RoundDbo, RoundSearchReque
 
         if (searchRequest.GameId != null)
             res = res.Where(x => x.GameId == searchRequest.GameId);
-        
+
         if (searchRequest.NextRoundId != null)
             res = res.Where(x => x.NextRoundId == searchRequest.NextRoundId);
 
@@ -145,5 +145,19 @@ public class RoundsService : EntityServiceBase<Round, RoundDbo, RoundSearchReque
                 new DefaultContractResolver()));
 
         return existing;
+    }
+
+    protected override Task RemoveSensitiveDataAsync(Round? entity)
+    {
+        if (entity == null)
+            return Task.CompletedTask;
+
+        if (IsUserAuthorized())
+            return Task.CompletedTask;
+
+        if (entity.CurrentState == null || entity.CurrentState.State == RoundState.None)
+            entity.Specification = null;
+
+        return Task.CompletedTask;
     }
 }

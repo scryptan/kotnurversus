@@ -16,6 +16,7 @@ public class DbContext : Microsoft.EntityFrameworkCore.DbContext
         this.settings = settings;
     }
 
+    public DbSet<UserDbo> Users { get; set; } = null!;
     public DbSet<RoundDbo> Rounds { get; set; } = null!;
     public DbSet<GameDbo> Games { get; set; } = null!;
     public DbSet<ChallengeDbo> Challenge { get; set; } = null!;
