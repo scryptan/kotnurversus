@@ -25,7 +25,7 @@ public class RegisterCommand : IRegisterCommand
                 var existing = await dbContext.Users
                     .FirstOrDefaultAsync(x => x.Email == request.Email.ToLowerInvariant());
                 if (existing != null)
-                    return new ErrorInfo<AccessSingleEntityError>(AccessSingleEntityError.Forbidden, "User already exists");
+                    return new ErrorInfo<AccessSingleEntityError>(AccessSingleEntityError.Forbidden, "User already exist");
 
                 var passwordHash = SecretHasher.Hash(request.Password);
 

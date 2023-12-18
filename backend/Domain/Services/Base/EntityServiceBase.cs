@@ -41,6 +41,7 @@ public abstract class EntityServiceBase<T, TDbo, TSearchRequest> : IEntityServic
 
         var result = new T();
         await FillEntityAsync(result, dbos);
+        await RemoveSensitiveDataAsync(result);
 
         return result;
     }
