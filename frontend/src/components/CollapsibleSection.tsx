@@ -27,14 +27,14 @@ const CollapsibleSection = ({
   ...props
 }: Props) => {
   const [isOpen, setIsOpen] = useBoolean(() =>
-    storageKey && storage.has(storageKey)
-      ? storage.getBoolean(storageKey)
+    storageKey && storage.has(storageKey, { isSession: true })
+      ? storage.getBoolean(storageKey, { isSession: true })
       : defaultIsOpen
   );
 
   useEffect(() => {
     if (!storageKey) return;
-    storage.set(storageKey, String(isOpen));
+    storage.set(storageKey, String(isOpen), { isSession: true });
   }, [isOpen, storageKey]);
 
   return (

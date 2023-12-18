@@ -11,17 +11,22 @@ type TokenPayload = {
 };
 
 export const getUser = (): User | undefined => {
-  const token = storage.get(TOKEN_STORAGE_KEY);
+  try {
+    const token = storage.get(TOKEN_STORAGE_KEY);
 
-  if (!token) return;
+    if (!token) return;
 
-  const payload = jwtDecode<TokenPayload>(token);
+    const payload = jwtDecode<TokenPayload>(token);
 
-  if (!(Date.now() < payload?.exp * 1000)) return;
+    if (!(Date.now() < payload?.exp * 1000)) return;
 
-  return {
-    id: payload.sid,
-    email: payload.email,
-    isAuthorized: payload.IsAuthorized === "True",
-  };
+    return {
+      id: payload.sid,
+      email: payload.email,
+      isAuthorized: payload.IsAuthorized === "True",
+    };
+  } catch {
+    storage.remove(TOKEN_STORAGE_KEY);
+    return undefined;
+  }
 };
