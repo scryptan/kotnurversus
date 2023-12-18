@@ -1,8 +1,7 @@
 import { HStack, Heading, useBreakpointValue } from "@chakra-ui/react";
 import { SingleEliminationBracket } from "@g-loot/react-tournament-brackets";
 import { CommonTreeProps } from "@g-loot/react-tournament-brackets/dist/src/types";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { compare } from "fast-json-patch";
+import { useQuery } from "@tanstack/react-query";
 import { memo, useEffect, useState } from "react";
 import api from "~/api";
 import {
@@ -25,17 +24,17 @@ import TourneyBracketContainer from "./TourneyBracketContainer";
 type Props = {
   id: string;
   state: TourneyState;
-  teams: TourneyTeam[];
   specifications: TourneySpecification[];
 };
 
-const TourneyBracket = ({ id, state, teams, specifications }: Props) => {
-  const queryClient = useQueryClient();
-  const { isEditable } = useTourneyContext();
+const TourneyBracket = ({ id, state, specifications }: Props) => {
+  const { isEditable, teams, useSubscribe } = useTourneyContext();
   const isDesktop = useBreakpointValue(
     { base: false, sm: true },
     { ssr: false }
   );
+
+  useSubscribe("teams");
 
   const isPrepare = state === TourneyState.Prepare;
 
@@ -46,34 +45,24 @@ const TourneyBracket = ({ id, state, teams, specifications }: Props) => {
   });
 
   const [previewRounds, setPreviewRounds] = useState(() =>
-    calcRounds(teams, isEditable ? specifications : undefined)
+    calcRounds(teams.get, isEditable ? specifications : undefined)
   );
 
   useEffect(() => {
     if (!isPrepare) return;
     setPreviewRounds(
-      calcRounds(teams, isEditable ? specifications : undefined)
+      calcRounds(teams.get, isEditable ? specifications : undefined)
     );
-  }, [teams, specifications, isEditable]);
-
-  const editTeams = useMutation({
-    mutationFn: async (teams: TourneyTeam[]) => {
-      const operations = compare({}, { teams });
-      return await api.tourneys.patch(id, operations);
-    },
-    onSuccess: async (tourney) => {
-      queryClient.setQueryData(queryKeys.tourney(tourney.id), tourney);
-    },
-  });
+  }, [calcTeamsKey(teams.get), specifications, isEditable]);
 
   const rounds =
     isPrepare || roundsQuery.isLoading
       ? roundsQuery.isLoading
         ? previewRounds.map((r) => ({ ...r, isLoading: true }))
         : previewRounds
-      : (roundsQuery.data?.items || []).map(castToTourneyRound(teams));
+      : (roundsQuery.data?.items || []).map(castToTourneyRound(teams.get));
 
-  if (teams.length < 4 || rounds.length < 2 || roundsQuery.isError) {
+  if (teams.get.length < 4 || rounds.length < 2 || roundsQuery.isError) {
     const message = roundsQuery.isError
       ? "Не удалось загрузить турнирную сетку"
       : isEditable
@@ -109,12 +98,7 @@ const TourneyBracket = ({ id, state, teams, specifications }: Props) => {
     return (
       <>
         {bracket}
-        <ActionsButton
-          teams={teams}
-          onTeamsChange={async (newTeams: TourneyTeam[]) => {
-            await editTeams.mutateAsync(newTeams);
-          }}
-        />
+        <ActionsButton teams={teams.get} onTeamsChange={teams.set} />
       </>
     );
   }
@@ -148,7 +132,7 @@ const desktopOptions: CommonTreeProps["options"] = {
 
 type ActionsButtonProps = {
   teams: TourneyTeam[];
-  onTeamsChange: (teams: TourneyTeam[]) => Promise<void>;
+  onTeamsChange: (teams: TourneyTeam[]) => void;
 };
 
 const ActionsButton = ({ teams, onTeamsChange }: ActionsButtonProps) => (
@@ -178,7 +162,6 @@ export default memo(TourneyBracket, (prev, next) => {
   return (
     prev.id === next.id &&
     prev.state === next.state &&
-    calcTeamsKey(prev.teams) === calcTeamsKey(next.teams) &&
     calcSpecificationsKey(prev.specifications) ===
       calcSpecificationsKey(next.specifications)
   );

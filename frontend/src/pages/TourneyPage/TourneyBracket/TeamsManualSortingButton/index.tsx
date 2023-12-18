@@ -1,4 +1,4 @@
-import { Button, useBoolean, useDisclosure } from "@chakra-ui/react";
+import { Button, useDisclosure } from "@chakra-ui/react";
 import { useRef } from "react";
 import Window, { WindowProps } from "~/components/Window";
 import MoveIcon from "~/icons/MoveIcon";
@@ -7,7 +7,7 @@ import TeamsManualSorting from "./TeamsManualSorting";
 
 type Props = {
   teams: TourneyTeam[];
-  onSubmit: (sortedTeams: TourneyTeam[]) => Promise<void>;
+  onSubmit: (sortedTeams: TourneyTeam[]) => void;
 };
 
 const TeamsManualSortingButton = ({ teams, onSubmit }: Props) => {
@@ -38,26 +38,19 @@ const TeamsManualSortingWindow = ({
   ...props
 }: WindowProps<Props>) => {
   const sortedTeams = useRef(teams);
-  const [isLoading, setIsLoading] = useBoolean(false);
 
   const handleChange = (teams: TourneyTeam[]) => {
     sortedTeams.current = teams;
   };
 
   const handleSubmit = async () => {
-    setIsLoading.on();
-    try {
-      await onSubmit(sortedTeams.current.map((t, i) => ({ ...t, order: i })));
-      props.onClose();
-    } finally {
-      setIsLoading.off();
-    }
+    onSubmit(sortedTeams.current.map((t, i) => ({ ...t, order: i })));
+    props.onClose();
   };
 
   return (
     <Window
       heading="Сопоставление участников"
-      isLoading={isLoading}
       submitProps={{ onClick: handleSubmit }}
       {...props}
     >

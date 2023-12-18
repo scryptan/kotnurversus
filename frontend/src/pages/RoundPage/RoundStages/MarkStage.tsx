@@ -1,7 +1,6 @@
 import {
   BoxProps,
   HStack,
-  Heading,
   IconButton,
   Input,
   Stack,
@@ -72,7 +71,7 @@ const MarkStage = () => {
             />
           ))}
       <Stage.MainInfo children="Оценка команд" />
-      {isOrganizer ? (
+      {isOrganizer && (
         <Stack align="center" gridArea="b">
           <Text textAlign="center" fontSize="md" lineHeight="150%">
             Выставите командам баллы
@@ -91,14 +90,6 @@ const MarkStage = () => {
             ].join("\n")}
           />
         </Stack>
-      ) : (
-        <Heading
-          gridArea="m"
-          textAlign="center"
-          fontSize={{ base: "xl", md: "2xl" }}
-        >
-          Оценка команд
-        </Heading>
       )}
     </>
   );
