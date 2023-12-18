@@ -61,10 +61,9 @@ const TourneyPage = () => {
         <TourneyBracket
           id={tourney.id}
           state={tourney.state}
-          teams={tourney.teams}
           specifications={tourney.specifications}
         />
-        <TourneyTeams id={tourney.id} teams={tourney.teams} />
+        <TourneyTeams id={tourney.id} />
 
         {/* TODO move this to match */}
         <TourneyArtifacts artifacts={[]} />

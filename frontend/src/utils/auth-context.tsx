@@ -1,4 +1,5 @@
 import { ReactNode, createContext, useContext, useMemo, useState } from "react";
+import { getUser } from "~/utils/auth";
 import storage from "~/utils/storage";
 
 type AuthContent = {
@@ -21,7 +22,7 @@ export const TOKEN_STORAGE_KEY = "access-token";
 
 export const AuthProvider = ({ children }: AuthProviderProps) => {
   const [isAuthenticated, setIsAuthenticated] = useState(
-    storage.has(TOKEN_STORAGE_KEY)
+    () => getUser()?.isAuthorized || false
   );
 
   const context = useMemo(() => {

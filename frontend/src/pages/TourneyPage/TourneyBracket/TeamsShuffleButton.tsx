@@ -1,31 +1,21 @@
-import { Button, ButtonProps, useBoolean } from "@chakra-ui/react";
+import { Button, ButtonProps } from "@chakra-ui/react";
 import ShuffleIcon from "~/icons/ShuffleIcon";
 import { TourneyTeam } from "~/types/tourney";
 
 type Props = {
   teams: TourneyTeam[];
-  onTeamsChange: (teams: TourneyTeam[]) => Promise<void>;
+  onTeamsChange: (teams: TourneyTeam[]) => void;
 } & ButtonProps;
 
 const TeamsShuffleButton = ({ teams, onTeamsChange, ...props }: Props) => {
-  const [isLoading, setIsLoading] = useBoolean(false);
-
   const handleClick = async () => {
-    setIsLoading.on();
-    try {
-      const shuffledTeams = teams
-        .toShuffle()
-        .map((t, i) => ({ ...t, order: i }));
-      await onTeamsChange(shuffledTeams);
-    } finally {
-      setIsLoading.off();
-    }
+    const shuffledTeams = teams.toShuffle().map((t, i) => ({ ...t, order: i }));
+    onTeamsChange(shuffledTeams);
   };
 
   return (
     <Button
       {...props}
-      isLoading={isLoading}
       leftIcon={<ShuffleIcon boxSize={4} />}
       onClick={handleClick}
       children="Перемешать участников"

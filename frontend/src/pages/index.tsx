@@ -2,6 +2,7 @@ import { lazy } from "react";
 import MainPage from "./MainPage";
 import paths from "./paths";
 
+const AdminPage = lazy(() => import("./AdminPage"));
 const ChallengesPage = lazy(() => import("./ChallengesPage"));
 const TourneysPage = lazy(() => import("./TourneysPage"));
 const CreateTourneyPage = lazy(() => import("./CreateTourneyPage"));
@@ -11,6 +12,10 @@ const RoundPage = lazy(() => import("./RoundPage"));
 const ProfilePage = lazy(() => import("./ProfilePage"));
 
 export default {
+  admin: {
+    path: paths.admin.pathTemplate,
+    Component: AdminPage,
+  },
   challenges: {
     path: paths.challenges.pathTemplate,
     Component: ChallengesPage,

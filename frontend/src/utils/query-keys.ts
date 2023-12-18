@@ -6,4 +6,5 @@ export default {
   tourneys: ["tourneys"] as const,
   round: (roundId: string) => ["round", roundId] as const,
   rounds: (tourneyId: string) => ["rounds", tourneyId] as const,
+  users: ["users"] as const,
 };

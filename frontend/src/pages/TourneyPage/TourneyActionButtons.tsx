@@ -1,16 +1,16 @@
-import { Button, HStack, useToast } from "@chakra-ui/react";
+import { Button, HStack } from "@chakra-ui/react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import { Link } from "react-router-dom";
 import api from "~/api";
 import ButtonWithAlert from "~/components/ButtonWithAlert";
+import useCustomToast from "~/hooks/useCustomToast";
 import PenIcon from "~/icons/PenIcon";
 import UnlockIcon from "~/icons/UnlockIcon";
 import paths from "~/pages/paths";
 import { Tourney } from "~/types/tourney";
 import queryKeys from "~/utils/query-keys";
 import { castToCreateRound } from "~/utils/round";
-import { warningToast } from "~/utils/template-toasts";
 import {
   addSpecificationToRound,
   createMatchesFromTeams,
@@ -22,7 +22,7 @@ type Props = {
 };
 
 const TourneyActionButtons = ({ tourney }: Props) => {
-  const toast = useToast();
+  const toast = useCustomToast();
   const queryClient = useQueryClient();
 
   const { isEditable } = useTourneyContext();
@@ -50,7 +50,7 @@ const TourneyActionButtons = ({ tourney }: Props) => {
       } else if (error?.message) {
         message = error?.message || message;
       }
-      toast(warningToast(message));
+      toast.warning({ description: message });
     },
   });
 
