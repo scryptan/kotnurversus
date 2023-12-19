@@ -14,4 +14,5 @@ public class Round : EntityInfo, IEntity
     public Guid? NextRoundId { get; set; }
     public int Order { get; set; }
     public Guid GameId { get; set; }
+    public string? Description { get; set; }
 }

@@ -27,6 +27,7 @@ public class RoundsService : EntityServiceBase<Round, RoundDbo, RoundSearchReque
         dbo.Order = entity.Order;
         dbo.GameId = entity.GameId;
         dbo.Settings = entity.Settings;
+        dbo.Description = entity.Description;
 
         return Task.CompletedTask;
     }
@@ -42,6 +43,7 @@ public class RoundsService : EntityServiceBase<Round, RoundDbo, RoundSearchReque
         entity.Order = dbo.Order;
         entity.GameId = dbo.GameId;
         entity.Settings = dbo.Settings;
+        entity.Description = dbo.Description;
 
         return Task.CompletedTask;
     }
