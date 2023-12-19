@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Models;
 using Models.Challenges;
 using Models.Rounds;
+using Models.Search;
 
 namespace Domain.Commands.Rounds;
 
@@ -25,9 +26,9 @@ public class GetAvailableChallengesCommand : IGetAvailableChallengesCommand
         this.gamesService = gamesService;
     }
 
-    public async Task<DomainResult<List<SnapshotChallenge>, AccessMultipleEntitiesError>> RunAsync(Guid roundId, CancellationToken cancellationToken)
+    public async Task<DomainResult<SearchResult<SnapshotChallenge>, AccessMultipleEntitiesError>> RunAsync(Guid roundId, CancellationToken cancellationToken)
     {
-        var result = await dataContextAccessor.AccessDataAsync<DomainResult<List<SnapshotChallenge>, AccessMultipleEntitiesError>>(
+        var result = await dataContextAccessor.AccessDataAsync<DomainResult<SearchResult<SnapshotChallenge>, AccessMultipleEntitiesError>>(
             async dbContext =>
             {
                 var round = await roundsService.FindAsync(roundId);
@@ -57,9 +58,9 @@ public class GetAvailableChallengesCommand : IGetAvailableChallengesCommand
                 var challenges = await dbContext.SnapshotChallenges
                     .Where(x => !challengesToExclude.Contains(x.Id))
                     .Select(x => x.ToApiModel())
-                    .ToListAsync(cancellationToken: cancellationToken);
+                    .ToArrayAsync(cancellationToken: cancellationToken);
 
-                return challenges;
+                return new SearchResult<SnapshotChallenge>(challenges);
             });
 
         return result;
