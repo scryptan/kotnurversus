@@ -19,7 +19,8 @@ public class DbContext : Microsoft.EntityFrameworkCore.DbContext
     public DbSet<UserDbo> Users { get; set; } = null!;
     public DbSet<RoundDbo> Rounds { get; set; } = null!;
     public DbSet<GameDbo> Games { get; set; } = null!;
-    public DbSet<ChallengeDbo> Challenge { get; set; } = null!;
+    public DbSet<ChallengeDbo> Challenges { get; set; } = null!;
+    public DbSet<SnapshotChallengeDbo> SnapshotChallenges { get; set; } = null!;
     public DbSet<CategoryDbo> Categories { get; set; } = null!;
 
     protected override void OnConfiguring(DbContextOptionsBuilder builder)
@@ -43,5 +44,9 @@ public class DbContext : Microsoft.EntityFrameworkCore.DbContext
         var challenge = modelBuilder.Entity<ChallengeDbo>();
         challenge.HasKey(x => x.Id);
         challenge.HasIndex(x => new {x.Title, Theme = x.CategoryId}).IsUnique();
+        
+        var snapshotChallenge = modelBuilder.Entity<SnapshotChallengeDbo>();
+        snapshotChallenge.HasKey(x => new{x.Id, x.GameId, x.RoundId});
+        snapshotChallenge.HasIndex(x => new {x.Id, x.GameId, x.RoundId}).IsUnique();
     }
 }

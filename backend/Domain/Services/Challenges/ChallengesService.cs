@@ -12,7 +12,7 @@ public class ChallengesService : EntityServiceBase<Challenge, ChallengeDbo, Chal
     private readonly Lazy<ICategoriesService> categoriesService;
 
     public ChallengesService(IDataContext context, Lazy<ICategoriesService> categoriesService)
-        : base(context, x => x.Challenge)
+        : base(context, x => x.Challenges)
     {
         this.categoriesService = categoriesService;
     }
