@@ -46,7 +46,7 @@ public class StartRoundCommand : IStartRoundCommand
                 var challenges = await dbContext.Challenges.ToListAsync();
                 foreach (var group in challenges.GroupBy(x => x.CategoryId))
                 {
-                    var challengeOrders = Enumerable.Range(0, group.Count() - 1).OrderBy(_ => random.Next()).ToList();
+                    var challengeOrders = Enumerable.Range(0, group.Count()).OrderBy(_ => random.Next()).ToList();
                     var i = 0;
                     foreach (var challengeDbo in group)
                     {
