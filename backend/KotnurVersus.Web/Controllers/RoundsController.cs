@@ -2,6 +2,7 @@ using Domain.Commands.Rounds;
 using KotnurVersus.Web.Controllers.Base;
 using KotnurVersus.Web.Helpers;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.WebUtilities;
 using Models;
 using Models.Challenges;
 using Models.Rounds;
@@ -11,6 +12,8 @@ namespace KotnurVersus.Web.Controllers;
 
 public class RoundsController : CreatableEntityControllerBase<Round, RoundCreationArgs, InvalidRoundDataReason, RoundSearchRequest>
 {
+    private const long maxFileSize = 100 * 1024 * 1024;
+
     [HttpGet("{id:guid}/get-available-challenges")]
     public async Task<ActionResult<SearchResult<Challenge>, ErrorInfo<AccessMultipleEntitiesError>>> GetAvailableChallenges(
         [FromServices] IGetAvailableChallengesCommand command,
@@ -19,7 +22,32 @@ public class RoundsController : CreatableEntityControllerBase<Round, RoundCreati
         var result = await command.RunAsync(id, HttpContext.RequestAborted);
         return result.ToActionResult();
     }
-    
+
+    [RequestFormLimits(
+        MultipartBodyLengthLimit = 2 * maxFileSize,
+        MultipartHeadersLengthLimit = MultipartReader.DefaultHeadersLengthLimit * 2)]
+    [RequestSizeLimit(2 * maxFileSize)]
+    [HttpPost("{id:guid}/add-artifact")]
+    public async Task<ActionResult<Artifact, ErrorInfo<AccessSingleEntityError>>> AddArtifact(
+        [FromServices] IAddArtifactCommand command,
+        [FromRoute] Guid id,
+        [FromForm] IFormFile? file,
+        [FromForm] string? description)
+    {
+        var memoryStream = new MemoryStream();
+        if (file != null)
+            await file.CopyToAsync(memoryStream);
+
+        var result = await command.RunAsync(
+            id,
+            file == null ? ArtifactType.Text : ArtifactType.Image,
+            memoryStream,
+            file?.FileName,
+            description);
+
+        return result.ToActionResult();
+    }
+
     [HttpPost("{id:guid}/reset-timer")]
     public async Task<ActionResult<Round, ErrorInfo<InvalidRoundDataReason>>> ResetRoundTimer(
         [FromServices] IResetTimerCommand command,
