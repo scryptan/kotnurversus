@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.WebUtilities;
 using Models;
 using Models.Challenges;
 using Models.Rounds;
-using Models.Search;
 
 namespace KotnurVersus.Web.Controllers;
 
@@ -16,7 +15,7 @@ public class RoundsController : CreatableEntityControllerBase<Round, RoundCreati
     private const long maxFileSize = 100 * 1024 * 1024;
 
     [HttpGet("{id:guid}/get-available-challenges")]
-    public async Task<ActionResult<SearchResult<Challenge>, ErrorInfo<AccessMultipleEntitiesError>>> GetAvailableChallenges(
+    public async Task<ActionResult<List<SnapshotChallenge>, ErrorInfo<AccessMultipleEntitiesError>>> GetAvailableChallenges(
         [FromServices] IGetAvailableChallengesCommand command,
         [FromRoute] Guid id)
     {

@@ -1,5 +1,7 @@
 using Domain.Context;
+using Domain.Helpers;
 using Domain.Services.Rounds;
+using Microsoft.EntityFrameworkCore;
 using Models;
 using Models.Rounds;
 using Models.Rounds.History;
@@ -10,6 +12,8 @@ public class StartRoundCommand : IStartRoundCommand
 {
     private readonly IDataContextAccessor dataContextAccessor;
     private readonly IRoundsService service;
+
+    private static readonly Random random = new();
 
     public StartRoundCommand(
         IDataContextAccessor dataContextAccessor,
@@ -38,6 +42,19 @@ public class StartRoundCommand : IStartRoundCommand
                         Order = 0,
                         Value = new PrepareRoundHistoryItem()
                     });
+
+                var challenges = await dbContext.Challenges.ToListAsync();
+                foreach (var group in challenges.GroupBy(x => x.CategoryId))
+                {
+                    var challengeOrders = Enumerable.Range(0, group.Count() - 1).OrderBy(_ => random.Next()).ToList();
+                    var i = 0;
+                    foreach (var challengeDbo in group)
+                    {
+                        var order = challengeOrders[i++];
+                        var snapshot = challengeDbo.ToSnapshot(existing.GameId, existing.Id, order);
+                        await dbContext.SnapshotChallenges.AddAsync(snapshot);
+                    }
+                }
 
                 await dbContext.SaveChangesAsync();
                 return existing;

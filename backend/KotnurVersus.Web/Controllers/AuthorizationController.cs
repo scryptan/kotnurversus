@@ -1,7 +1,6 @@
 using Domain.Commands.Authorization;
 using KotnurVersus.Web.Configuration;
 using KotnurVersus.Web.Helpers;
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.JsonWebTokens;
