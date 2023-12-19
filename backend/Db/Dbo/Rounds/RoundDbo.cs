@@ -31,4 +31,7 @@ public class RoundDbo : Dbo
 
     [Column("artifacts", TypeName = "jsonb")]
     public List<Artifact> Artifacts { get; set; } = new();
+
+    [Column("description")]
+    public string? Description { get; set; }
 }

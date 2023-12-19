@@ -1,6 +1,7 @@
 using Domain.Commands.Rounds;
 using KotnurVersus.Web.Controllers.Base;
 using KotnurVersus.Web.Helpers;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.WebUtilities;
 using Models;
@@ -22,12 +23,27 @@ public class RoundsController : CreatableEntityControllerBase<Round, RoundCreati
         var result = await command.RunAsync(id, HttpContext.RequestAborted);
         return result.ToActionResult();
     }
+    
+    [HttpDelete("{id:guid}/artifacts/{artifactId:guid}")]
+    [Authorize]
+    public async Task<VoidActionResult<ErrorInfo<AccessSingleEntityError>>> RemoveArtifact(
+        [FromServices] IRemoveArtifactCommand command,
+        [FromRoute] Guid id,
+        [FromRoute] Guid artifactId)
+    {
+        var result = await command.RunAsync(
+            id,
+            artifactId);
+
+        return result.ToActionResult();
+    }
 
     [RequestFormLimits(
         MultipartBodyLengthLimit = 2 * maxFileSize,
         MultipartHeadersLengthLimit = MultipartReader.DefaultHeadersLengthLimit * 2)]
     [RequestSizeLimit(2 * maxFileSize)]
     [HttpPost("{id:guid}/add-artifact")]
+    [Authorize]
     public async Task<ActionResult<Artifact, ErrorInfo<AccessSingleEntityError>>> AddArtifact(
         [FromServices] IAddArtifactCommand command,
         [FromRoute] Guid id,
@@ -49,6 +65,7 @@ public class RoundsController : CreatableEntityControllerBase<Round, RoundCreati
     }
 
     [HttpPost("{id:guid}/reset-timer")]
+    [Authorize]
     public async Task<ActionResult<Round, ErrorInfo<InvalidRoundDataReason>>> ResetRoundTimer(
         [FromServices] IResetTimerCommand command,
         [FromRoute] Guid id)
@@ -58,6 +75,7 @@ public class RoundsController : CreatableEntityControllerBase<Round, RoundCreati
     }
 
     [HttpPost("{id:guid}/init")]
+    [Authorize]
     public async Task<ActionResult<Round, ErrorInfo<InvalidRoundDataReason>>> InitRound(
         [FromServices] IStartRoundCommand command,
         [FromRoute] Guid id)
@@ -67,6 +85,7 @@ public class RoundsController : CreatableEntityControllerBase<Round, RoundCreati
     }
 
     [HttpPost("{id:guid}/finish")]
+    [Authorize]
     public async Task<ActionResult<Round, ErrorInfo<InvalidRoundDataReason>>> FinishRound(
         [FromServices] IFinishRoundCommand command,
         [FromRoute] Guid id,
@@ -77,6 +96,7 @@ public class RoundsController : CreatableEntityControllerBase<Round, RoundCreati
     }
 
     [HttpPost("{id:guid}/start/{state}")]
+    [Authorize]
     public async Task<ActionResult<Round, ErrorInfo<InvalidRoundDataReason>>> StartRoundState(
         [FromServices] IProcessRoundCommand command,
         [FromRoute] Guid id,
@@ -88,6 +108,7 @@ public class RoundsController : CreatableEntityControllerBase<Round, RoundCreati
     }
 
     [HttpPost("{id:guid}/end/{state}")]
+    [Authorize]
     public async Task<ActionResult<Round, ErrorInfo<InvalidRoundDataReason>>> EndRoundState(
         [FromServices] IProcessRoundCommand command,
         [FromRoute] Guid id,
