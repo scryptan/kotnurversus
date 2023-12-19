@@ -8,6 +8,9 @@ public class ChallengeDbo : Dbo
     [Column("title")]
     public string Title { get; set; } = null!;
     
+    [Column("short_description")]
+    public string ShortDescription { get; set; } = null!;
+    
     [Column("description")]
     public string Description { get; set; } = null!;
     

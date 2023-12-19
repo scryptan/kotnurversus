@@ -13,6 +13,7 @@ public static class ChallengeHelpers
             Description = challengeDbo.Description,
             CategoryId = challengeDbo.CategoryId,
             Title = challengeDbo.Title,
+            ShortDescription = challengeDbo.ShortDescription,
             GameId = gameId,
             RoundId = roundId,
             Order = order,
@@ -31,6 +32,7 @@ public static class ChallengeHelpers
             GameId = challenge.GameId,
             RoundId = challenge.RoundId,
             Order = challenge.Order,
+            ShortDescription = challenge.ShortDescription,
             IsCatInBag = challenge.IsCatInBag
         };
     }
@@ -46,6 +48,7 @@ public static class ChallengeHelpers
             GameId = challenge.GameId,
             RoundId = challenge.RoundId,
             Order = challenge.Order,
+            ShortDescription = challenge.ShortDescription,
             IsCatInBag = challenge.IsCatInBag
         };
     }

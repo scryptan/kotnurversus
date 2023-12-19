@@ -20,6 +20,7 @@ public class ChallengesService : EntityServiceBase<Challenge, ChallengeDbo, Chal
     protected override Task FillDboAsync(ChallengeDbo dbo, Challenge entity)
     {
         dbo.Description = entity.Description;
+        dbo.ShortDescription = entity.ShortDescription;
         dbo.Id = entity.Id;
         dbo.CategoryId = entity.CategoryId;
         dbo.Title = entity.Title;
@@ -31,6 +32,7 @@ public class ChallengesService : EntityServiceBase<Challenge, ChallengeDbo, Chal
     protected override Task FillEntityAsync(Challenge entity, ChallengeDbo dbo)
     {
         entity.Description = dbo.Description;
+        entity.ShortDescription = dbo.ShortDescription;
         entity.Id = dbo.Id;
         entity.CategoryId = dbo.CategoryId;
         entity.Title = dbo.Title;

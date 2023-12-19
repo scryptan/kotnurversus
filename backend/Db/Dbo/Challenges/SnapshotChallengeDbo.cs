@@ -11,6 +11,9 @@ public class SnapshotChallengeDbo : Dbo
     [Column("description")]
     public string Description { get; set; } = null!;
 
+    [Column("short_description")]
+    public string ShortDescription { get; set; } = null!;
+
     [Column("categoryId")]
     public Guid CategoryId { get; set; }
 
