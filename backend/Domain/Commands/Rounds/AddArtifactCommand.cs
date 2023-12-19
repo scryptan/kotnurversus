@@ -43,6 +43,7 @@ public class AddArtifactCommand : IAddArtifactCommand
 
                 var artifact = new Artifact
                 {
+                    Id = Guid.NewGuid(),
                     Type = artifactType,
                     Title = description ?? fileName
                 };
