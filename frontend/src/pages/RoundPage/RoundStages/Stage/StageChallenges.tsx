@@ -17,7 +17,10 @@ const StageChallenges = ({ teamId, ...props }: Props) => {
   const chosenChallengeIds =
     round.participants.find((p) => p.teamId === teamId)?.challenges || [];
 
-  const query = useChallengesQuery({ enabled: chosenChallengeIds.length > 0 });
+  const query = useChallengesQuery({
+    roundId: round.id,
+    enabled: chosenChallengeIds.length > 0,
+  });
 
   if (chosenChallengeIds.length < 1) return null;
 

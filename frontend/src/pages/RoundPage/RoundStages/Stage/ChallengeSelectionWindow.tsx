@@ -65,8 +65,7 @@ const ChallengeSelectionWindow = ({
 
   const data = useMemo(() => {
     const challengesByCategoryId = query.getChallengesByCategoryId(
-      calcAvailableChallenges(round, query.challenges),
-      { useShuffle: true }
+      calcAvailableChallenges(round, query.challenges)
     );
     const categories = query.categories.filter(
       (c) => challengesByCategoryId[c.id]?.length > 0
@@ -79,7 +78,6 @@ const ChallengeSelectionWindow = ({
         )
         .filter(isDefined)
     );
-
     const disabledChallengeIds = new Set(
       round.participants.flatMap((p) => p.challenges) || []
     );
@@ -108,7 +106,7 @@ const ChallengeSelectionWindow = ({
       <Window
         {...props}
         onClose={handleClose}
-        heading={`Команда ${team?.title} выбирает требование`}
+        heading={`Команда "${team?.title}" выбирает требование`}
         isWindowLoading={query.isLoading}
         isLoading={addChallengeMutation.isPending}
         contentProps={{ w: "1150px" }}

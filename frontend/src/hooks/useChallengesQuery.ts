@@ -30,20 +30,14 @@ const useChallengesQuery = ({
   });
 
   const getChallengesByCategoryId = (
-    challenges: Challenge[] = challengesQuery.data?.items || [],
-    options: { useShuffle?: boolean } = {}
+    challenges: Challenge[] = challengesQuery.data?.items || []
   ): Record<string, Challenge[]> =>
     challenges.reduce(
       (result, challenge) => {
-        let byCategory = result[challenge.categoryId];
-        if (!byCategory) {
+        if (!result[challenge.categoryId]) {
           result[challenge.categoryId] = [];
-          byCategory = result[challenge.categoryId];
         }
-        byCategory.push(challenge);
-        if (options.useShuffle) {
-          result[challenge.categoryId] = byCategory.toShuffle();
-        }
+        result[challenge.categoryId].push(challenge);
         return result;
       },
       {} as Record<string, Challenge[]>
