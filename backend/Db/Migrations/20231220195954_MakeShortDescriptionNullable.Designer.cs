@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Db;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Models.Rounds;
 using Models.Settings;
@@ -16,9 +17,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Db.Migrations
 {
     [DbContext(typeof(DbContext))]
-    partial class DbContextModelSnapshot : ModelSnapshot
+    [Migration("20231220195954_MakeShortDescriptionNullable")]
+    partial class MakeShortDescriptionNullable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
