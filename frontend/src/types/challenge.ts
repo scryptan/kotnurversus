@@ -8,4 +8,4 @@ export type Challenge = {
   order?: number;
 };
 
-export type CreateChallenge = Omit<Challenge, "id">;
+export type CreateChallenge = Omit<Challenge, "id" | "order">;

@@ -37,6 +37,11 @@ const ChallengeForm = ({ id, defaultValue, onSubmit }: Props) => {
         label="Название"
         errorMessage={errors.title?.message}
       />
+      <Textarea
+        {...register("shortDescription")}
+        minH="64px"
+        label="Краткое описание"
+      />
       <Textarea {...register("description")} minH="160px" label="Описание" />
       <Switch
         {...register("isCatInBag")}
@@ -60,6 +65,7 @@ const challengeFormSchema = z.object({
     .string()
     .min(1, "Заполните поле")
     .max(50, "Максимальная длина 50 символов"),
+  shortDescription: z.string().optional(),
   description: z.string().optional(),
   isCatInBag: z.boolean().default(false),
 });

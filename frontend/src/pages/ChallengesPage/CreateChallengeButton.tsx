@@ -35,7 +35,7 @@ const CreateChallengeButton = ({ defaultCategoryId, ...props }: Props) => {
         variant="link"
         colorScheme="blue"
         fontWeight="normal"
-        children="Создать"
+        children="Создать требование"
       />
       <ChallengeWindow.Create
         {...window.getDisclosureProps()}

@@ -61,6 +61,7 @@ const baseOptions: UseToastOptions = {
   position: "bottom",
   duration: 2500,
   isClosable: true,
+  variant: "left-accent",
 };
 
 const successOptions: UseToastOptions = {
