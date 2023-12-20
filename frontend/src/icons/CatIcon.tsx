@@ -1,7 +1,7 @@
-import { Icon, IconProps } from "@chakra-ui/react";
+import { Icon, IconProps, forwardRef } from "@chakra-ui/react";
 
-export default (props: IconProps) => (
-  <Icon boxSize={4} fill="none" viewBox="0 0 28 26" {...props}>
+export default forwardRef<IconProps, "svg">((props, ref) => (
+  <Icon ref={ref} boxSize={4} fill="none" viewBox="0 0 28 26" {...props}>
     <path
       fill="#D9D9D9"
       stroke="#F03B36"
@@ -33,4 +33,4 @@ export default (props: IconProps) => (
       d="M7.984 17.745c.188 1.414 1.03 2.863 2.9 2.893 2.486.041 4.52-2.66 5.118-4.551-1.368-.198-2.735-.187-4.102-.061.597 1.8 2.708 4.579 4.783 4.612 1.99.032 2.675-1.274 2.9-2.893"
     />
   </Icon>
-);
+));

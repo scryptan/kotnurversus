@@ -1,4 +1,4 @@
-import { Box, ButtonProps, Text } from "@chakra-ui/react";
+import { Box, ButtonProps, Text, Tooltip } from "@chakra-ui/react";
 import chroma from "chroma-js";
 import CatIcon from "~/icons/CatIcon";
 import { Category } from "~/types/category";
@@ -31,14 +31,20 @@ const ChallengeCard = ({
       {...props}
     >
       {challenge.isCatInBag && (
-        <CatIcon
-          pos="absolute"
-          top={0}
-          left="50%"
-          transform="translate(-50%, -70%)"
-          boxSize={7}
-          pointerEvents="none"
-        />
+        <Tooltip
+          hasArrow
+          placement="top"
+          openDelay={500}
+          label="Это требование — Кот в мешке"
+        >
+          <CatIcon
+            pos="absolute"
+            top={0}
+            left="50%"
+            transform="translate(-50%, -70%)"
+            boxSize={7}
+          />
+        </Tooltip>
       )}
       <Box px={4} py={2} color={fontColor} bg={category.color} borderRadius={8}>
         <Text
