@@ -1,3 +1,4 @@
+import { useBreakpointValue } from "@chakra-ui/react";
 import { useQueryClient } from "@tanstack/react-query";
 import { compare } from "fast-json-patch";
 import { ReactNode, createContext, useContext, useMemo } from "react";
@@ -12,12 +13,14 @@ import queryKeys from "~/utils/query-keys";
 type SubscribeKey = "teams";
 
 type TourneyContext = {
+  isDesktop: boolean;
   isEditable: boolean;
   useSubscribe: (key: SubscribeKey) => void;
   teams: ValueRef<TourneyTeam[]>;
 };
 
 const Context = createContext<TourneyContext>({
+  isDesktop: true,
   isEditable: false,
   useSubscribe: () => {},
   teams: { get: [], set: () => {} },
@@ -36,6 +39,10 @@ export const TourneyProvider = ({
   const queryClient = useQueryClient();
   const { isAuthenticated } = useAuthContext();
   const { ping, useSubscribe } = useSubscriptions<SubscribeKey>();
+  const isDesktop = useBreakpointValue(
+    { base: false, sm: true },
+    { ssr: false }
+  );
 
   const teams = useValue(tourney.teams, {
     onUpdate: (newTeams: TourneyTeam[]) => {
@@ -52,11 +59,12 @@ export const TourneyProvider = ({
 
   const contextValue = useMemo(
     () => ({
-      isEditable: isAuthenticated && isPrepare,
+      isDesktop: Boolean(isDesktop),
+      isEditable: Boolean(isDesktop) && isAuthenticated && isPrepare,
       useSubscribe,
       teams,
     }),
-    [tourney.id, isAuthenticated, isPrepare]
+    [isDesktop, tourney.id, isAuthenticated, isPrepare]
   );
 
   return <Context.Provider value={contextValue} children={children} />;
