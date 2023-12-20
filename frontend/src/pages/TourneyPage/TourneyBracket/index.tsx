@@ -1,4 +1,4 @@
-import { HStack, Heading, useBreakpointValue } from "@chakra-ui/react";
+import { HStack, Heading } from "@chakra-ui/react";
 import { SingleEliminationBracket } from "@g-loot/react-tournament-brackets";
 import { CommonTreeProps } from "@g-loot/react-tournament-brackets/dist/src/types";
 import { useQuery } from "@tanstack/react-query";
@@ -28,11 +28,7 @@ type Props = {
 };
 
 const TourneyBracket = ({ id, state, specifications }: Props) => {
-  const { isEditable, teams, useSubscribe } = useTourneyContext();
-  const isDesktop = useBreakpointValue(
-    { base: false, sm: true },
-    { ssr: false }
-  );
+  const { isDesktop, isEditable, teams, useSubscribe } = useTourneyContext();
 
   useSubscribe("teams");
 

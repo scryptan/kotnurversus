@@ -22,6 +22,7 @@ const EditChallengeWindow = ({
     onSubmit?.({
       categoryId: data.categoryId,
       title: data.title,
+      shortDescription: data.shortDescription,
       description: data.description,
       isCatInBag: data.isCatInBag,
     });

@@ -30,9 +30,14 @@ export class RoundsController {
   async findAvailableChallenges(
     id: string
   ): Promise<PaginationResponse<Challenge>> {
-    return await axiosClient.get(
+    const response = await axiosClient.get<PaginationResponse<Challenge>>(
       `/api/v1/Rounds/${id}/get-available-challenges`
     );
+    const sortedItems = response.items.sort(
+      (a, b) => (a.order || 0) - (b.order || 0)
+    );
+
+    return { ...response, items: sortedItems };
   }
 
   async patch(id: string, operations: Operation[]): Promise<Round> {

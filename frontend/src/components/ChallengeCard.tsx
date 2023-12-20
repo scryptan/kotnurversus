@@ -1,5 +1,6 @@
-import { Box, ButtonProps, Text } from "@chakra-ui/react";
+import { Box, ButtonProps, Text, Tooltip } from "@chakra-ui/react";
 import chroma from "chroma-js";
+import CatIcon from "~/icons/CatIcon";
 import { Category } from "~/types/category";
 import { Challenge } from "~/types/challenge";
 
@@ -18,6 +19,7 @@ const ChallengeCard = ({
 
   return (
     <Box
+      pos="relative"
       as="button"
       outline="none"
       bg="blackAlpha.300"
@@ -28,6 +30,22 @@ const ChallengeCard = ({
       _focusVisible={{ boxShadow: "outline" }}
       {...props}
     >
+      {challenge.isCatInBag && (
+        <Tooltip
+          hasArrow
+          placement="top"
+          openDelay={500}
+          label="Это требование — Кот в мешке"
+        >
+          <CatIcon
+            pos="absolute"
+            top={0}
+            left="50%"
+            transform="translate(-50%, -70%)"
+            boxSize={7}
+          />
+        </Tooltip>
+      )}
       <Box px={4} py={2} color={fontColor} bg={category.color} borderRadius={8}>
         <Text
           fontSize={{ base: "sm", md: "lg" }}
@@ -38,7 +56,7 @@ const ChallengeCard = ({
           children={challenge.title}
         />
       </Box>
-      {challenge.description && (
+      {challenge.shortDescription && (
         <Box px={2} py={1}>
           <Text
             fontSize={{ base: "xs", md: "sm" }}
@@ -46,7 +64,7 @@ const ChallengeCard = ({
             fontWeight="normal"
             wordBreak="break-word"
             noOfLines={4}
-            children={challenge.description}
+            children={challenge.shortDescription}
           />
         </Box>
       )}
