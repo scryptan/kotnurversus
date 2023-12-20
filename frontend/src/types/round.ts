@@ -2,6 +2,7 @@ import { TourneySettings, TourneySpecification } from "~/types/tourney";
 
 export type Round = {
   id: string;
+  description?: string;
   nextRoundId?: string;
   gameId: string;
   settings: TourneySettings;

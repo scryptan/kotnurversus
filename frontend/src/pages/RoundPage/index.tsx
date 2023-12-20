@@ -1,5 +1,6 @@
 import { Flex } from "@chakra-ui/react";
 import { useParams } from "react-router-dom";
+import RoundArtifacts from "./RoundArtifacts";
 import RoundHeader from "./RoundHeader";
 import RoundSpecificationSection from "./RoundSpecificationSection";
 import RoundStages from "./RoundStages";
@@ -26,6 +27,7 @@ const RoundPage = () => {
         <RoundHeader />
         <RoundStages mt={5} />
         <RoundSpecificationSection mt={{ base: 10, md: 20 }} />
+        <RoundArtifacts mt={8} />
       </Flex>
     </RoundProvider>
   );
