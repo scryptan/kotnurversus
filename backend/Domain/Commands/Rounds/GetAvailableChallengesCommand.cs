@@ -56,7 +56,10 @@ public class GetAvailableChallengesCommand : IGetAvailableChallengesCommand
                 }
 
                 var challenges = await dbContext.SnapshotChallenges
-                    .Where(x => !challengesToExclude.Contains(x.Id))
+                    .Where(
+                        x => !challengesToExclude.Contains(x.Id)
+                             && x.GameId == game.Id 
+                             && x.RoundId == round.Id)
                     .Select(x => x.ToApiModel())
                     .ToArrayAsync(cancellationToken: cancellationToken);
 
