@@ -6,5 +6,5 @@ namespace Domain.Commands.Rounds;
 
 public interface IGetAvailableChallengesCommand
 {
-    Task<DomainResult<SearchResult<Challenge>, AccessMultipleEntitiesError>> RunAsync(Guid roundId, CancellationToken cancellationToken);
+    Task<DomainResult<SearchResult<SnapshotChallenge>, AccessMultipleEntitiesError>> RunAsync(Guid roundId, CancellationToken cancellationToken);
 }

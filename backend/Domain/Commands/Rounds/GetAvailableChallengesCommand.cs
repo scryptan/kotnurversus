@@ -1,7 +1,8 @@
 using Domain.Context;
-using Domain.Services.Challenges;
+using Domain.Helpers;
 using Domain.Services.Games;
 using Domain.Services.Rounds;
+using Microsoft.EntityFrameworkCore;
 using Models;
 using Models.Challenges;
 using Models.Rounds;
@@ -14,24 +15,21 @@ public class GetAvailableChallengesCommand : IGetAvailableChallengesCommand
     private readonly IDataContextAccessor dataContextAccessor;
     private readonly IRoundsService roundsService;
     private readonly IGamesService gamesService;
-    private readonly IChallengesService challengesService;
 
     public GetAvailableChallengesCommand(
         IDataContextAccessor dataContextAccessor,
         IRoundsService roundsService,
-        IGamesService gamesService,
-        IChallengesService challengesService)
+        IGamesService gamesService)
     {
         this.dataContextAccessor = dataContextAccessor;
         this.roundsService = roundsService;
         this.gamesService = gamesService;
-        this.challengesService = challengesService;
     }
 
-    public async Task<DomainResult<SearchResult<Challenge>, AccessMultipleEntitiesError>> RunAsync(Guid roundId, CancellationToken cancellationToken)
+    public async Task<DomainResult<SearchResult<SnapshotChallenge>, AccessMultipleEntitiesError>> RunAsync(Guid roundId, CancellationToken cancellationToken)
     {
-        var result = await dataContextAccessor.AccessDataAsync<DomainResult<SearchResult<Challenge>, AccessMultipleEntitiesError>>(
-            async _ =>
+        var result = await dataContextAccessor.AccessDataAsync<DomainResult<SearchResult<SnapshotChallenge>, AccessMultipleEntitiesError>>(
+            async dbContext =>
             {
                 var round = await roundsService.FindAsync(roundId);
                 if (round == null)
@@ -40,8 +38,8 @@ public class GetAvailableChallengesCommand : IGetAvailableChallengesCommand
                 var game = (await gamesService.FindAsync(round.GameId))!;
 
                 var withoutRepeat = game.Settings.WithoutChallengesRepeatInFinal;
-                HashSet<Guid>? challengesToExclude = null;
-                
+                var challengesToExclude = new HashSet<Guid>();
+
                 if (withoutRepeat && round.NextRoundId == null)
                 {
                     var previousRounds = await roundsService.SearchAsync(
@@ -57,14 +55,15 @@ public class GetAvailableChallengesCommand : IGetAvailableChallengesCommand
                         .ToHashSet();
                 }
 
-                var challenges = await challengesService.SearchAsync(
-                    new ChallengeSearchRequest
-                    {
-                        ExcludeIds = challengesToExclude
-                    },
-                    cancellationToken);
+                var challenges = await dbContext.SnapshotChallenges
+                    .Where(
+                        x => !challengesToExclude.Contains(x.Id)
+                             && x.GameId == game.Id 
+                             && x.RoundId == round.Id)
+                    .Select(x => x.ToApiModel())
+                    .ToArrayAsync(cancellationToken: cancellationToken);
 
-                return challenges;
+                return new SearchResult<SnapshotChallenge>(challenges);
             });
 
         return result;

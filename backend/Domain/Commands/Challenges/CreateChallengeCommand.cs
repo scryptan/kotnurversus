@@ -19,6 +19,7 @@ public class CreateChallengeCommand : CreateCommandBase<Challenge, ChallengeCrea
         CategoryId = args.CategoryId,
         Title = args.Title,
         IsCatInBag = args.IsCatInBag,
+        ShortDescription = args.ShortDescription
     };
 
     protected override CreateErrorInfo<CreateEntityError, InvalidChallengeDataReason>? TryHandleConstraintViolation(string constraintName, Challenge entity)

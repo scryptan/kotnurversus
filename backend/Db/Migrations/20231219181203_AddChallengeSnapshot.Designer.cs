@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Db;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Models.Rounds;
 using Models.Settings;
@@ -16,9 +17,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Db.Migrations
 {
     [DbContext(typeof(DbContext))]
-    partial class DbContextModelSnapshot : ModelSnapshot
+    [Migration("20231219181203_AddChallengeSnapshot")]
+    partial class AddChallengeSnapshot
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -67,10 +70,6 @@ namespace Db.Migrations
                         .HasColumnType("boolean")
                         .HasColumnName("is_cat_in_bag");
 
-                    b.Property<string>("ShortDescription")
-                        .HasColumnType("text")
-                        .HasColumnName("short_description");
-
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("text")
@@ -114,10 +113,6 @@ namespace Db.Migrations
                     b.Property<int>("Order")
                         .HasColumnType("integer")
                         .HasColumnName("order");
-
-                    b.Property<string>("ShortDescription")
-                        .HasColumnType("text")
-                        .HasColumnName("short_description");
 
                     b.Property<string>("Title")
                         .IsRequired()
