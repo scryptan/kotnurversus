@@ -47,10 +47,6 @@ const ChallengeSection = () => {
     );
   }
 
-  if (query.categories.length === 0) {
-    return null;
-  }
-
   const challengesByCategoryId = query.getChallengesByCategoryId();
 
   return (
