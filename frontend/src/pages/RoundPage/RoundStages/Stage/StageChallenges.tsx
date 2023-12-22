@@ -29,7 +29,7 @@ const StageChallenges = ({ teamId, ...props }: Props) => {
   return (
     <Wrap
       w="full"
-      spacing={4}
+      spacing={6}
       align="flex-start"
       justifySelf={isFirstTeam ? "flex-end" : "flex-start"}
       justify={{ base: "center", md: isFirstTeam ? "flex-end" : "flex-start" }}

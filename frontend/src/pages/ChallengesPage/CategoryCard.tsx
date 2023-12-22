@@ -18,7 +18,7 @@ type Props = {
 const CategoryCard = ({ category, challenges }: Props) => (
   <Box>
     <CategoryButton category={category} />
-    <Wrap mt={4} spacing={8} align="flex-start">
+    <Wrap mt={6} spacing={8} align="flex-start">
       {challenges
         .sort((a, b) => a.title.localeCompare(b.title))
         .map((challenge) => (
