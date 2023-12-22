@@ -1,10 +1,10 @@
 import {
+  Grid,
   IconButton,
   Image,
   Skeleton,
   Stack,
   Text,
-  Wrap,
   useBoolean,
 } from "@chakra-ui/react";
 import { memo, useEffect, useRef, useState } from "react";
@@ -72,7 +72,11 @@ const AddImagesWindow = ({ onSubmit, ...props }: WindowProps<Props>) => {
           }}
         />
         {chosenImages.length > 0 && (
-          <Wrap spacing={4}>
+          <Grid
+            gap={4}
+            justifyContent="center"
+            gridTemplateColumns="repeat(5, 96px)"
+          >
             {chosenImages.map((image) => (
               <ImageItem
                 key={image.name}
@@ -80,7 +84,7 @@ const AddImagesWindow = ({ onSubmit, ...props }: WindowProps<Props>) => {
                 onRemove={handleRemove(image)}
               />
             ))}
-          </Wrap>
+          </Grid>
         )}
       </Stack>
     </Window>
@@ -112,7 +116,12 @@ const ImageItem = memo(
     }, [image.name]);
 
     return (
-      <Skeleton pos="relative" isLoaded={!isLoading} borderRadius={4}>
+      <Skeleton
+        pos="relative"
+        isLoaded={!isLoading}
+        borderRadius={4}
+        _hover={{ button: { opacity: 1 } }}
+      >
         <Image
           boxSize={24}
           objectFit="cover"
@@ -126,9 +135,11 @@ const ImageItem = memo(
           size="xs"
           variant="solid"
           colorScheme="red"
+          opacity={0}
           borderRadius="full"
           aria-label="Удалить изображение"
           icon={<CrossIcon boxSize={5} />}
+          _focusVisible={{ opacity: 1, boxShadow: "outline" }}
           onClick={onRemove}
         />
       </Skeleton>

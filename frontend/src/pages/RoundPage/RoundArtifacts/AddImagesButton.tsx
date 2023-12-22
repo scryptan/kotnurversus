@@ -49,7 +49,8 @@ const AddImagesButton = () => {
         bg="blackAlpha.50"
         _dark={{ bg: "whiteAlpha.50" }}
         _hover={{ bg: "blackAlpha.100", _dark: { bg: "whiteAlpha.100" } }}
-        transition="background 200ms ease-in-out"
+        _focusVisible={{ outline: "none", boxShadow: "outline" }}
+        transition="background 200ms ease-out, box-shadow 200ms ease-out"
         onClick={window.onOpen}
       >
         <OutlinePlusIcon boxSize={10} />

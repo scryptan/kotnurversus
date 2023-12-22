@@ -27,6 +27,7 @@ const Dropzone = ({ onDrop, accept, ...props }: Props) => {
         borderColor: "whiteAlpha.800",
         bg: isDragActive ? "whiteAlpha.100" : undefined,
       }}
+      _focusVisible={{ outline: "none", boxShadow: "outline" }}
       {...props}
     >
       <input {...getInputProps()} />

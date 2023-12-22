@@ -65,6 +65,7 @@ const EditableDescription = ({ roundId, description }: Props) => {
       ref={textareaRef}
       defaultValue={description}
       onChange={handleChange}
+      placeholder="Введите описание для раунда"
     />
   );
 };
