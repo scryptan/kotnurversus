@@ -5,7 +5,6 @@ import api from "~/api";
 import Loading from "~/components/Loading";
 import queryKeys from "~/utils/query-keys";
 import TourneyActionButtons from "./TourneyActionButtons";
-import TourneyArtifacts from "./TourneyArtifacts";
 import TourneyBracket from "./TourneyBracket";
 import TourneyHeader from "./TourneyHeader";
 import TourneySpecificationsSettings from "./TourneySpecificationsSettings";
@@ -64,9 +63,6 @@ const TourneyPage = () => {
           specifications={tourney.specifications}
         />
         <TourneyTeams id={tourney.id} />
-
-        {/* TODO move this to match */}
-        <TourneyArtifacts artifacts={[]} />
       </Stack>
     </TourneyProvider>
   );

@@ -272,7 +272,7 @@ const RemoveButton = ({ onRemove, ...props }: RemoveButtonProps) => {
         label="Удалить"
         borderRadius="full"
         onClick={alert.onOpen}
-        icon={<CrossIcon boxSize={4} />}
+        icon={<CrossIcon boxSize={5} />}
         {...props}
       />
       <Alert

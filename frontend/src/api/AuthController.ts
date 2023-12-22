@@ -14,7 +14,7 @@ export class AuthController {
     return await axiosClient.post(
       "/api/v1/Authorization/set-authorized",
       undefined,
-      { id, isAuthorized }
+      { params: { id, isAuthorized } }
     );
   }
 

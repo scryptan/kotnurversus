@@ -105,7 +105,7 @@ const Window = ({
           borderRadius={10}
           {...contentProps}
         >
-          {!isHideClose && <ModalCloseButton />}
+          {!isHideClose && <ModalCloseButton zIndex={5} />}
 
           {heading && (
             <ModalHeader px={6} py={4} {...headerProps}>

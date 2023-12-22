@@ -1,4 +1,8 @@
-import axiosStatic, { AxiosError, AxiosResponse } from "axios";
+import axiosStatic, {
+  AxiosError,
+  AxiosRequestConfig,
+  AxiosResponse,
+} from "axios";
 import { isDev } from "~/utils";
 import { TOKEN_STORAGE_KEY } from "~/utils/auth-context";
 import storage from "~/utils/storage";
@@ -34,9 +38,13 @@ export default {
       throw error;
     }
   },
-  post: async <T, K>(url: string, data?: K, params?: object): Promise<T> => {
+  post: async <T, K>(
+    url: string,
+    data?: K,
+    config?: AxiosRequestConfig
+  ): Promise<T> => {
     try {
-      const res = await axios.post<K, AxiosResponse<T>>(url, data, { params });
+      const res = await axios.post<K, AxiosResponse<T>>(url, data, config);
       isDev && console.log(`POST ${url}`, res.data); // LOG
       return res.data;
     } catch (err) {
