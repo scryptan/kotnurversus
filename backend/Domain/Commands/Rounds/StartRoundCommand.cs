@@ -1,5 +1,6 @@
 using Domain.Context;
 using Domain.Helpers;
+using Domain.Services.Games;
 using Domain.Services.Rounds;
 using Microsoft.EntityFrameworkCore;
 using Models;
@@ -12,15 +13,18 @@ public class StartRoundCommand : IStartRoundCommand
 {
     private readonly IDataContextAccessor dataContextAccessor;
     private readonly IRoundsService service;
+    private readonly IGamesService gamesService;
 
     private static readonly Random random = new();
 
     public StartRoundCommand(
         IDataContextAccessor dataContextAccessor,
-        IRoundsService service)
+        IRoundsService service,
+        IGamesService gamesService)
     {
         this.dataContextAccessor = dataContextAccessor;
         this.service = service;
+        this.gamesService = gamesService;
     }
 
     public async Task<DomainResult<Round, InvalidRoundDataReason>> RunAsync(Guid id)
@@ -35,6 +39,10 @@ public class StartRoundCommand : IStartRoundCommand
                 if (existing.History.FirstOrDefault(x => x.State == RoundState.Prepare) != null)
                     return new ErrorInfo<InvalidRoundDataReason>(InvalidRoundDataReason.InvalidData, "Round already started");
 
+                var game = await gamesService.FindAsync(existing.GameId);
+                if (game == null)
+                    return new ErrorInfo<InvalidRoundDataReason>(InvalidRoundDataReason.InvalidData, "Game not found");
+
                 await service.AddHistoryItem(
                     existing.Id,
                     new HistoryItem
@@ -44,6 +52,18 @@ public class StartRoundCommand : IStartRoundCommand
                     });
 
                 var challenges = await dbContext.Challenges.ToListAsync();
+                if (game.Settings.CatsInTheBag)
+                {
+                    var categories = challenges.Select(x => x.CategoryId).Distinct().ToList();
+                    var cats = challenges.Where(x => x.IsCatInBag).ToList();
+                    foreach (var cat in cats)
+                    {
+                        cat.CategoryId = categories
+                            .Where(x => x != cat.CategoryId)
+                            .ElementAt(random.Next(categories.Count));
+                    }
+                }
+
                 foreach (var group in challenges.GroupBy(x => x.CategoryId))
                 {
                     var challengeOrders = Enumerable.Range(0, group.Count()).OrderBy(_ => random.Next()).ToList();
