@@ -1,7 +1,7 @@
 import { Operation } from "fast-json-patch";
 import { Challenge } from "~/types/challenge";
 import { PaginationResponse } from "~/types/pagination";
-import { FinishRound, Round, RoundState } from "~/types/round";
+import { FinishRound, Round, RoundArtifact, RoundState } from "~/types/round";
 import axiosClient from "~/utils/axios-client";
 
 export class RoundsController {
@@ -52,7 +52,7 @@ export class RoundsController {
     return await axiosClient.post(
       `/api/v1/Rounds/${id}/start/${state}`,
       undefined,
-      teamId ? { teamId } : {}
+      teamId ? { params: { teamId } } : {}
     );
   }
 
@@ -60,7 +60,7 @@ export class RoundsController {
     return await axiosClient.post(
       `/api/v1/Rounds/${id}/end/${state}`,
       undefined,
-      teamId ? { teamId } : {}
+      teamId ? { params: { teamId } } : {}
     );
   }
 
@@ -70,5 +70,21 @@ export class RoundsController {
 
   async resetTimer(id: string): Promise<Round> {
     return await axiosClient.post(`/api/v1/Rounds/${id}/reset-timer`);
+  }
+
+  async addArtifact(id: string, file: File): Promise<RoundArtifact> {
+    const formData = new FormData();
+    formData.append("file", file);
+    return await axiosClient.post(
+      `/api/v1/Rounds/${id}/add-artifact`,
+      formData,
+      { headers: { "Content-Type": "multipart/form-data" } }
+    );
+  }
+
+  async deleteArtifact(id: string, artifactId: string): Promise<void> {
+    return await axiosClient.delete(
+      `/api/v1/Rounds/${id}/artifacts/${artifactId}`
+    );
   }
 }

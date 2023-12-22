@@ -1,46 +1,44 @@
-import { BoxProps, Stack, Text } from "@chakra-ui/react";
+import { Text } from "@chakra-ui/react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { compare } from "fast-json-patch";
-import { ChangeEvent, memo, useRef } from "react";
+import { ChangeEvent, useMemo, useRef } from "react";
 import api from "~/api";
 import AutoLinkWrapper from "~/components/AutoLinkWrapper";
 import AutoSizeTextarea from "~/components/AutoSizeTextarea";
-import CollapsibleSection from "~/components/CollapsibleSection";
 import useDebounce from "~/hooks/useDebounce";
 import useHandleError from "~/hooks/useHandleError";
 import queryKeys from "~/utils/query-keys";
-import { useRoundContext } from "./round-context";
+import { useRoundContext } from "../round-context";
 
-const RoundArtifacts = (props: BoxProps) => {
+const RoundDescription = () => {
   const { isOrganizer, round } = useRoundContext();
 
-  const Description = isOrganizer ? EditableDescription : DescriptionBlock;
+  const component = useMemo(() => {
+    const Description = isOrganizer ? EditableDescription : ReadonlyDescription;
 
-  return (
-    <CollapsibleSection
-      label="Прикрепленные материалы"
-      storageKey="round-artifacts-section"
-      {...props}
-    >
-      <Stack mt={6} spacing={6}>
-        <Description roundId={round.id} description={round.description} />
-      </Stack>
-    </CollapsibleSection>
-  );
+    return <Description roundId={round.id} description={round.description} />;
+  }, [isOrganizer, round.id, round.description]);
+
+  return component;
 };
 
-type DescriptionProps = {
+type Props = {
   roundId: string;
   description?: string;
 };
 
-const DescriptionBlock = ({ description }: DescriptionProps) => (
+const ReadonlyDescription = ({ description }: Props) => (
   <AutoLinkWrapper>
-    <Text whiteSpace="pre-line" lineHeight="150%" children={description} />
+    <Text
+      whiteSpace="pre-line"
+      fontSize={{ base: "sm", md: "md" }}
+      lineHeight="150%"
+      children={description}
+    />
   </AutoLinkWrapper>
 );
 
-const EditableDescription = ({ roundId, description }: DescriptionProps) => {
+const EditableDescription = ({ roundId, description }: Props) => {
   const debounce = useDebounce(300);
   const handleError = useHandleError();
   const queryClient = useQueryClient();
@@ -71,4 +69,4 @@ const EditableDescription = ({ roundId, description }: DescriptionProps) => {
   );
 };
 
-export default memo(RoundArtifacts);
+export default RoundDescription;

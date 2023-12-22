@@ -8,7 +8,7 @@ export type Round = {
   settings: TourneySettings;
   specification: TourneySpecification;
   participants: RoundParticipant[];
-  artifacts: unknown[];
+  artifacts: RoundArtifact[];
   history: RoundStateData[];
   winnerId?: string;
   currentState?: RoundStateData;
@@ -58,4 +58,10 @@ export type RoundParticipant = {
 export type RoundMark = {
   teamId: string;
   mark: number;
+};
+
+export type RoundArtifact = {
+  id: string;
+  title: string;
+  content: string;
 };
