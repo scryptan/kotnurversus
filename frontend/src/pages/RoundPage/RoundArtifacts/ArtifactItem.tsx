@@ -56,7 +56,7 @@ const ArtifactItem = ({ roundId, artifact, onClick, isOrganizer }: Props) => {
       >
         {isError ? (
           <Stack
-            boxSize="175px"
+            boxSize={{ base: "100px", md: "175px" }}
             align="center"
             justify="center"
             userSelect="none"
@@ -66,14 +66,14 @@ const ArtifactItem = ({ roundId, artifact, onClick, isOrganizer }: Props) => {
             _hover={{ bg: "blackAlpha.100", _dark: { bg: "whiteAlpha.100" } }}
             _focusVisible={{ outline: "none", boxShadow: "outline" }}
           >
-            <NotAllowedIcon boxSize={12} />
-            <Text fontSize="sm" lineHeight="150%">
+            <NotAllowedIcon boxSize={{ base: 6, md: 12 }} />
+            <Text fontSize={{ base: "xs", md: "sm" }} lineHeight="150%">
               Не удалось загрузить изображение
             </Text>
           </Stack>
         ) : (
           <Image
-            boxSize="175px"
+            boxSize={{ base: "100px", md: "175px" }}
             loading="lazy"
             objectFit="cover"
             borderRadius={8}

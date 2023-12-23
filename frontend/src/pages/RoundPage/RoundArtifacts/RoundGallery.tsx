@@ -15,8 +15,11 @@ const RoundGallery = () => {
     <Grid
       px={2}
       w="full"
-      gridTemplateColumns="repeat(auto-fill, 175px)"
-      gridAutoRows="175px"
+      gridTemplateColumns={{
+        base: "repeat(auto-fill, 100px)",
+        md: "repeat(auto-fill, 175px)",
+      }}
+      gridAutoRows={{ base: "100px", md: "175px" }}
       gap={{ base: 4, md: 6 }}
       justifyContent="center"
     >
