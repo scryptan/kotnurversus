@@ -1,4 +1,4 @@
-import { Wrap } from "@chakra-ui/react";
+import { Grid } from "@chakra-ui/react";
 import { useState } from "react";
 import { useRoundContext } from "../round-context";
 import AddImagesButton from "./AddImagesButton";
@@ -12,7 +12,14 @@ const RoundGallery = () => {
   if (!(isOrganizer || round.artifacts.length)) return null;
 
   return (
-    <Wrap px={2} spacing={{ base: 4, md: 6 }}>
+    <Grid
+      px={2}
+      w="full"
+      gridTemplateColumns="repeat(auto-fill, 175px)"
+      gridAutoRows="175px"
+      gap={{ base: 4, md: 6 }}
+      justifyContent="center"
+    >
       {round.artifacts.map((artifact) => (
         <ArtifactItem
           key={artifact.id}
@@ -29,7 +36,7 @@ const RoundGallery = () => {
         isOpen={activeId !== undefined}
         onClose={() => setActiveId(undefined)}
       />
-    </Wrap>
+    </Grid>
   );
 };
 

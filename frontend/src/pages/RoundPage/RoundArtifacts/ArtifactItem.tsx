@@ -3,6 +3,8 @@ import {
   IconButton,
   Image,
   Skeleton,
+  Stack,
+  Text,
   useBoolean,
   useDisclosure,
 } from "@chakra-ui/react";
@@ -12,6 +14,7 @@ import api from "~/api";
 import Alert from "~/components/Alert";
 import useHandleError from "~/hooks/useHandleError";
 import CrossIcon from "~/icons/CrossIcon";
+import NotAllowedIcon from "~/icons/NotAllowedIcon";
 import { RoundArtifact } from "~/types/round";
 import queryKeys from "~/utils/query-keys";
 
@@ -24,6 +27,17 @@ type Props = {
 
 const ArtifactItem = ({ roundId, artifact, onClick, isOrganizer }: Props) => {
   const [isLoading, setIsLoading] = useBoolean(true);
+  const [isError, setIsError] = useBoolean(false);
+
+  const handleLoad = () => {
+    setIsError.off();
+    setIsLoading.off();
+  };
+
+  const handleError = () => {
+    setIsLoading.off();
+    setIsError.on();
+  };
 
   return (
     <Skeleton
@@ -34,20 +48,39 @@ const ArtifactItem = ({ roundId, artifact, onClick, isOrganizer }: Props) => {
     >
       <Box
         as="button"
-        borderRadius={4}
+        borderRadius={8}
         onClick={() => onClick(artifact.id)}
         transition="transform 200ms ease-out"
         _hover={{ transform: "scale(0.98)" }}
         _focusVisible={{ outline: "none", boxShadow: "outline" }}
       >
-        <Image
-          h="240px"
-          loading="lazy"
-          objectFit="cover"
-          borderRadius={4}
-          onLoad={setIsLoading.off}
-          src={`${import.meta.env.VITE_API_URL}${artifact.content}`}
-        />
+        {isError ? (
+          <Stack
+            boxSize="175px"
+            align="center"
+            justify="center"
+            borderRadius={8}
+            bg="blackAlpha.50"
+            _dark={{ bg: "whiteAlpha.50" }}
+            _hover={{ bg: "blackAlpha.100", _dark: { bg: "whiteAlpha.100" } }}
+            _focusVisible={{ outline: "none", boxShadow: "outline" }}
+          >
+            <NotAllowedIcon boxSize={12} />
+            <Text fontSize="sm" lineHeight="150%">
+              Не удалось загрузить изображение
+            </Text>
+          </Stack>
+        ) : (
+          <Image
+            boxSize="175px"
+            loading="lazy"
+            objectFit="cover"
+            borderRadius={8}
+            onLoad={handleLoad}
+            onError={handleError}
+            src={`${import.meta.env.VITE_API_URL}${artifact.content}`}
+          />
+        )}
       </Box>
       {isOrganizer && <DeleteButton roundId={roundId} artifact={artifact} />}
     </Skeleton>
