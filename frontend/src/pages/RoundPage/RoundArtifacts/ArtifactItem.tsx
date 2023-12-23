@@ -59,6 +59,7 @@ const ArtifactItem = ({ roundId, artifact, onClick, isOrganizer }: Props) => {
             boxSize="175px"
             align="center"
             justify="center"
+            userSelect="none"
             borderRadius={8}
             bg="blackAlpha.50"
             _dark={{ bg: "whiteAlpha.50" }}
