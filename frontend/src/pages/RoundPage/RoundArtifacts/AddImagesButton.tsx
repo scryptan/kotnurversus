@@ -41,11 +41,10 @@ const AddImagesButton = () => {
       <Stack
         {...window.getButtonProps()}
         as="button"
-        spacing={4}
-        boxSize="240px"
+        boxSize="full"
         align="center"
         justify="center"
-        borderRadius={16}
+        borderRadius={8}
         bg="blackAlpha.50"
         _dark={{ bg: "whiteAlpha.50" }}
         _hover={{ bg: "blackAlpha.100", _dark: { bg: "whiteAlpha.100" } }}
@@ -53,8 +52,8 @@ const AddImagesButton = () => {
         transition="background 200ms ease-out, box-shadow 200ms ease-out"
         onClick={window.onOpen}
       >
-        <OutlinePlusIcon boxSize={10} />
-        <Text fontSize="2xl" lineHeight="150%">
+        <OutlinePlusIcon boxSize={{ base: 6, md: 10 }} />
+        <Text fontSize={{ base: "xs", md: "lg" }} lineHeight="150%">
           Добавить изображения
         </Text>
       </Stack>
