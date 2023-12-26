@@ -19,7 +19,7 @@ const RoundHeader = () => {
           mt={4}
           fontSize={{ base: "md", md: "3xl" }}
           fontWeight="bold"
-          children={round.specification.title}
+          children={round.specification?.title}
         />
       )}
       {isPublic && (
@@ -29,7 +29,7 @@ const RoundHeader = () => {
           whiteSpace="pre-line"
           fontSize={{ base: "sm", md: "xl" }}
           lineHeight="130%"
-          children={round.specification.businessDescription}
+          children={round.specification?.businessDescription}
         />
       )}
     </>
