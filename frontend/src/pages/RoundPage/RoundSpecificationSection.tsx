@@ -5,7 +5,7 @@ import { useRoundContext } from "./round-context";
 const RoundSpecificationSection = (props: BoxProps) => {
   const { isPublic, round } = useRoundContext();
 
-  const text = round.specification.techDescription?.trim() || "";
+  const text = round.specification?.techDescription?.trim() || "";
 
   if (!isPublic || text.length < 1) return null;
 
@@ -20,7 +20,7 @@ const RoundSpecificationSection = (props: BoxProps) => {
         fontSize={{ base: "sm", md: "md" }}
         lineHeight="150%"
         whiteSpace="pre-line"
-        children={round.specification.techDescription}
+        children={round.specification?.techDescription}
       />
     </CollapsibleSection>
   );

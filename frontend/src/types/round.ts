@@ -6,7 +6,7 @@ export type Round = {
   nextRoundId?: string;
   gameId: string;
   settings: TourneySettings;
-  specification: TourneySpecification;
+  specification?: TourneySpecification;
   participants: RoundParticipant[];
   artifacts: RoundArtifact[];
   history: RoundStateData[];
