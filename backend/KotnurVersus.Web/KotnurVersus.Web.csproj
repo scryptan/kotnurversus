@@ -1,16 +1,16 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
 
+    <Import Project="$(MSBuildThisFileDirectory)..\Service.Build.props"/>
     <PropertyGroup>
-        <TargetFramework>net7.0</TargetFramework>
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
         <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="7.0.14" />
-        <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="7.0.14" />
-        <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="7.0.11"/>
+        <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.2" />
+        <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="8.0.2" />
+        <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.2" />
         <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
         <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0"/>
         <PackageReference Include="Swashbuckle.AspNetCore.Newtonsoft" Version="6.5.0" />
@@ -31,6 +31,9 @@
       </Content>
       <Content Include="..\..\Dockerfile">
         <Link>Dockerfile</Link>
+      </Content>
+      <Content Include="..\Service.Build.props">
+        <Link>Service.Build.props</Link>
       </Content>
     </ItemGroup>
 

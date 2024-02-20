@@ -9,8 +9,8 @@
     <ItemGroup>
         <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
         <PackageReference Include="Vostok.Commons.Time" Version="0.1.4" />
-        <PackageReference Include="Vostok.Logging.Abstractions" Version="1.0.31" />
-        <PackageReference Include="Vostok.Logging.Console" Version="1.0.9" />
+        <PackageReference Include="Vostok.Logging.Abstractions" Version="1.0.32" />
+        <PackageReference Include="Vostok.Logging.Console" Version="1.0.10" />
     </ItemGroup>
 
 </Project>
