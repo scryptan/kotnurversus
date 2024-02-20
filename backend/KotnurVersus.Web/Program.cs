@@ -15,6 +15,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
 using Vostok.Applications.AspNetCore;
+using Vostok.Commons.Time;
 using Vostok.Configuration;
 using Vostok.Configuration.Sources.Combined;
 using Vostok.Configuration.Sources.Environment;
@@ -156,7 +157,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseVostokRequestLogging();
-// app.UseHttpsRedirection();
+app.UseHttpsRedirection();
 app.UseCors(
     x => x
         .AllowAnyMethod()
@@ -172,9 +173,8 @@ var staticFileOptions = new StaticFileOptions
     ContentTypeProvider = new FileExtensionContentTypeProvider {Mappings = {[".webmanifest"] = "application/manifest+json"}},
     OnPrepareResponse = ctx =>
     {
-        const int durationInSeconds = 60 * 60 * 24;
         ctx.Context.Response.Headers[HeaderNames.CacheControl] =
-            "public,max-age=" + durationInSeconds;
+            "public,max-age=" + 24.Hours().TotalSeconds;
 
         if (ctx.File.Name == "remoteEntry.js")
             ctx.Context.Response.Headers[HeaderNames.CacheControl] = "no-cache";
