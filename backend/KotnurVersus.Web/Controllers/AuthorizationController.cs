@@ -32,10 +32,10 @@ public class AuthorizationController : ControllerBase
 
     [HttpPost("register")]
     public async Task<ActionResult<User, ErrorInfo<AccessSingleEntityError>>> Register(
-        [FromServices] IRegisterCommand command,
+        [FromServices] IRegisterUserCommand userCommand,
         [FromBody] UserRegisterRequest request)
     {
-        var result = await command.RunAsync(request);
+        var result = await userCommand.RunAsync(request);
         if (result.Result != null)
         {
             var user = result.Result;

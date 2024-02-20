@@ -8,11 +8,11 @@ using Models.Authorization;
 
 namespace Domain.Commands.Authorization;
 
-public class RegisterCommand : IRegisterCommand
+public class RegisterUserCommand : IRegisterUserCommand
 {
     private readonly IDataContextAccessor dataContextAccessor;
 
-    public RegisterCommand(IDataContextAccessor dataContextAccessor)
+    public RegisterUserCommand(IDataContextAccessor dataContextAccessor)
     {
         this.dataContextAccessor = dataContextAccessor;
     }

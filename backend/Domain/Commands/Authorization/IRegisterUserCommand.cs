@@ -3,7 +3,7 @@ using Models.Authorization;
 
 namespace Domain.Commands.Authorization;
 
-public interface IRegisterCommand
+public interface IRegisterUserCommand
 {
     Task<DomainResult<User, AccessSingleEntityError>> RunAsync(UserRegisterRequest request);
 }
