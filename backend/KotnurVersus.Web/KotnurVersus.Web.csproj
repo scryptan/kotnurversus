@@ -32,9 +32,6 @@
       <Content Include="..\..\Dockerfile">
         <Link>Dockerfile</Link>
       </Content>
-      <Content Include="..\Service.Build.props">
-        <Link>Service.Build.props</Link>
-      </Content>
     </ItemGroup>
 
 </Project>

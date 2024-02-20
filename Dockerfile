@@ -6,17 +6,18 @@ RUN echo VITE_API_URL=$API_URL > .env
 RUN npm i
 RUN npm run build
 
-FROM mcr.microsoft.com/dotnet/aspnet:7.0 AS base
+FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
 WORKDIR /app
 EXPOSE 4000
 
-FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
 COPY ["backend/KotnurVersus.Web/KotnurVersus.Web.csproj", "KotnurVersus.Web/"]
 COPY ["backend/Domain/Domain.csproj", "Domain/"]
 COPY ["backend/Core/Core.csproj", "Core/"]
 COPY ["backend/Db/Db.csproj", "Db/"]
 COPY ["backend/Models/Models.csproj", "Models/"]
+COPY ["backend/Service.Build.props", "Service.Build.props"]
 RUN dotnet restore "KotnurVersus.Web/KotnurVersus.Web.csproj"
 COPY ./backend/ .
 WORKDIR "/src/KotnurVersus.Web"
